@@ -5,9 +5,21 @@
 </template>
 
 <script>
+import { login } from '../src/api';
 export default {
-  name: "app",
-  components: {}
+    name: 'app',
+    components: {},
+    methods: {
+        async login(username, password) {
+            let res = await login({
+                username,
+                password
+            });
+        }
+    },
+    mounted() {
+        this.login('ly','000111');
+    }
 };
 </script>
 
