@@ -6,12 +6,13 @@
         </div>
         <div class="layout-top-header-right">
           <div>管理员</div>
+          <div></div>
         </div>
     </div>
 </template>
 <script>
 export default {
-  name: "layoutTopHeader"
+    name: 'layoutTopHeader'
 };
 </script>
 <style lang="scss" scoped>

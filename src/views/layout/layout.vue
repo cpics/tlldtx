@@ -2,7 +2,7 @@
   <div>
     <el-container>
       <el-header>
-        <layoutTopHeader />
+        <layoutTopHeader/>
       </el-header>
       <el-main>
         <el-container>
@@ -16,17 +16,16 @@
         </el-container>
       </el-main>
     </el-container>
-    
   </div>
 </template>
 
 <script>
-import layoutTopHeader from "./components/layoutTopHeader";
+import layoutTopHeader from './components/layoutTopHeader';
 export default {
-  name: "layout",
-  components: {
-    layoutTopHeader
-  }
+    name: 'layout',
+    components: {
+        layoutTopHeader
+    }
 };
 </script>
 
