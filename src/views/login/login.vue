@@ -60,6 +60,7 @@ export default {
             });
             if (res.code == 0) {
                 this.setUserInfo(res.objects);
+                this.$router.push('/home');
             } else {
                 Message.error(res.codeInfo);
             }
