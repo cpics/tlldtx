@@ -5,8 +5,8 @@
           <div class="name">生产拉动系统</div>
         </div>
         <div class="layout-top-header-right">
-          <div>管理员</div>
-          <div></div>
+          <div><i class="el-icon-info"></i>管理员</div>
+          <div><el-button>退出</el-button></div>
         </div>
     </div>
 </template>
