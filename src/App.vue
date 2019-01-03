@@ -5,25 +5,20 @@
 </template>
 
 <script>
-import { login } from '../src/api';
+import { mapMutations, mapState } from 'vuex';
 export default {
     name: 'app',
     components: {},
     methods: {
-        async login(username, password) {
-            let res = await login({
-                username,
-                password
-            });
-        }
+        ...mapMutations(['setUserInfo'])
     },
     mounted() {
-        this.login('ly','000111');
+        this.setUserInfo();
     }
 };
 </script>
 
 <style>
-  @import "./assets/styles/reset.css";
-  @import "./assets/styles/common.css";
+@import "./assets/styles/reset.css";
+@import "./assets/styles/common.css";
 </style>

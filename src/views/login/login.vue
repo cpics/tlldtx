@@ -1,36 +1,76 @@
-<style scoped>
-    @import url('./login.css');
-</style>
 <template>
-    <div class="mod-wrapper">
-        <div class="g-login-main">
-            <div class="m-login-main">
-                <div class="login-inner">
-                    <div class="u-login-logo">
-                        <i class="login-logo-icon"></i>
-                        <span class="u-logo-txt">通力生产拉动系统</span>
-                    </div>
-                    <div class="m-login-box">
-                        <h4 class="login-title">用户登录</h4>
-                        <div class="m-login-form">
-                            <div class="form-row">
-                                <input type="text" placeholder="请输入用户名" />
-                            </div>
-                            <div class="form-row">
-                                <input type="text" placeholder="请输入密码" />
-                            </div>
-                        </div>
-                        <div class="m-login-button">登 录</div>
-                    </div>
-                </div>
+  <div class="mod-wrapper">
+    <div class="g-login-main">
+      <div class="m-login-main">
+        <div class="login-inner">
+          <div class="u-login-logo">
+            <i class="login-logo-icon"></i>
+            <span class="u-logo-txt">通力生产拉动系统</span>
+          </div>
+          <div class="m-login-box">
+            <h4 class="login-title">用户登录</h4>
+            <div class="m-login-form">
+              <div class="form-row">
+                <input type="text" v-model="username" placeholder="请输入用户名">
+              </div>
+              <div class="form-row">
+                <input type="password" v-model="password" placeholder="请输入密码">
+              </div>
             </div>
+            <div class="m-login-button" @click="login">登 录</div>
+          </div>
         </div>
+      </div>
     </div>
+  </div>
 </template>
 
 <script>
-    export default {
-        name: 'login',
-        components: {}
-    };
+import { login } from '../../api/index';
+import { Message, Loading } from 'element-ui';
+import { mapMutations, mapState } from 'vuex';
+
+import cookies from '../../common/utils/cookies';
+export default {
+    name: 'login',
+    components: {},
+    data() {
+        return {
+            username: '',
+            password: ''
+        };
+    },
+    computed: {
+        ...mapState(['userInfo'])
+    },
+    methods: {
+        ...mapMutations(['setUserInfo']),
+        async login() {
+            if (this.username.length == 0) {
+                Message.error('请填写用户名');
+                return;
+            }
+            if (this.password.length == 0) {
+                Message.error('请填写密码');
+                return;
+            }
+            let res = await login({
+                username: this.username,
+                password: this.password
+            });
+            if (res.code == 0) {
+                this.setUserInfo(res.objects);
+            } else {
+                Message.error(res.codeInfo);
+            }
+            console.log(res);
+        }
+    },
+    mounted() {
+        console.log(this.$store.state);
+    }
+};
 </script>
+<style scoped>
+@import url("./login.css");
+</style>
