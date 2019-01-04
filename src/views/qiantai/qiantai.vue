@@ -4,10 +4,11 @@
       <leftSliderbar/>
     </el-aside>
     <el-container>
-      <el-header>
+      <el-header class="f-header-bar">
+        <i class="f-menu-line"></i>
         <layoutTopHeaderRight/>
       </el-header>
-      <el-main>
+      <el-main class="f-el-main">
         <el-tabs v-model="activeName" type="card" @tab-click="tabClick">
           <el-tab-pane
             v-for="(item,index) in tabsList"
@@ -56,5 +57,38 @@ export default {
   .g-slide-bar{
     color: #fff;
     background: #005982;
+  }
+  .f-el-main{
+    background: #fff;
+  }
+  .f-header-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: #000;
+    background: #f8f9fd;
+    .f-header-right{
+      display: flex;
+      align-items: center;
+    }
+  }
+  .f-menu-line{
+    position: relative;
+    width: 20px;
+    height: 12px;
+    display: inline-block;
+    border-top: 2px solid #b1b7c3;
+    border-bottom: 2px solid #b1b7c3;
+    background-clip:content-box;
+    &:before{
+      position: absolute;
+      left: 0;
+      top: 50%;
+      content: "";
+      width: 100%;
+      height: 2px;
+      background: #b1b7c3;
+      margin-top: -1px;
+    }
   }
 </style>

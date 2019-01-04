@@ -12,26 +12,40 @@
                     <li><div class="d-label">今日计划：</div><div>312</div></li>
                     <li><div class="d-label">当前完成：</div><div>120</div></li>
                     <li><div class="d-label">完成率：</div><div>30%</div></li>
-                    <li><div class="d-label">运行状态：</div><div>正常</div></li>
+                    <li><div class="d-label">运行状态：</div><div class="c-green">正常</div></li>
                 </ul>
             </div>
             <div class="d-slide-column">
                 <ul>
                     <li>
                         <div class="d-label">Wip-前壁:</div>
-                        <div></div>
+                        <div class="d-info">
+                          <i class="u-cart-icon"></i>
+                          <i class="u-cart-icon"></i>
+                          <em class="slide-mark-icon">FULL</em>
+                        </div>
                     </li>
                     <li>
                         <div class="d-label">Wip-天花:</div>
-                        <div></div>
+                        <div class="d-info">
+                          <i class="u-cart-icon"></i>
+                        </div>
                     </li>
                     <li>
                         <div class="d-label">Wip-前壁:</div>
-                        <div></div>
+                        <div class="d-info">
+                          <i class="u-cart-icon"></i>
+                          <i class="u-cart-icon"></i>
+                          <em class="slide-mark-icon">FULL</em>
+                        </div>
                     </li>
                     <li>
                         <div class="d-label">Wip-木箱:</div>
-                        <div></div>
+                        <div class="d-info">
+                          <i class="u-cart-icon"></i>
+                          <i class="u-cart-icon"></i>
+                          <em class="slide-mark-icon">FULL</em>
+                        </div>
                     </li>
                 </ul>
             </div>
@@ -78,5 +92,30 @@ export default {
         display: inline-block;
         flex-shrink: 0;
     }
+    .d-info{
+      display: flex;
+      align-items: center;
+    }
 }
+  .u-cart-icon{
+    position: relative;
+    top: -2px;
+    width: 18px;
+    height: 18px;
+    display: inline-block;
+    margin-right: 5px;
+    background: url("images/cart.png") no-repeat center center;
+    background-size: contain;
+  }
+  .slide-mark-icon{
+    color: #fff;
+    font-size: 12px;
+    height: 16px;
+    line-height: 16px;
+    display: inline-block;
+    padding: 0 5px;
+    background: #ff0000;
+    border-radius: 8px;
+    transform: scale(.9);
+  }
 </style>

@@ -6,6 +6,7 @@ body {
 :root{
     --color-primary: #17ba9b;
     --color-primary-light: #0da88a;
+    --color-blue: #00a0e9;
 }
 
 .o-hidden {
@@ -153,4 +154,14 @@ body,
 }
 .el-main-content{
     min-width:740px;
+}
+.m-el-tipper{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 20px;
+}
+.g-order-main .el-table thead th{
+  color: #000;
+  background-color: #7ecef4;
 }
