@@ -6,7 +6,7 @@
   </el-menu>
 </template>
 <script>
-import { mainRouters } from '../../../router.js';
+import { houtaiRouters } from '../../../router.js';
 export default {
     name: 'leftSlidebarMenu',
     data() {
@@ -17,18 +17,22 @@ export default {
     },
     methods: {
         getSliderbarMenuList() {
-            this.sliderbarMenuList = mainRouters;
+            this.sliderbarMenuList = houtaiRouters;
         },
         getCurrentIndex(route) {
             this.sliderbarMenuList.forEach((item, index) => {
                 if (item.name == route.name) {
                     this.currentIndex = index + '';
                 }
+                
             });
+            console.log(this.currentIndex);
         }
     },
     mounted() {
         this.getSliderbarMenuList();
+        this.getCurrentIndex(this.$route);
+        
     },
     watch: {
         $route(route, oldRoute) {
@@ -48,6 +52,9 @@ export default {
     &:hover {
       background: #17ba9b;
     }
+  }
+  .is-active{
+      background: #17ba9b;
   }
 }
 .el-menu {

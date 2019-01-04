@@ -27,7 +27,6 @@
 
 <script>
 import { login } from '../../api/index';
-import { Message, Loading } from 'element-ui';
 import { mapMutations, mapState } from 'vuex';
 
 import cookies from '../../common/utils/cookies';
@@ -47,11 +46,17 @@ export default {
         ...mapMutations(['setUserInfo']),
         async login() {
             if (this.username.length == 0) {
-                Message.error('请填写用户名');
+                this.$notify.error({
+                    type: '错误',
+                    message: '请填写用户名'
+                });
                 return;
             }
             if (this.password.length == 0) {
-                Message.error('请填写密码');
+                this.$notify.error({
+                    type: '错误',
+                    message: '请填写密码'
+                });
                 return;
             }
             let res = await login({
@@ -62,7 +67,10 @@ export default {
                 this.setUserInfo(res.objects);
                 this.$router.push('/home');
             } else {
-                Message.error(res.codeInfo);
+                this.$notify.error({
+                    type: '错误',
+                    message: codeInfo
+                });
             }
             console.log(res);
         }

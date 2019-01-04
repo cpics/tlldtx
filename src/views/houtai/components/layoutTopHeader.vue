@@ -4,24 +4,17 @@
       <div class="hd-logo"></div>
       <div class="hd-logo-name">生产拉动系统</div>
     </div>
-    <div class="layout-top-header-right">
-      <div class="manager-name">
-        <i class="manager-icon"></i>
-        {{userInfo.name}}
-      </div>
-      <div class="exit-btn">
-        <el-button>退出</el-button>
-      </div>
-    </div>
+    <layoutTopHeaderRight />
   </div>
 </template>
 <script>
-import { mapMutations, mapState } from 'vuex';
+import layoutTopHeaderRight from '../../../components/layoutTopHeaderRight/layoutTopHeaderRight';
 export default {
     name: 'layoutTopHeader',
-    computed: {
-        ...mapState(['userInfo'])
+    components:{
+        layoutTopHeaderRight
     }
+    
 };
 </script>
 <style lang="scss" scoped>
@@ -31,8 +24,7 @@ export default {
   align-items: center;
   justify-content: space-between;
   background: #fff;
-  .layout-top-header-left,
-  .layout-top-header-right {
+  .layout-top-header-left {
     display: flex;
     align-items: center;
     color: #000;
@@ -46,19 +38,6 @@ export default {
   }
   .hd-logo-name {
     font-size: 16px;
-  }
-  .manager-icon {
-    width: 14px;
-    height: 16px;
-    display: inline-block;
-    margin-right: 10px;
-    background: url("images/manager.png") no-repeat center center;
-    background-size: contain;
-  }
-  .manager-name {
-    display: flex;
-    align-items: center;
-    margin-right: 66px;
   }
 }
 </style>
