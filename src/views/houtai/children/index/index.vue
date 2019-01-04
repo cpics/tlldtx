@@ -26,6 +26,10 @@
                 label="状态">
         </el-table-column>
     </el-table>
+    <!--状态颜色-->
+    <!--红 c-red    #d62e42-->
+    <!--绿 c-green  #009944-->
+    <!--蓝 c-blue   #00a0e9-->
 </template>
 
 <script>

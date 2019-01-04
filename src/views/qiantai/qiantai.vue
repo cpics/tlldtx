@@ -1,6 +1,6 @@
 <template>
-  <el-container>
-    <el-aside width="200px">
+  <el-container class="mod-wrapper">
+    <el-aside class="g-slide-bar" width="200px">
       <leftSliderbar/>
     </el-aside>
     <el-container>
@@ -52,3 +52,9 @@ export default {
     }
 };
 </script>
+<style lang="scss" scoped>
+  .g-slide-bar{
+    color: #fff;
+    background: #005982;
+  }
+</style>
