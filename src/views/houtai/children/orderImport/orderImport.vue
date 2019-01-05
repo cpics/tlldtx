@@ -4,10 +4,11 @@
     <div class="m-import-box">
       <el-form class="m-form" ref="form" :model="form" label-width="120px">
         <el-form-item label="请输入工时：">
-          <el-input v-model="form.name"></el-input>
+          <el-input v-model="worktime"></el-input>
         </el-form-item>
         <el-form-item class="import-row" label>
-          <el-upload
+          <input type="file" name="file" ref="uploadImg">
+          <!-- <el-upload
             class="upload-demo"
             action="https://jsonplaceholder.typicode.com/posts/"
             multiple
@@ -17,8 +18,8 @@
           >
             <el-button class="d-import-btn" type="primary">选择文件</el-button>
             <el-button class="d-choose-file">点击选择文件</el-button>
-            <!--<div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>-->
-          </el-upload>
+            <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
+          </el-upload>-->
         </el-form-item>
         <el-form-item class="pt-50">
           <el-button type="primary" @click="onSubmit">确定</el-button>
@@ -28,25 +29,29 @@
   </div>
 </template>
 <script>
+import { importOrder } from '../../../../api';
+import axios from 'axios';
 export default {
     data() {
         return {
+            worktime: '',
             fileList: [],
-            form: {
-                name: '',
-                region: '',
-                date1: '',
-                date2: '',
-                delivery: false,
-                type: [],
-                resource: '',
-                desc: ''
-            }
+            form: {}
         };
     },
     methods: {
-        onSubmit() {
-            console.log('submit!');
+        async onSubmit() {
+            let file = this.$refs.uploadImg.files[0];
+            let form = new FormData();
+            form.append('worktime', this.worktime);
+            form.append('file', file);
+            // let res = await importOrder({ worktime: this.worktime }, file);
+
+            axios.post('//kone.2xnet.net:8023/importOrder.2x', form, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            });
         },
         uploadSuccess(file, fileList) {
             console.log(fileList);

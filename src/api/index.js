@@ -33,9 +33,8 @@ export const removeUser = params =>
 
 //导入订单
 export const importOrder = (params, file) => {
-    fetch.post(domain + '/importOrder.2x', {
-        params: params,
-        file: file,
+    fetch.post(domain + '/importOrder.2x', params, {
+        file,
         isUpload: true
     });
 }

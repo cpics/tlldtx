@@ -9,7 +9,7 @@ let fetch = axios.create({
     timeout: 100 * 1000,
     headers: {
         post: {
-            'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'
+            'Content-Type': 'multipart/form-data'
         }
     }
 });
@@ -22,8 +22,26 @@ fetch.interceptors.request.use(
         // Do something before request is sent
 
 
+
+        // console.log(config.method == 'post');
+        // if (config.method == 'post') {
+
+        //     config.headers.post['Content-Type'] = 'multipart/form-data';
+        // }
+
+
+
+        // console.log(config);
+        // if (config.isUpload) {
+        //     let form = new FormData();
+        //     form.append('worktime', config.data.worktime);
+        //     form.append('file', config.file);
+        //     config.headers.post['Content-Type'] = 'multipart/form-data';
+        //     config.data = form;
+        // }
+
         console.log(config);
-            
+
         return config;
     },
     error => {
