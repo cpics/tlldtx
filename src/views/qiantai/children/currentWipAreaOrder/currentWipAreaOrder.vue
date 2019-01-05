@@ -11,34 +11,30 @@
               </div>
             </div>
             <el-table
-                :data="tableData4"
+                :data="tableData"
                 style="width: 100%"
                 max-height="300">
               <el-table-column
                   fixed
                   prop="order"
                   label="订单号"
-                  width="120">
+                  width="140">
               </el-table-column>
               <el-table-column
                   prop="parts1"
-                  label="部件1"
-                  width="110">
+                  label="部件1">
               </el-table-column>
               <el-table-column
                   prop="parts2"
-                  label="部件2"
-                  width="110">
+                  label="部件2">
               </el-table-column>
               <el-table-column
                   prop="parts3"
-                  label="部件3"
-                  width="110">
+                  label="部件3">
               </el-table-column>
               <el-table-column
                   prop="parts4"
-                  label="部件4"
-                  width="110">
+                  label="部件4">
               </el-table-column>
               <el-table-column
                   prop="time"
@@ -57,18 +53,15 @@
               </el-table-column>
               <el-table-column
                   prop="remarks"
-                  label="备注说明"
-                  width="190">
+                  label="备注说明">
               </el-table-column>
               <el-table-column
-                  fixed="right"
-                  label="操作"
-                  width="120">
+                      prop="handle"
+                      label="操作">
                 <template slot-scope="scope">
                   <el-button
-                      @click.native.prevent="deleteRow(scope.$index, tableData4)"
-                      type="text"
-                      size="small">
+                          @click.native.prevent="deleteRow(scope.$index, tableData4)"
+                          type="text">
                     确认
                   </el-button>
                 </template>
@@ -83,34 +76,30 @@
               </div>
             </div>
             <el-table
-                :data="tableData4"
+                :data="tableData"
                 style="width: 100%"
                 max-height="300">
               <el-table-column
                   fixed
                   prop="order"
                   label="订单号"
-                  width="120">
+                  width="140">
               </el-table-column>
               <el-table-column
                   prop="parts1"
-                  label="部件1"
-                  width="110">
+                  label="部件1">
               </el-table-column>
               <el-table-column
                   prop="parts2"
-                  label="部件2"
-                  width="110">
+                  label="部件2">
               </el-table-column>
               <el-table-column
                   prop="parts3"
-                  label="部件3"
-                  width="110">
+                  label="部件3">
               </el-table-column>
               <el-table-column
                   prop="parts4"
-                  label="部件4"
-                  width="110">
+                  label="部件4">
               </el-table-column>
               <el-table-column
                   prop="time"
@@ -129,18 +118,15 @@
               </el-table-column>
               <el-table-column
                   prop="remarks"
-                  label="备注说明"
-                  width="190">
+                  label="备注说明">
               </el-table-column>
               <el-table-column
-                  fixed="right"
-                  label="操作"
-                  width="120">
+                      prop="handle"
+                      label="操作">
                 <template slot-scope="scope">
                   <el-button
-                      @click.native.prevent="deleteRow(scope.$index, tableData4)"
-                      type="text"
-                      size="small">
+                          @click.native.prevent="deleteRow(scope.$index, tableData4)"
+                          type="text">
                     --
                   </el-button>
                 </template>
@@ -158,7 +144,7 @@ export default {
     data() {
         return {
             activeName: 'second',
-            tableData4: [{
+            tableData: [{
                 order: '12345678',
                 parts1: 'A-01',
                 parts2: 'B-01',
