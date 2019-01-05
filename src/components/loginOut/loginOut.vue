@@ -4,11 +4,23 @@
   </div>
 </template>
 <script>
+import { loginOut } from '../../api';
+import { mapMutations, mapState } from 'vuex';
 export default {
     name: 'loginOut',
     methods: {
-        loginOut() {
-            
+        ...mapMutations(['removeUserInfo']),
+        async loginOut() {
+            let res = await loginOut();
+            if (res.code == 0) {
+                this.removeUserInfo();
+                this.$router.push('/login');
+            } else {
+                this.$notify.error({
+                    type: '错误',
+                    message: res.codeInfo
+                });
+            }
         }
     }
 };

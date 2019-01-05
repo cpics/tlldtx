@@ -24,12 +24,20 @@ export default new Vuex.Store({
         },
         setUserInfo(state, userInfo) {
             if (userInfo) {
-                cookies.set('userInfo', userInfo, { expires: 7 });
+                cookies.set('userInfo', userInfo, {
+                    expires: 7
+                });
                 state.userInfo = userInfo;
             } else if (cookies.get('userInfo')) {
                 state.userInfo = cookies.get('userInfo');
             }
 
+        },
+        removeUserInfo(state) {
+            cookies.remove('userInfo', {
+                path: '/'
+            });
+            state.userInfo = {};
         }
     },
     actions: {}

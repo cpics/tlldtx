@@ -64,19 +64,24 @@ export default {
                 password: this.password
             });
             if (res.code == 0) {
+
+                if(res.authorization){
+                    res.objects.authorization  = res.authorization;
+                }
+                // console.log(res.authorization);
                 this.setUserInfo(res.objects);
-                this.$router.push('/home');
+                this.$router.push('houtai/index');
             } else {
                 this.$notify.error({
                     type: '错误',
-                    message: codeInfo
+                    message: res.codeInfo
                 });
             }
-            console.log(res);
+            // console.log(res);
         }
     },
     mounted() {
-        console.log(this.$store.state);
+        // console.log(this.$store.state);
     }
 };
 </script>
