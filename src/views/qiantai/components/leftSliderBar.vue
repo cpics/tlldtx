@@ -113,9 +113,9 @@ export default {
     height: 16px;
     line-height: 16px;
     display: inline-block;
-    padding: 0 5px;
+    padding: 0 5px 2px;
     background: #ff0000;
-    border-radius: 8px;
-    transform: scale(.9);
+    border-radius: 10px;
+      transform: scale(.9);
   }
 </style>

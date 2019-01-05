@@ -13,9 +13,14 @@
           <el-tab-pane
             v-for="(item,index) in tabsList"
             :key="index"
-            :label="item.meta.title"
             :name="item.name"
-          ></el-tab-pane>
+          >
+            <span slot="label">
+              <el-badge :value="99" class="item m-inside">
+                {{item.meta.title}}
+              </el-badge>
+            </span>
+          </el-tab-pane>
         </el-tabs>
         <router-view/>
       </el-main>

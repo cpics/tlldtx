@@ -165,3 +165,58 @@ body,
   color: #000;
   background-color: #7ecef4;
 }
+.g-order-main .el-table td,
+.g-order-main .el-table th{
+    padding: 10px 0;
+}
+.g-order-main .el-table td.c-red,
+.g-order-main .el-table th.c-red,
+.g-order-main .el-table .el-table__row.c-red td{
+    color: #d62e42;
+}
+.g-order-main .m-inner-box{
+    margin-bottom: 25px;
+}
+.g-order-main .c-danger,
+.g-order-main .c-danger:hover,
+.g-order-main .c-danger:focus{
+    color: #f56c6c;
+}
+.g-order-main .c-success,
+.g-order-main .c-success:hover,
+.g-order-main .c-success:focus{
+    color: #67c23a;
+}
+.g-order-main .c-primary,
+.g-order-main .c-primary:hover,
+.g-order-main .c-primary:focus{
+    color: #409eff;
+}
+.g-order-main .el-button--mini.minimum,
+.g-order-main .el-button--mini.is-round.minimum {
+    padding: 4px 6px;
+}
+.common-title{
+    display: flex;
+    width: 100%;
+    text-align: center;
+    margin: 25px auto;
+}
+
+.common-title i {
+    flex: 1;
+    position: relative;
+    top: -10px;
+    border-bottom: 1px solid #ccc;
+}
+
+.common-title .tit-txt {
+    color: #666;
+    padding: 0 20px;
+    font-size: 14px;
+    line-height: 20px;
+}
+.m-inside .el-badge__content.is-fixed{
+    z-index: 5;
+    top:9px;
+}

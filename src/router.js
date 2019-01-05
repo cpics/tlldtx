@@ -13,6 +13,7 @@ import CurrentWipAreaOrder from './views/qiantai/children/currentWipAreaOrder/cu
 import CurrentPullOrder from './views/qiantai/children/currentPullOrder/currentPullOrder';
 import TodayProOrder from './views/qiantai/children/todayProOrder/todayProOrder';
 import UnfinishOrder from './views/qiantai/children/unFinishOrder/unFinishOrder';
+import boardOrder from './views/qiantai/children/boardOrder/boardOrder';
 
 Vue.use(Router);
 
@@ -71,6 +72,14 @@ export const qiantaiRouters = [{
     component: UnfinishOrder,
     meta: {
         title: '缺料装箱订单'
+    }
+},
+{
+    path: 'boardOrder',
+    name: 'boardOrder',
+    component: boardOrder,
+    meta: {
+        title: '订单看板'
     }
 }
 ]
