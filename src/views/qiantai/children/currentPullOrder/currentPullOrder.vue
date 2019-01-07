@@ -6,7 +6,7 @@
         </div>
         <el-dialog style="z-index: 9999" title="一键下单" :visible.sync="dialogTableVisible">
             <!--加急 单元行-标红 tr  + c-red-->
-            <el-table :data="gridData" max-height="400">
+            <el-table :data="gridData" max-height="300">
                 <el-table-column type="selection" width="55"></el-table-column>
                 <el-table-column fixed prop="order" label="订单号" width="100"></el-table-column>
                 <el-table-column prop="parts1" label="部件1"></el-table-column>
@@ -16,12 +16,144 @@
                 <el-table-column prop="time" label="交付时间" width="120"></el-table-column>
                 <el-table-column prop="remarks" label="备注说明" width="180"></el-table-column>
             </el-table>
+            <div class="m-dialog-btn">
+                <el-button type="primary">自动</el-button>
+            </div>
         </el-dialog>
         <el-tabs v-model="activeName" @tab-click="handleClick">
             <el-tab-pane label="前壁产线" name="first">
                 <div class="m-inner-box">
                     <div class="m-el-tipper">
                         <div class="tipper-txt">前壁产线 - 拉动批次01    2018-10-21 10:21:32</div>
+                        <div class="tipper-handle">
+                            <el-button type="danger" size="mini">一键撤回</el-button>
+                        </div>
+                    </div>
+                    <!--加急 单元行-标红 tr  + c-red-->
+                    <el-table
+                            :data="tableData"
+                            style="width: 100%"
+                            max-height="280">
+                        <el-table-column
+                                fixed
+                                prop="order"
+                                label="订单号"
+                                width="140">
+                        </el-table-column>
+                        <el-table-column
+                                prop="parts1"
+                                label="部件1">
+                        </el-table-column>
+                        <el-table-column
+                                prop="parts2"
+                                label="部件2">
+                        </el-table-column>
+                        <el-table-column
+                                prop="parts3"
+                                label="部件3">
+                        </el-table-column>
+                        <el-table-column
+                                prop="parts4"
+                                label="部件4">
+                        </el-table-column>
+                        <el-table-column
+                                prop="time"
+                                label="交付时间"
+                                width="140">
+                        </el-table-column>
+                        <el-table-column
+                                prop="current"
+                                label="当前状态"
+                                width="120">
+                        </el-table-column>
+                        <el-table-column
+                                prop="place"
+                                label="当前位置"
+                                width="140">
+                        </el-table-column>
+                        <el-table-column
+                                prop="remarks"
+                                label="备注说明"
+                                width="180">
+                        </el-table-column>
+                        <el-table-column
+                                prop="handle"
+                                label="操作"
+                                width="180">
+                            <template slot-scope="scope">
+                                <el-button type="danger" class="minimum" size="mini">撤回</el-button>
+                            </template>
+                        </el-table-column>
+                    </el-table>
+                </div>
+                <div class="m-inner-box">
+                    <div class="m-el-tipper">
+                        <div class="tipper-txt">前壁产线 - 拉动批次02    2018-10-21 10:21:32</div>
+                        <div class="tipper-handle">
+                            <el-button type="danger" size="mini">一键撤回</el-button>
+                        </div>
+                    </div>
+                    <el-table
+                            :data="tableData"
+                            style="width: 100%"
+                            max-height="280">
+                        <el-table-column
+                                fixed
+                                prop="order"
+                                label="订单号"
+                                width="140">
+                        </el-table-column>
+                        <el-table-column
+                                prop="parts1"
+                                label="部件1">
+                        </el-table-column>
+                        <el-table-column
+                                prop="parts2"
+                                label="部件2">
+                        </el-table-column>
+                        <el-table-column
+                                prop="parts3"
+                                label="部件3">
+                        </el-table-column>
+                        <el-table-column
+                                prop="parts4"
+                                label="部件4">
+                        </el-table-column>
+                        <el-table-column
+                                prop="time"
+                                label="交付时间"
+                                width="140">
+                        </el-table-column>
+                        <el-table-column
+                                prop="current"
+                                label="当前状态"
+                                width="120">
+                        </el-table-column>
+                        <el-table-column
+                                prop="place"
+                                label="当前位置"
+                                width="140">
+                        </el-table-column>
+                        <el-table-column
+                                prop="remarks"
+                                label="备注说明"
+                                width="180">
+                        </el-table-column>
+                        <el-table-column
+                                prop="handle"
+                                label="操作"
+                                width="180">
+                            <template slot-scope="scope">
+                                <el-button type="danger" class="minimum" size="mini">撤回</el-button>
+                            </template>
+                        </el-table-column>
+                    </el-table>
+                </div>
+            </el-tab-pane>
+            <el-tab-pane label="装箱产线" name="second">
+                <div class="m-inner-box">
+                    <div class="m-el-tipper">
+                        <div class="tipper-txt">装箱南线 - 拉动批次01    2018-10-21 10:21:32</div>
                         <div class="tipper-handle">
                             <!--<el-button type="danger" size="mini">一键撤回</el-button>-->
                             <el-button type="danger" size="mini">一键缺料</el-button>
@@ -33,7 +165,7 @@
                     <el-table
                             :data="tableData"
                             style="width: 100%"
-                            max-height="300">
+                            max-height="280">
                         <el-table-column
                                 fixed
                                 prop="order"
@@ -91,7 +223,7 @@
                 </div>
                 <div class="m-inner-box">
                     <div class="m-el-tipper">
-                        <div class="tipper-txt">前壁产线 - 拉动批次02    2018-10-21 10:21:32</div>
+                        <div class="tipper-txt">装箱北线 - 拉动批次02    2018-10-21 10:21:32</div>
                         <div class="tipper-handle">
                             <!--<el-button type="danger" size="mini">一键撤回</el-button>-->
                             <el-button type="danger" size="mini">一键缺料</el-button>
@@ -102,7 +234,7 @@
                     <el-table
                             :data="tableData"
                             style="width: 100%"
-                            max-height="300">
+                            max-height="280">
                         <el-table-column
                                 fixed
                                 prop="order"
@@ -159,9 +291,6 @@
                     </el-table>
                 </div>
             </el-tab-pane>
-            <el-tab-pane label="天花产线" name="second">天花产线</el-tab-pane>
-            <el-tab-pane label="轿门产线" name="third">轿门产线</el-tab-pane>
-            <el-tab-pane label="安捷木箱" name="forth">安捷木箱</el-tab-pane>
         </el-tabs>
     </div>
 </template>
@@ -311,6 +440,10 @@ export default {
         top:0;
         right:0;
         z-index: 4;
+    }
+    .m-dialog-btn{
+        text-align: center;
+        padding-top: 20px;
     }
 </style>
 
