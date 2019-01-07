@@ -30,6 +30,10 @@ import { login } from '../../api/index';
 import { mapMutations, mapState } from 'vuex';
 
 import cookies from '../../common/utils/cookies';
+import filterRoleType, {
+    roleMaxType,
+    roleEnum
+} from '../../common/role-types/role-types';
 export default {
     name: 'login',
     components: {},
@@ -64,13 +68,25 @@ export default {
                 password: this.password
             });
             if (res.code == 0) {
-
-                if(res.authorization){
-                    res.objects.authorization  = res.authorization;
+                if (res.authorization) {
+                    res.objects.authorization = res.authorization;
                 }
                 // console.log(res.authorization);
+                // console.log(roleType);
+                res.objects.roleMaxType = filterRoleType(res.objects.role);
+                res.objects.roleString = roleEnum[res.objects.role];
+
                 this.setUserInfo(res.objects);
-                this.$router.push('houtai/index');
+
+                let $roleMaxType = res.objects.roleMaxType;
+                if ($roleMaxType == roleMaxType.ADMIN) {
+                    this.$router.push('houtai/index');
+                } else if (
+                    $roleMaxType == roleMaxType.ZX ||
+                    $roleMaxType == roleMaxType.QB
+                ) {
+                    this.$router.push('qiantai/currentWipAreaOrder');
+                }
             } else {
                 this.$notify.error({
                     type: '错误',

@@ -42,7 +42,7 @@ export const houtaiRouters = [{
     }
 }
 ]
-export const qiantaiRouters = [{
+export const qiantaiZxRouters = [{
     path: 'currentWipAreaOrder',
     name: 'currentWipAreaOrder',
     component: CurrentWipAreaOrder,
@@ -84,6 +84,48 @@ export const qiantaiRouters = [{
 }
 ]
 
+export const qiantaiQbRouters = [{
+    path: 'currentPullOrder',
+    name: 'currentPullOrder',
+    component: CurrentPullOrder,
+    meta: {
+        title: '当前拉动订单'
+    }
+},
+{
+    path: 'currentWipAreaOrder',
+    name: 'currentWipAreaOrder',
+    component: CurrentWipAreaOrder,
+    meta: {
+        title: '当前Wip区订单'
+    }
+},
+{
+    path: 'todayProOrder',
+    name: 'todayProOrder',
+    component: TodayProOrder,
+    meta: {
+        title: '当前排产订单'
+    }
+},
+{
+    path: 'unfinishOrder',
+    name: 'unfinishOrder',
+    component: UnfinishOrder,
+    meta: {
+        title: '缺料标记订单'
+    }
+},
+{
+    path: 'boardOrder',
+    name: 'boardOrder',
+    component: boardOrder,
+    meta: {
+        title: '订单看板'
+    }
+}
+]
+
 const router = new Router({
     routes: [{
         path: '/login',
@@ -100,7 +142,7 @@ const router = new Router({
         path: '/qiantai/',
         name: 'qiantai',
         component: Qiantai,
-        children: qiantaiRouters
+        children: qiantaiZxRouters
     }
     ]
 });
