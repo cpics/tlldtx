@@ -10,9 +10,10 @@
       </el-header>
       <el-main class="f-el-main">
         <el-tabs v-model="activeName" type="card" @tab-click="tabClick">
-          <el-tab-pane v-for="(item,index) in tabsList" :key="index" :name="item.name">
+          <el-tab-pane v-for="(item,index) in defaultSort" :key="index" :name="tabsList[index].name">
+          <!-- <el-tab-pane v-for="(item,index) in tabsList" :key="index" :name="item.name"> -->
             <span slot="label">
-              <el-badge :value="99" class="item m-inside">{{item.meta.title}}</el-badge>
+              <el-badge :value="99" class="item m-inside">{{tabsList[index].meta.title}}</el-badge>
             </span>
           </el-tab-pane>
         </el-tabs>
@@ -38,7 +39,8 @@ export default {
             qiantaiRouters: [],
             userInfo: {},
             zxSort:[0,1,2,3,4],
-            qbSort:[1,0,2,3,4]
+            qbSort:[1,0,2,3,4],
+            defaultSort:[]
         };
     },
     components: {
@@ -60,14 +62,18 @@ export default {
             return;
         }
         this.userInfo = cookies.get('userInfo');
-        console.log(this.userInfo);
+        // console.log(this.userInfo);
         let currentUserMaxType = this.userInfo.roleMaxType;
 
-        if (currentUserMaxType == roleMaxType.ZX) {
-            this.qiantaiRouters = qiantaiZxRouters;
-        } else if (currentUserMaxType == roleMaxType.QB) {
-            this.qiantaiRouters = qiantaiQbRouters;
+        if(currentUserMaxType == roleMaxType.ZX){
+            this.defaultSort = this.zxSort;
+        }else if(currentUserMaxType == roleMaxType.QB){
+            this.defaultSort = this.qbSort;
         }
+
+        this.qiantaiRouters = qiantaiZxRouters;
+
+        console.log(this.qiantaiRouters);
         this.getTabs();
 
         // if(this.userInfo.role)
