@@ -2,7 +2,12 @@
   <div class="g-order-main">
     <!--当前拉动订单-->
     <div class="tab-pane-btn">
-      <el-button type="primary" size="small" @click="dialogTableVisible = true">一键下单</el-button>
+      <el-button
+        type="primary"
+        v-if="userRoleMaxType == 'ZX'"
+        size="small"
+        @click="dialogTableVisible = true"
+      >一键下单</el-button>
     </div>
     <el-dialog style="z-index: 9999" title="一键下单" :visible.sync="dialogTableVisible">
       <!--加急 单元行-标红 tr  + c-red-->
@@ -20,17 +25,35 @@
         <el-button type="primary">自动</el-button>
       </div>
     </el-dialog>
-    <el-tabs v-model="activeName" @tab-click="handleClick">
-      <el-tab-pane label="前壁产线" name="first"></el-tab-pane>
-      <el-tab-pane label="装箱产线" name="second"></el-tab-pane>
+    <el-tabs v-model="activeName" @tab-click="chooseCx" v-if="userRoleMaxType == 'ZX'">
+      <el-tab-pane v-for="(item,i) in pullPanes" :key="i" :label="item.label" :name="item.name"></el-tab-pane>
     </el-tabs>
     <data-list :tableData="tableData">
-      <el-button type="danger" class="minimum" size="mini">撤回</el-button>
+      <template slot="allAction" v-if="userRoleMaxType == 'ZX'">
+        <el-button type="danger" size="mini">一键撤回</el-button>
+      </template>
+      <template slot-scope="slotProps" slot="itemAction" v-if="userRoleMaxType == 'ZX'">
+        <el-button type="danger" class="minimum" size="mini">撤回{{slotProps.rowData.order}}</el-button>
+      </template>
+
+      <template slot="allAction" v-if="userRoleMaxType == 'QB'">
+        <el-button type="danger" size="mini">一键缺料</el-button>
+        <el-button type="warning" size="mini">一键生产</el-button>
+        <el-button type="primary" size="mini">一键完成</el-button>
+      </template>
+      <template slot-scope="slotProps" slot="itemAction" v-if="userRoleMaxType == 'QB'">
+          <el-button type="danger" class="minimum" size="mini">缺料</el-button>
+        <el-button type="warning" class="minimum" size="mini">生产</el-button>
+        <el-button type="primary" class="minimum" size="mini">完成</el-button>
+      </template>
+      
     </data-list>
+    
   </div>
 </template>
 <script>
 import dataList from '../../components/dataList/dataList';
+import cookies from '../../../../common/utils/cookies.js';
 export default {
     name: 'currentPullOrder',
     components: {
@@ -39,6 +62,31 @@ export default {
     data() {
         return {
             activeName: 'first',
+            userInfo: {},
+            userRoleMaxType: '',
+            pullPanes: [
+                //产线类型
+                {
+                    label: '前壁产线',
+                    type: 1,
+                    name: 'first'
+                },
+                {
+                    label: '天花产线',
+                    type: 1,
+                    name: 'second'
+                },
+                {
+                    label: '轿门产线',
+                    type: 1,
+                    name: 'three'
+                },
+                {
+                    label: '安捷产线',
+                    type: 1,
+                    name: 'four'
+                }
+            ],
             tableData: [
                 {
                     order: '12345678',
@@ -161,7 +209,8 @@ export default {
         };
     },
     methods: {
-        handleClick(tab, event) {
+        //选择产线tab
+        chooseCx(tab, event) {
             console.log(tab, event);
         },
         deleteRow(index, rows) {
@@ -179,6 +228,11 @@ export default {
         handleSelectionChange(val) {
             this.multipleSelection = val;
         }
+    },
+    created() {
+        this.userInfo = cookies.get('userInfo');
+        this.userRoleMaxType = this.userInfo.roleMaxType;
+        // console.log(this.userInfo);
     }
 };
 </script>

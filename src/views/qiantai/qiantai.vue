@@ -10,10 +10,9 @@
       </el-header>
       <el-main class="f-el-main">
         <el-tabs v-model="activeName" type="card" @tab-click="tabClick">
-          <el-tab-pane v-for="(item,index) in defaultSort" :key="index" :name="tabsList[index].name">
-          <!-- <el-tab-pane v-for="(item,index) in tabsList" :key="index" :name="item.name"> -->
+          <el-tab-pane v-for="(item,index) in defaultSort" :key="index" :name="tabsList[item].name">
             <span slot="label">
-              <el-badge :value="99" class="item m-inside">{{tabsList[index].meta.title}}</el-badge>
+              <el-badge :value="99" class="item m-inside">{{tabsList[item].meta.title}}</el-badge>
             </span>
           </el-tab-pane>
         </el-tabs>
@@ -28,7 +27,7 @@ import leftSliderbar from './components/leftSliderBar';
 
 import cookies from '../../common/utils/cookies';
 
-import { qiantaiZxRouters, qiantaiQbRouters } from '../../router';
+import { qiantaiRouters } from '../../router';
 import { roleMaxType } from '../../common/role-types/role-types';
 export default {
     name: 'qiantai',
@@ -36,7 +35,6 @@ export default {
         return {
             tabsList: [],
             activeName: 'first',
-            qiantaiRouters: [],
             userInfo: {},
             zxSort:[0,1,2,3,4],
             qbSort:[1,0,2,3,4],
@@ -48,12 +46,9 @@ export default {
         leftSliderbar
     },
     methods: {
-        getTabs() {
-            this.tabsList = this.qiantaiRouters;
-            this.activeName = this.$route.name;
-        },
         tabClick(tab, event) {
-            this.$router.push(this.qiantaiRouters[tab.index].path);
+            console.log(tab.index);
+            this.$router.push(this.tabsList[this.defaultSort[tab.index]].path);
         }
     },
     mounted() {
@@ -62,22 +57,21 @@ export default {
             return;
         }
         this.userInfo = cookies.get('userInfo');
-        // console.log(this.userInfo);
+        
+        //获取当前用户的大类型
         let currentUserMaxType = this.userInfo.roleMaxType;
 
+        //根据大类型来展示使用那种数据展示Tab
         if(currentUserMaxType == roleMaxType.ZX){
             this.defaultSort = this.zxSort;
         }else if(currentUserMaxType == roleMaxType.QB){
             this.defaultSort = this.qbSort;
         }
+        
+        this.tabsList = qiantaiRouters;
+        this.activeName = this.$route.name;
+        
 
-        this.qiantaiRouters = qiantaiZxRouters;
-
-        console.log(this.qiantaiRouters);
-        this.getTabs();
-
-        // if(this.userInfo.role)
-        // this.getTabs();
     }
 };
 </script>

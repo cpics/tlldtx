@@ -3,7 +3,9 @@
     <div class="m-el-tipper">
       <div class="tipper-txt">前壁产线 - 拉动批次01 2018-10-21 10:21:32</div>
       <div class="tipper-handle">
-        <el-button type="danger" size="mini">一键撤回</el-button>
+        <!-- <template slot-scope="scope"> -->
+          <slot name="allAction" ></slot>
+        <!-- </template> -->
       </div>
     </div>
     <!--加急 单元行-标红 tr  + c-red-->
@@ -19,7 +21,7 @@
       <el-table-column prop="remarks" label="备注说明" width="180"></el-table-column>
       <el-table-column prop="handle" label="操作" width="180">
         <template slot-scope="scope">
-          <slot></slot>
+          <slot :rowData="scope.row" name="itemAction"></slot>
         </template>
       </el-table-column>
     </el-table>
