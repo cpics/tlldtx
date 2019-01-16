@@ -38,3 +38,16 @@ export const importOrder = (params, file) => {
         isUpload: true
     });
 }
+
+//查询拉动订单
+export const ladongOrder = (params) => {
+    fetch.get(domain + '/queryLadong.2x', {
+        params: params
+    })
+}
+//查询缺料订单
+export const queliaoOrder = (params) => {
+    fetch.get(domain + '/queryQueliao.2x', {
+        params: params
+    })
+}

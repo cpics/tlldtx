@@ -54,6 +54,8 @@
 <script>
 import dataList from '../../components/dataList/dataList';
 import cookies from '../../../../common/utils/cookies.js';
+import { ladongOrder } from '../../../../api/index';
+
 export default {
     name: 'currentPullOrder',
     components: {
@@ -62,28 +64,29 @@ export default {
     data() {
         return {
             activeName: 'first',
+            activePane:{},
             userInfo: {},
             userRoleMaxType: '',
             pullPanes: [
                 //产线类型
                 {
                     label: '前壁产线',
-                    type: 1,
+                    type: 4,
                     name: 'first'
                 },
                 {
                     label: '天花产线',
-                    type: 1,
+                    type: 5,
                     name: 'second'
                 },
                 {
                     label: '轿门产线',
-                    type: 1,
+                    type: 6,
                     name: 'three'
                 },
                 {
                     label: '安捷产线',
-                    type: 1,
+                    type: 7,
                     name: 'four'
                 }
             ],
@@ -211,7 +214,8 @@ export default {
     methods: {
         //选择产线tab
         chooseCx(tab, event) {
-            console.log(tab, event);
+            this.activePane = this.pullPanes[tab.index];
+            // console.log(this.activePane);
         },
         deleteRow(index, rows) {
             rows.splice(index, 1);
@@ -227,11 +231,28 @@ export default {
         },
         handleSelectionChange(val) {
             this.multipleSelection = val;
+        },
+        async getData(){
+            console.log(this.activePane);
+            let res = await ladongOrder({
+                type:this.activePane.type,
+                currentpage:1,
+                pagesize:100000
+            })
+            console.log(res);
         }
     },
     created() {
         this.userInfo = cookies.get('userInfo');
         this.userRoleMaxType = this.userInfo.roleMaxType;
+
+        if(this.userRoleMaxType == 'ZX'){
+            
+            this.activePane = this.pullPanes[0];
+        }
+
+        this.getData();
+
         // console.log(this.userInfo);
     }
 };
