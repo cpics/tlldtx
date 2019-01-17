@@ -31,6 +31,12 @@ export const removeUser = params =>
         params: params
     });
 
+//修改用户
+export const modifyUser = params =>
+    fetch.get(domain + '/modifyUser.2x', {
+        params: params
+    })
+
 //导入订单
 export const importOrder = (params, file) => {
     fetch.post(domain + '/importOrder.2x', params, {
@@ -40,14 +46,57 @@ export const importOrder = (params, file) => {
 }
 
 //查询拉动订单
-export const ladongOrder = (params) => {
+export const ladongOrder = params => {
     fetch.get(domain + '/queryLadong.2x', {
         params: params
     })
 }
 //查询缺料订单
-export const queliaoOrder = (params) => {
+export const queliaoOrder = params => {
     fetch.get(domain + '/queryQueliao.2x', {
         params: params
     })
 }
+//今日统计
+export const todayTongji = params => {
+    fetch.get(domain + '/jinritongji.2x', {
+        params: params
+    })
+}
+//根据产线类型下单
+export const xiadan = params => {
+    fetch.get(domain + '/xiadan.2x', {
+        params: params
+    })
+}
+//更新订单为生产中
+export const shengchan = params => {
+    fetch.get(domain + '/shengchan.2x', {
+        params: params
+    })
+}
+//更新订单状态为生产完成
+export const shengchanwancheng = params => {
+    fetch.get(domain + '/shengchanwancheng.2x', {
+        params: params
+    })
+}
+//更新订单状态为订单
+export const orderwancheng = params => {
+    fetch.get(domain + '/orderwancheng.2x', {
+        params: params
+    })
+}
+//根据装配产线号查询生产产线所需的Wips，Cars信息
+export const queryScInfo = params => {
+    fetch.get(domain + '/queryScInfo.2x', {
+        params: params
+    })
+}
+//更新装配产线号对应的Wips，Cars信息
+export const updateScInfo = params => {
+    fetch.get(domain + '/updateScInfo.2x', {
+        params: params
+    })
+}
+//

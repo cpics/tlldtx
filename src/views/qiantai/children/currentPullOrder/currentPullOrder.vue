@@ -28,7 +28,7 @@
     <el-tabs v-model="activeName" @tab-click="chooseCx" v-if="userRoleMaxType == 'ZX'">
       <el-tab-pane v-for="(item,i) in pullPanes" :key="i" :label="item.label" :name="item.name"></el-tab-pane>
     </el-tabs>
-    <data-list :tableData="tableData">
+    <data-list :tableData="tableData" :headers="headers">
       <template slot="allAction" v-if="userRoleMaxType == 'ZX'">
         <el-button type="danger" size="mini">一键撤回</el-button>
       </template>
@@ -42,19 +42,22 @@
         <el-button type="primary" size="mini">一键完成</el-button>
       </template>
       <template slot-scope="slotProps" slot="itemAction" v-if="userRoleMaxType == 'QB'">
-          <el-button type="danger" class="minimum" size="mini">缺料</el-button>
+        <el-button type="danger" class="minimum" size="mini">缺料</el-button>
         <el-button type="warning" class="minimum" size="mini">生产</el-button>
         <el-button type="primary" class="minimum" size="mini">完成</el-button>
       </template>
-      
     </data-list>
-    
   </div>
 </template>
 <script>
 import dataList from '../../components/dataList/dataList';
 import cookies from '../../../../common/utils/cookies.js';
 import { ladongOrder } from '../../../../api/index';
+
+import qianbi from '../../../../common/category/qianbi';
+import tianhua from '../../../../common/category/tianhua';
+import jiaomen from '../../../../common/category/jiaomen';
+import anjie from '../../../../common/category/anjie';
 
 export default {
     name: 'currentPullOrder',
@@ -63,8 +66,9 @@ export default {
     },
     data() {
         return {
-            activeName: 'first',
-            activePane:{},
+            activeName: 'qianbi',
+            activePane: {},
+            headers: [],
             userInfo: {},
             userRoleMaxType: '',
             pullPanes: [
@@ -72,103 +76,129 @@ export default {
                 {
                     label: '前壁产线',
                     type: 4,
-                    name: 'first'
+                    name: 'qianbi',
+                    headers: qianbi
                 },
                 {
                     label: '天花产线',
                     type: 5,
-                    name: 'second'
+                    name: 'tianhua',
+                    headers: tianhua
                 },
                 {
                     label: '轿门产线',
                     type: 6,
-                    name: 'three'
+                    name: 'jiaomen',
+                    headers: jiaomen
                 },
                 {
                     label: '安捷产线',
                     type: 7,
-                    name: 'four'
+                    name: 'anjie',
+                    headers: anjie
                 }
             ],
             tableData: [
                 {
-                    order: '12345678',
-                    parts1: 'A-01',
-                    parts2: 'B-01',
-                    parts3: 'C-01',
-                    parts4: 'D-01',
-                    time: '2018-12-21',
-                    current: '已完成',
-                    place: '前壁1线',
-                    remarks: '加急'
-                },
-                {
-                    order: '12345678',
-                    parts1: 'A-01',
-                    parts2: 'B-01',
-                    parts3: 'C-01',
-                    parts4: 'D-01',
-                    time: '2018-12-21',
-                    current: '已完成',
-                    place: '前壁1线',
-                    remarks: '加急'
-                },
-                {
-                    order: '12345678',
-                    parts1: 'A-01',
-                    parts2: 'B-01',
-                    parts3: 'C-01',
-                    parts4: 'D-01',
-                    time: '2018-12-21',
-                    current: '已完成',
-                    place: '前壁1线',
-                    remarks: '加急'
-                },
-                {
-                    order: '12345678',
-                    parts1: 'A-01',
-                    parts2: 'B-01',
-                    parts3: 'C-01',
-                    parts4: 'D-01',
-                    time: '2018-12-21',
-                    current: '已完成',
-                    place: '前壁1线',
-                    remarks: '加急'
-                },
-                {
-                    order: '12345678',
-                    parts1: 'A-01',
-                    parts2: 'B-01',
-                    parts3: 'C-01',
-                    parts4: 'D-01',
-                    time: '2018-12-21',
-                    current: '已完成',
-                    place: '前壁1线',
-                    remarks: '加急'
-                },
-                {
-                    order: '12345678',
-                    parts1: 'A-01',
-                    parts2: 'B-01',
-                    parts3: 'C-01',
-                    parts4: 'D-01',
-                    time: '2018-12-21',
-                    current: '已完成',
-                    place: '前壁1线',
-                    remarks: '加急'
-                },
-                {
-                    order: '12345678',
-                    parts1: 'A-01',
-                    parts2: 'B-01',
-                    parts3: 'C-01',
-                    parts4: 'D-01',
-                    time: '2018-12-21',
-                    current: '已完成',
-                    place: '前壁1线',
-                    remarks: '加急'
+                    orderBatch: '1',
+                    tixing:'1',
+                    orderNo:'2',
+                    line:'3',
+                    FMaterial:'FMaterial',
+                    hmchouDu:'hmchouDu',
+                    secttc:'secttc',
+                    zkck:'zkck',
+                    lf:'lf',
+                    rf:'rf',
+                    copleixing:'copleixing',
+                    weizhi1:'weizhi1',
+                    qianbigaodu:'qianbigaodu',
+                    ch:'ch',
+                    ak:'ak',
+                    hh:'hh',
+                    qianbigaodu:'qianbigaodu',
+                    market:'market'
                 }
             ],
+            // tableData: [
+            //     {
+            //         order: '12345678',
+            //         parts1: 'A-01',
+            //         parts2: 'B-01',
+            //         parts3: 'C-01',
+            //         parts4: 'D-01',
+            //         time: '2018-12-21',
+            //         current: '已完成',
+            //         place: '前壁1线',
+            //         remarks: '加急'
+            //     },
+            //     {
+            //         order: '12345678',
+            //         parts1: 'A-01',
+            //         parts2: 'B-01',
+            //         parts3: 'C-01',
+            //         parts4: 'D-01',
+            //         time: '2018-12-21',
+            //         current: '已完成',
+            //         place: '前壁1线',
+            //         remarks: '加急'
+            //     },
+            //     {
+            //         order: '12345678',
+            //         parts1: 'A-01',
+            //         parts2: 'B-01',
+            //         parts3: 'C-01',
+            //         parts4: 'D-01',
+            //         time: '2018-12-21',
+            //         current: '已完成',
+            //         place: '前壁1线',
+            //         remarks: '加急'
+            //     },
+            //     {
+            //         order: '12345678',
+            //         parts1: 'A-01',
+            //         parts2: 'B-01',
+            //         parts3: 'C-01',
+            //         parts4: 'D-01',
+            //         time: '2018-12-21',
+            //         current: '已完成',
+            //         place: '前壁1线',
+            //         remarks: '加急'
+            //     },
+            //     {
+            //         order: '12345678',
+            //         parts1: 'A-01',
+            //         parts2: 'B-01',
+            //         parts3: 'C-01',
+            //         parts4: 'D-01',
+            //         time: '2018-12-21',
+            //         current: '已完成',
+            //         place: '前壁1线',
+            //         remarks: '加急'
+            //     },
+            //     {
+            //         order: '12345678',
+            //         parts1: 'A-01',
+            //         parts2: 'B-01',
+            //         parts3: 'C-01',
+            //         parts4: 'D-01',
+            //         time: '2018-12-21',
+            //         current: '已完成',
+            //         place: '前壁1线',
+            //         remarks: '加急'
+            //     },
+            //     {
+            //         order: '12345678',
+            //         parts1: 'A-01',
+            //         parts2: 'B-01',
+            //         parts3: 'C-01',
+            //         parts4: 'D-01',
+            //         time: '2018-12-21',
+            //         current: '已完成',
+            //         place: '前壁1线',
+            //         remarks: '加急'
+            //     }
+            // ],
             gridData: [
                 {
                     order: '12345678',
@@ -215,6 +245,8 @@ export default {
         //选择产线tab
         chooseCx(tab, event) {
             this.activePane = this.pullPanes[tab.index];
+            this.headers = this.pullPanes[tab.index].headers;
+
             // console.log(this.activePane);
         },
         deleteRow(index, rows) {
@@ -232,13 +264,13 @@ export default {
         handleSelectionChange(val) {
             this.multipleSelection = val;
         },
-        async getData(){
+        async getData() {
             console.log(this.activePane);
             let res = await ladongOrder({
-                type:this.activePane.type,
-                currentpage:1,
-                pagesize:100000
-            })
+                type: this.activePane.type,
+                currentpage: 1,
+                pagesize: 100000
+            });
             console.log(res);
         }
     },
@@ -246,9 +278,10 @@ export default {
         this.userInfo = cookies.get('userInfo');
         this.userRoleMaxType = this.userInfo.roleMaxType;
 
-        if(this.userRoleMaxType == 'ZX'){
-            
+        if (this.userRoleMaxType == 'ZX') {
             this.activePane = this.pullPanes[0];
+            this.headers = this.pullPanes[0].headers;
+            console.log(this.headers);
         }
 
         this.getData();
