@@ -56,6 +56,7 @@
             size="mini"
             @click="chehui(slotProps.rowData)"
           >撤回</el-button>
+          <div v-if="slotProps.rowData.currentStatus == '订单完成'">订单完成</div>
         </template>
         <template v-if="userRoleMaxType == 'QB'">
           <el-button type="danger" class="minimum" size="mini">缺料</el-button>
@@ -216,9 +217,9 @@ export default {
                     } else if (this.activePane.type == 5) {
                         item.currentStatus = item.thStatus;
                     } else if (this.activePane.type == 6) {
-                        item.currentStatus = item.jmstatus;
+                        item.currentStatus = item.jmStatus;
                     } else if (this.activePane.type == 7) {
-                        item.currentStatus = item.ajstatus;
+                        item.currentStatus = item.ajStatus;
                     }
                     return item;
                 });
