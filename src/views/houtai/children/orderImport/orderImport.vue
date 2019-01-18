@@ -29,7 +29,7 @@
   </div>
 </template>
 <script>
-import { importOrder } from '../../../../api';
+import { importOrder, domain } from '../../../../api';
 import axios from 'axios';
 export default {
     data() {
@@ -47,7 +47,7 @@ export default {
             form.append('file', file);
             // let res = await importOrder({ worktime: this.worktime }, file);
 
-            axios.post('//kone.2xnet.net:8023/importOrder.2x', form, {
+            axios.post('//' + domain + '/importOrder.2x', form, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 }

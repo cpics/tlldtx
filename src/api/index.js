@@ -1,5 +1,6 @@
 import fetch from '../common/fetch/index';
 const domain = '//kone.2xnet.net:8023';
+// export const domain = location.host;
 
 //用户登录
 export const login = params =>
@@ -57,6 +58,13 @@ export const queliaoOrder = params =>
         params: params
     })
 
+
+//查询缺料订单
+export const wipOrder = params =>
+    fetch.get(domain + '/queryShengchan.2x', {
+        params: params
+    })
+
 //今日统计
 export const todayTongji = params =>
     fetch.get(domain + '/jinritongji.2x', {
@@ -84,6 +92,18 @@ export const shengchanwancheng = params =>
 //更新订单状态为订单
 export const orderwancheng = params =>
     fetch.get(domain + '/orderwancheng.2x', {
+        params: params
+    })
+
+//更新订单状态为撤回
+export const cehui = params =>
+    fetch.get(domain + '/cehui.2x', {
+        params: params
+    })
+
+//更新订单状态为缺料
+export const queliao = params =>
+    fetch.get(domain + '/queliao.2x', {
         params: params
     })
 
