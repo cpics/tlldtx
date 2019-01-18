@@ -40,7 +40,7 @@ fetch.interceptors.request.use(
         //     config.data = form;
         // }
 
-        console.log(config);
+        // console.log(config);
 
         return config;
     },
@@ -64,11 +64,13 @@ fetch.interceptors.response.use(
 
 
         // Do something with response data
-        if (response.data) {
-            return response.data;
-        } else {
-            return response;
-        }
+        // console.log(response);
+        return response.data;
+        // if (response.data) {
+        //     return response.data;
+        // } else {
+        //     return response;
+        // }
 
     },
     error => {

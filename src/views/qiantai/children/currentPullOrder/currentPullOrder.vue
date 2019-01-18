@@ -30,21 +30,25 @@
     </el-tabs>
     <data-list :tableData="tableData" :headers="headers">
       <template slot="allAction" v-if="userRoleMaxType == 'ZX'">
-        <el-button type="danger" size="mini">一键撤回</el-button>
-      </template>
-      <template slot-scope="slotProps" slot="itemAction" v-if="userRoleMaxType == 'ZX'">
-        <el-button type="danger" class="minimum" size="mini">撤回{{slotProps.rowData.order}}</el-button>
-      </template>
+        <template v-if="userRoleMaxType == 'ZX'">
+          <el-button type="danger" size="mini">一键撤回</el-button>
+        </template>
 
-      <template slot="allAction" v-if="userRoleMaxType == 'QB'">
-        <el-button type="danger" size="mini">一键缺料</el-button>
-        <el-button type="warning" size="mini">一键生产</el-button>
-        <el-button type="primary" size="mini">一键完成</el-button>
+        <template v-if="userRoleMaxType == 'QB'">
+          <el-button type="danger" size="mini">一键缺料</el-button>
+          <el-button type="warning" size="mini">一键生产</el-button>
+          <el-button type="primary" size="mini">一键完成</el-button>
+        </template>
       </template>
-      <template slot-scope="slotProps" slot="itemAction" v-if="userRoleMaxType == 'QB'">
-        <el-button type="danger" class="minimum" size="mini">缺料</el-button>
-        <el-button type="warning" class="minimum" size="mini">生产</el-button>
-        <el-button type="primary" class="minimum" size="mini">完成</el-button>
+      <template slot-scope="slotProps" slot="itemAction">
+        <template v-if="userRoleMaxType == 'ZX'">
+          <el-button type="danger" class="minimum" size="mini">撤回</el-button>
+        </template>
+        <template v-if="userRoleMaxType == 'QB'">
+          <el-button type="danger" class="minimum" size="mini">缺料</el-button>
+          <el-button type="warning" class="minimum" size="mini">生产</el-button>
+          <el-button type="primary" class="minimum" size="mini">完成</el-button>
+        </template>
       </template>
     </data-list>
   </div>
@@ -98,107 +102,7 @@ export default {
                     headers: anjie
                 }
             ],
-            tableData: [
-                {
-                    orderBatch: '1',
-                    tixing:'1',
-                    orderNo:'2',
-                    line:'3',
-                    FMaterial:'FMaterial',
-                    hmchouDu:'hmchouDu',
-                    secttc:'secttc',
-                    zkck:'zkck',
-                    lf:'lf',
-                    rf:'rf',
-                    copleixing:'copleixing',
-                    weizhi1:'weizhi1',
-                    qianbigaodu:'qianbigaodu',
-                    ch:'ch',
-                    ak:'ak',
-                    hh:'hh',
-                    qianbigaodu:'qianbigaodu',
-                    market:'market'
-                }
-            ],
-            // tableData: [
-            //     {
-            //         order: '12345678',
-            //         parts1: 'A-01',
-            //         parts2: 'B-01',
-            //         parts3: 'C-01',
-            //         parts4: 'D-01',
-            //         time: '2018-12-21',
-            //         current: '已完成',
-            //         place: '前壁1线',
-            //         remarks: '加急'
-            //     },
-            //     {
-            //         order: '12345678',
-            //         parts1: 'A-01',
-            //         parts2: 'B-01',
-            //         parts3: 'C-01',
-            //         parts4: 'D-01',
-            //         time: '2018-12-21',
-            //         current: '已完成',
-            //         place: '前壁1线',
-            //         remarks: '加急'
-            //     },
-            //     {
-            //         order: '12345678',
-            //         parts1: 'A-01',
-            //         parts2: 'B-01',
-            //         parts3: 'C-01',
-            //         parts4: 'D-01',
-            //         time: '2018-12-21',
-            //         current: '已完成',
-            //         place: '前壁1线',
-            //         remarks: '加急'
-            //     },
-            //     {
-            //         order: '12345678',
-            //         parts1: 'A-01',
-            //         parts2: 'B-01',
-            //         parts3: 'C-01',
-            //         parts4: 'D-01',
-            //         time: '2018-12-21',
-            //         current: '已完成',
-            //         place: '前壁1线',
-            //         remarks: '加急'
-            //     },
-            //     {
-            //         order: '12345678',
-            //         parts1: 'A-01',
-            //         parts2: 'B-01',
-            //         parts3: 'C-01',
-            //         parts4: 'D-01',
-            //         time: '2018-12-21',
-            //         current: '已完成',
-            //         place: '前壁1线',
-            //         remarks: '加急'
-            //     },
-            //     {
-            //         order: '12345678',
-            //         parts1: 'A-01',
-            //         parts2: 'B-01',
-            //         parts3: 'C-01',
-            //         parts4: 'D-01',
-            //         time: '2018-12-21',
-            //         current: '已完成',
-            //         place: '前壁1线',
-            //         remarks: '加急'
-            //     },
-            //     {
-            //         order: '12345678',
-            //         parts1: 'A-01',
-            //         parts2: 'B-01',
-            //         parts3: 'C-01',
-            //         parts4: 'D-01',
-            //         time: '2018-12-21',
-            //         current: '已完成',
-            //         place: '前壁1线',
-            //         remarks: '加急'
-            //     }
-            // ],
+            tableData: [],
             gridData: [
                 {
                     order: '12345678',
@@ -246,6 +150,7 @@ export default {
         chooseCx(tab, event) {
             this.activePane = this.pullPanes[tab.index];
             this.headers = this.pullPanes[tab.index].headers;
+            this.getData();
 
             // console.log(this.activePane);
         },
@@ -265,13 +170,19 @@ export default {
             this.multipleSelection = val;
         },
         async getData() {
-            console.log(this.activePane);
             let res = await ladongOrder({
                 type: this.activePane.type,
                 currentpage: 1,
                 pagesize: 100000
             });
-            console.log(res);
+            if (res.code == 0) {
+                this.tableData = res.objects.entityList;
+            } else {
+                this.$notify.error({
+                    type: '错误',
+                    message: res.codeInfo
+                });
+            }
         }
     },
     created() {
@@ -281,7 +192,7 @@ export default {
         if (this.userRoleMaxType == 'ZX') {
             this.activePane = this.pullPanes[0];
             this.headers = this.pullPanes[0].headers;
-            console.log(this.headers);
+            // console.log(this.headers);
         }
 
         this.getData();

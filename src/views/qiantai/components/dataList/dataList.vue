@@ -43,6 +43,7 @@ export default {
     },
     mounted(){
         console.log(this.headers);
+        console.log()
     }
 };
 </script>
