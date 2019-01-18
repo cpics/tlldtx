@@ -29,7 +29,7 @@
       <el-tab-pane v-for="(item,i) in pullPanes" :key="i" :label="item.label" :name="item.name"></el-tab-pane>
     </el-tabs>
     <data-list :tableData="tableData" :headers="headers">
-      <template slot="allAction" v-if="userRoleMaxType == 'ZX'">
+      <template slot-scope="slotProps" slot="allAction">
         <template v-if="userRoleMaxType == 'ZX'">
           <el-button type="danger" size="mini">一键撤回</el-button>
         </template>
@@ -42,7 +42,20 @@
       </template>
       <template slot-scope="slotProps" slot="itemAction">
         <template v-if="userRoleMaxType == 'ZX'">
-          <el-button type="danger" class="minimum" size="mini">撤回</el-button>
+          <el-button
+            v-if="slotProps.rowData.currentStatus == '未安排'"
+            type="primary"
+            class="minimum"
+            size="mini"
+            @click="xiadan(slotProps.rowData)"
+          >下单</el-button>
+          <el-button
+            v-if="slotProps.rowData.currentStatus == '已下单'"
+            type="danger"
+            class="minimum"
+            size="mini"
+            @click="chehui(slotProps.rowData)"
+          >撤回</el-button>
         </template>
         <template v-if="userRoleMaxType == 'QB'">
           <el-button type="danger" class="minimum" size="mini">缺料</el-button>
@@ -56,7 +69,7 @@
 <script>
 import dataList from '../../components/dataList/dataList';
 import cookies from '../../../../common/utils/cookies.js';
-import { ladongOrder } from '../../../../api/index';
+import { ladongOrder, xiadan } from '../../../../api/index';
 
 import qianbi from '../../../../common/category/qianbi';
 import tianhua from '../../../../common/category/tianhua';
@@ -151,32 +164,65 @@ export default {
             this.activePane = this.pullPanes[tab.index];
             this.headers = this.pullPanes[tab.index].headers;
             this.getData();
-
-            // console.log(this.activePane);
         },
-        deleteRow(index, rows) {
-            rows.splice(index, 1);
-        },
-        toggleSelection(rows) {
-            if (rows) {
-                rows.forEach(row => {
-                    this.$refs.multipleTable.toggleRowSelection(row);
+        //更新订单为下单
+        async xiadan(order) {
+            // return;
+            let res = await xiadan({
+                type: this.activePane.type,
+                orderNo:order.orderNo
+            });
+            if (res.code == 0) {
+                order.currentStatus ='已下单';
+                this.$notify.success({
+                    title: '成功',
+                    message: res.codeInfo
                 });
             } else {
-                this.$refs.multipleTable.clearSelection();
+                this.$notify.error({
+                    type: '错误',
+                    message: res.codeInfo
+                });
             }
         },
-        handleSelectionChange(val) {
-            this.multipleSelection = val;
+        async chehui(order){
+            order.currentStatus = '未安排';
         },
+        // deleteRow(index, rows) {
+        //     rows.splice(index, 1);
+        // },
+        // toggleSelection(rows) {
+        //     if (rows) {
+        //         rows.forEach(row => {
+        //             this.$refs.multipleTable.toggleRowSelection(row);
+        //         });
+        //     } else {
+        //         this.$refs.multipleTable.clearSelection();
+        //     }
+        // },
+        // handleSelectionChange(val) {
+        //     this.multipleSelection = val;
+        // },
         async getData() {
             let res = await ladongOrder({
                 type: this.activePane.type,
                 currentpage: 1,
                 pagesize: 100000
             });
-            if (res.code == 0) {
-                this.tableData = res.objects.entityList;
+            if (res.code == 0 && res.objects.entityList) {
+                this.tableData = res.objects.entityList.map(item => {
+                    if (this.activePane.type == 4) {
+                        item.currentStatus = item.qbStatus;
+                    } else if (this.activePane.type == 5) {
+                        item.currentStatus = item.thStatus;
+                    } else if (this.activePane.type == 6) {
+                        item.currentStatus = item.jmstatus;
+                    } else if (this.activePane.type == 7) {
+                        item.currentStatus = item.ajstatus;
+                    }
+                    return item;
+                });
+                console.log(this.tableData);
             } else {
                 this.$notify.error({
                     type: '错误',
@@ -192,12 +238,9 @@ export default {
         if (this.userRoleMaxType == 'ZX') {
             this.activePane = this.pullPanes[0];
             this.headers = this.pullPanes[0].headers;
-            // console.log(this.headers);
         }
 
         this.getData();
-
-        // console.log(this.userInfo);
     }
 };
 </script>

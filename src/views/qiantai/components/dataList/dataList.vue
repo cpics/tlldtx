@@ -1,7 +1,8 @@
 <template>
   <div class="m-inner-box">
     <div class="m-el-tipper">
-      <div class="tipper-txt">前壁产线 - 拉动批次01 2018-10-21 10:21:32</div>
+      <div class="tipper-txt"></div>
+      <!-- <div class="tipper-txt">前壁产线 - 拉动批次01 2018-10-21 10:21:32</div> -->
       <div class="tipper-handle">
         <!-- <template slot-scope="scope"> -->
           <slot name="allAction" ></slot>
@@ -9,7 +10,7 @@
       </div>
     </div>
     <!--加急 单元行-标红 tr  + c-red-->
-    <el-table :data="tableData" style="width: 100%" max-height="280">
+    <el-table :data="tableData" style="width: 100%">
       <el-table-column 
       v-for="(item,index) in headers" 
       :key="index"
@@ -42,8 +43,8 @@ export default {
         tableData: Array
     },
     mounted(){
-        console.log(this.headers);
-        console.log()
+        // console.log(this.headers);
+        // console.log()
     }
 };
 </script>

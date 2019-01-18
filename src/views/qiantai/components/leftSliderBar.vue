@@ -11,15 +11,15 @@
           <li>2018-10-15 13.21.12</li>
           <li>
             <div class="d-label">今日计划：</div>
-            <div>312</div>
+            <div>{{todayLeftData.total}}</div>
           </li>
           <li>
             <div class="d-label">当前完成：</div>
-            <div>120</div>
+            <div>{{todayLeftData.total-todayLeftData.unfinish}}</div>
           </li>
           <li>
             <div class="d-label">完成率：</div>
-            <div>30%</div>
+            <div>{{parseInt((todayLeftData.total-todayLeftData.unfinish)/todayLeftData.unfinish*100)}}%</div>
           </li>
           <li>
             <div class="d-label">运行状态：</div>
@@ -68,7 +68,8 @@
 export default {
     name: 'leftSliderBar',
     props: {
-        maxClassString: String
+        maxClassString: String,
+        todayLeftData: Object
     }
 };
 </script>

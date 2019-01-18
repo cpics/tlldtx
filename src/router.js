@@ -107,7 +107,7 @@ const router = new Router({
 
 router.afterEach(route => {
     store.commit('setCurrentMeta', route.meta.title);
-    console.log(route);
+    // console.log(route);
 })
 
 export default router;

@@ -1,7 +1,7 @@
 <template>
   <el-container class="mod-wrapper">
     <el-aside class="g-slide-bar" width="200px">
-      <leftSliderbar :maxClassString="userInfo.roleString" />
+      <leftSliderbar :maxClassString="userInfo.roleString" :todayLeftData="todayLeftData"/>
     </el-aside>
     <el-container>
       <el-header class="f-header-bar">
@@ -12,7 +12,8 @@
         <el-tabs v-model="activeName" type="card" @tab-click="tabClick">
           <el-tab-pane v-for="(item,index) in defaultSort" :key="index" :name="tabsList[item].name">
             <span slot="label">
-              <el-badge :value="99" class="item m-inside">{{tabsList[item].meta.title}}</el-badge>
+              <el-badge class="item m-inside">{{tabsList[item].meta.title}}</el-badge>
+              <!-- <el-badge :value="99" class="item m-inside">{{tabsList[item].meta.title}}</el-badge> -->
             </span>
           </el-tab-pane>
         </el-tabs>
@@ -29,16 +30,19 @@ import cookies from '../../common/utils/cookies';
 
 import { qiantaiRouters } from '../../router';
 import { roleMaxType } from '../../common/role-types/role-types';
+import { todayTongji, queryScInfo, updateScInfo } from '../../api/index';
 export default {
     name: 'qiantai',
     data() {
         return {
             tabsList: [],
+            todayLeftData: {},
+            scInfo:{},
             activeName: 'first',
             userInfo: {},
-            zxSort:[0,1,2,3,4],
-            qbSort:[1,0,2,3,4],
-            defaultSort:[]
+            zxSort: [0, 1, 2, 3, 4],
+            qbSort: [1, 0, 2, 3, 4],
+            defaultSort: []
         };
     },
     components: {
@@ -47,8 +51,35 @@ export default {
     },
     methods: {
         tabClick(tab, event) {
-            console.log(tab.index);
             this.$router.push(this.tabsList[this.defaultSort[tab.index]].path);
+        },
+        //获取左边的今日数据
+        async getTodayData(type) {
+            let res = await todayTongji({
+                type
+            });
+            if (res.code == 0) {
+                this.todayLeftData = res.objects;
+            } else {
+                this.$notify.error({
+                    title: '错误',
+                    message: res.codeInfo
+                });
+            }
+        },
+        async getQueryScInfo(type) {
+            let res = await queryScInfo({
+                zplineno:type
+            });
+            if (res.code == 0) {
+                console.log(res);
+                this.scInfo = res.objects;
+            } else {
+                this.$notify.error({
+                    title: '错误',
+                    message: res.codeInfo
+                });
+            }
         }
     },
     mounted() {
@@ -57,21 +88,22 @@ export default {
             return;
         }
         this.userInfo = cookies.get('userInfo');
-        
+
+        this.getTodayData(this.userInfo.role);
+        this.getQueryScInfo(this.userInfo.role);
+
         //获取当前用户的大类型
         let currentUserMaxType = this.userInfo.roleMaxType;
 
         //根据大类型来展示使用那种数据展示Tab
-        if(currentUserMaxType == roleMaxType.ZX){
+        if (currentUserMaxType == roleMaxType.ZX) {
             this.defaultSort = this.zxSort;
-        }else if(currentUserMaxType == roleMaxType.QB){
+        } else if (currentUserMaxType == roleMaxType.QB) {
             this.defaultSort = this.qbSort;
         }
-        
+
         this.tabsList = qiantaiRouters;
         this.activeName = this.$route.name;
-        
-
     }
 };
 </script>
