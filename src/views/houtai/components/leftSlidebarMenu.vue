@@ -1,7 +1,7 @@
 <template>
   <el-menu :default-active="currentIndex" class="el-menu-vertical-demo" :router="true">
     <el-menu-item v-for="(item,i) in sliderbarMenuList" :index="`${i}`" :key="i" :route="item">
-      <span slot="title">{{item.meta.title}}{{i}}</span>
+      <span slot="title">{{item.meta.title}}</span>
     </el-menu-item>
   </el-menu>
 </template>

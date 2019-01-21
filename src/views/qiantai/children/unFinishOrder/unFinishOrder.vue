@@ -1,7 +1,7 @@
 <template>
   <div class="g-order-main">
     <!--当前Wip区订单-->
-    <el-tabs v-model="activeName" @tab-click="chooseCx" v-if="userRoleMaxType == 'ZX'">
+    <el-tabs v-model="activeName" @tab-click="chooseCx" >
       <el-tab-pane v-for="(item,i) in pullPanes" :key="i" :label="item.label" :name="item.name"></el-tab-pane>
     </el-tabs>
     <data-list :tableData="tableData" :headers="headers">
@@ -15,7 +15,7 @@
       <template slot-scope="slotProps" slot="itemAction">
         <template v-if="userRoleMaxType == 'ZX'"></template>
         <template v-if="userRoleMaxType == 'QB'">
-          <el-button type="primary" size="mini">取消标记</el-button>
+          <el-button @click="quxiaoqueliao((slotProps.rowData))" type="primary" size="mini">取消标记</el-button>
         </template>
       </template>
     </data-list>
@@ -24,7 +24,7 @@
 <script>
 import dataList from '../../components/dataList/dataList';
 import cookies from '../../../../common/utils/cookies.js';
-import { queliaoOrder, shengchan } from '../../../../api/index';
+import { queliaoOrder, quxiaoqueliao } from '../../../../api/index';
 
 import qianbi from '../../../../common/category/qianbi';
 import tianhua from '../../../../common/category/tianhua';
@@ -69,18 +69,51 @@ export default {
                     headers: anjie
                 }
             ],
+            qbPullPanes: [
+                //产线类型
+                {
+                    label: '装箱南线',
+                    type: 1,
+                    name: 'zhuangxiangnan',
+                    headers: null
+                },
+                {
+                    label: '装箱北线',
+                    type: 2,
+                    name: 'zhuangxiangbei',
+                    headers: null
+                }
+            ],
             tableData: []
         };
     },
     methods: {
-    //选择产线tab
+        //选择产线tab
         chooseCx(tab, event) {
             this.activePane = this.pullPanes[tab.index];
             this.headers = this.pullPanes[tab.index].headers;
             this.getData();
         },
-        deleteRow(index, rows) {
-            rows.splice(index, 1);
+        //缺料
+        async quxiaoqueliao(order) {
+            // return;
+            let res = await quxiaoqueliao({
+                type: this.activePane.type,
+                orderNo: order.orderNo
+            });
+            if (res.code == 0) {
+                let orderIndex = this.tableData.indexOf(order);
+                this.tableData.splice(orderIndex, 1);
+                this.$notify.success({
+                    title: '成功',
+                    message: res.codeInfo
+                });
+            } else {
+                this.$notify.error({
+                    type: '错误',
+                    message: res.codeInfo
+                });
+            }
         },
         async getData() {
             let res = await queliaoOrder({
@@ -106,9 +139,20 @@ export default {
             this.activePane = this.pullPanes[0];
             this.headers = this.pullPanes[0].headers;
         } else if (this.userRoleMaxType == 'QB') {
-            this.activePane = this.pullPanes.find(item => {
-                return (item.type = this.userInfo.role);
+            this.pullPanes.forEach((item)=>{
+                if(item.type == this.userInfo.role){
+                    this.qbPullPanes.forEach(pane=>{
+                        pane.headers = item.headers;
+                    });
+                }
             });
+            
+            this.pullPanes = this.qbPullPanes;
+            this.activePane = this.pullPanes[0];
+            this.activeName = this.activePane.name;
+            // this.activePane = this.pullPanes.find(item => {
+            //     return (item.type = this.userInfo.role);
+            // });
             this.headers = this.activePane.headers;
         }
 

@@ -1,6 +1,6 @@
 import fetch from '../common/fetch/index';
-// const domain = '//kone.2xnet.net:8023';
-export const domain = '//' + location.host;
+const domain = '//kone.2xnet.net:8023';
+// export const domain = '//' + location.host;
 
 //用户登录
 export const login = params =>
@@ -19,7 +19,11 @@ export const getCurrentUserInfo = params =>
     fetch.get(domain + '/getCurrentUser.2x', {
         params: params
     });
-
+//查询所有用户
+export const getUsers = params =>
+    fetch.get(domain + '/getUsers.2x', {
+        params: params
+    });
 //添加用户
 export const addUser = params =>
     fetch.get(domain + '/addUser.2x', {
@@ -59,7 +63,7 @@ export const queliaoOrder = params =>
     })
 
 
-//查询缺料订单
+//查询Wip订单
 export const wipOrder = params =>
     fetch.get(domain + '/queryShengchan.2x', {
         params: params
@@ -119,4 +123,25 @@ export const updateScInfo = params =>
         params: params
     })
 
+//取消标记
+export const quxiaoqueliao = params =>
+    fetch.get(domain + '/quxiaoqueliao.2x', {
+        params: params
+    })
+
+//订单结束完成
+export const orderFinish = params =>
+    fetch.get(domain + '/orderFinish.2x', {
+        params: params
+    })
+//一键下单
+export const yijianxiadan = params =>
+    fetch.get(domain + '/yijianxiadan.2x', {
+        params: params
+    })
+
 //
+export const queryPaichan = params =>
+    fetch.get(domain + '/queryPaichan.2x', {
+        params: params
+    })

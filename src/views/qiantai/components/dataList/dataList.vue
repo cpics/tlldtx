@@ -1,8 +1,8 @@
 <template>
   <div class="m-inner-box">
     <div class="m-el-tipper">
-      <div class="tipper-txt"></div>
-      <!-- <div class="tipper-txt">前壁产线 - 拉动批次01 2018-10-21 10:21:32</div> -->
+      <!-- <div class="tipper-txt"></div> -->
+      <div class="tipper-txt">前壁产线 - 拉动批次01 2018-10-21 10:21:32</div>
       <div class="tipper-handle">
         <!-- <template slot-scope="scope"> -->
           <slot name="allAction" ></slot>

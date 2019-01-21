@@ -8,6 +8,7 @@ import index from './views/houtai/children/index/index';
 import Login from './views/login/login';
 import orderImport from './views/houtai/children/orderImport/orderImport';
 import systemEdit from './views/houtai/children/systemEdit/systemEdit';
+import manage from './views/houtai/children/manage/manage';
 
 import CurrentWipAreaOrder from './views/qiantai/children/currentWipAreaOrder/currentWipAreaOrder';
 import CurrentPullOrder from './views/qiantai/children/currentPullOrder/currentPullOrder';
@@ -34,11 +35,11 @@ export const houtaiRouters = [{
     }
 },
 {
-    path: 'system/edit',
-    name: 'systemEdit',
-    component: systemEdit,
+    path: 'system/manage',
+    name: 'manage',
+    component: manage,
     meta: {
-        title: '系统设置'
+        title: '员工管理'
     }
 }
 ]
