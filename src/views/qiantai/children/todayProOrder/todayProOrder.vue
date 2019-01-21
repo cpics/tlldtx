@@ -1,23 +1,19 @@
 <template>
   <div class="g-order-main">
     <!--当前Wip区订单-->
-        <el-tabs v-model="activeName" @tab-click="chooseCx" v-if="userRoleMaxType == 'ZX'">
+    <el-tabs v-model="activeName" @tab-click="chooseCx" v-if="userRoleMaxType == 'ZX'">
       <el-tab-pane v-for="(item,i) in pullPanes" :key="i" :label="item.label" :name="item.name"></el-tab-pane>
     </el-tabs>
     <data-list :tableData="tableData" :headers="headers">
-      <template slot-scope="slotProps" slot="allAction">
-        <template v-if="userRoleMaxType == 'ZX'">
-        </template>
+      <!-- <template slot-scope="slotProps" slot="allAction">
+        <template v-if="userRoleMaxType == 'ZX'"></template>
 
-        <template v-if="userRoleMaxType == 'QB'">
-        </template>
+        <template v-if="userRoleMaxType == 'QB'"></template>
       </template>
       <template slot-scope="slotProps" slot="itemAction">
-        <template v-if="userRoleMaxType == 'ZX'">
-        </template>
-        <template v-if="userRoleMaxType == 'QB'">
-        </template>
-      </template>
+        <template v-if="userRoleMaxType == 'ZX'"></template>
+        <template v-if="userRoleMaxType == 'QB'"></template>
+      </template> -->
     </data-list>
   </div>
 </template>
@@ -69,16 +65,15 @@ export default {
                     headers: anjie
                 }
             ],
-            tableData: [],
+            tableData: []
         };
     },
     methods: {
-        //选择产线tab
+    //选择产线tab
         chooseCx(tab, event) {
             this.activePane = this.pullPanes[tab.index];
             this.headers = this.pullPanes[tab.index].headers;
             this.getData();
-
         },
         deleteRow(index, rows) {
             rows.splice(index, 1);
@@ -106,6 +101,11 @@ export default {
         if (this.userRoleMaxType == 'ZX') {
             this.activePane = this.pullPanes[0];
             this.headers = this.pullPanes[0].headers;
+        } else if (this.userRoleMaxType == 'QB') {
+            this.activePane = this.pullPanes.find(item => {
+                return (item.type = this.userInfo.role);
+            });
+            this.headers = this.activePane.headers;
         }
 
         this.getData();

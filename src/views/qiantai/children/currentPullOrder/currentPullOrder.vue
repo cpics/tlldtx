@@ -54,14 +54,31 @@
             type="danger"
             class="minimum"
             size="mini"
-            @click="chehui(slotProps.rowData)"
+            @click="cehui(slotProps.rowData)"
           >撤回</el-button>
-          <div v-if="slotProps.rowData.currentStatus == '订单完成'">订单完成</div>
         </template>
         <template v-if="userRoleMaxType == 'QB'">
-          <el-button type="danger" class="minimum" size="mini">缺料</el-button>
-          <el-button type="warning" class="minimum" size="mini">生产</el-button>
-          <el-button type="primary" class="minimum" size="mini">完成</el-button>
+          <el-button
+            type="danger"
+            class="minimum"
+            size="mini"
+            v-if="slotProps.rowData.currentStatus == '已下单'"
+            @click="queliao(slotProps.rowData)"
+          >缺料</el-button>
+          <el-button
+            v-if="slotProps.rowData.currentStatus == '已下单'"
+            type="warning"
+            class="minimum"
+            size="mini"
+            @click="shengchan(slotProps.rowData)"
+          >生产</el-button>
+          <el-button
+            v-if="slotProps.rowData.currentStatus == '生产中'"
+            type="primary"
+            class="minimum"
+            size="mini"
+            @click="shengchanwancheng(slotProps.rowData)"
+          >完成</el-button>
         </template>
       </template>
     </data-list>
@@ -70,7 +87,14 @@
 <script>
 import dataList from '../../components/dataList/dataList';
 import cookies from '../../../../common/utils/cookies.js';
-import { ladongOrder, xiadan } from '../../../../api/index';
+import {
+    ladongOrder,
+    xiadan,
+    shengchan,
+    cehui,
+    shengchanwancheng,
+    queliao
+} from '../../../../api/index';
 
 import qianbi from '../../../../common/category/qianbi';
 import tianhua from '../../../../common/category/tianhua';
@@ -160,7 +184,7 @@ export default {
         };
     },
     methods: {
-        //选择产线tab
+    //选择产线tab
         chooseCx(tab, event) {
             this.activePane = this.pullPanes[tab.index];
             this.headers = this.pullPanes[tab.index].headers;
@@ -171,10 +195,10 @@ export default {
             // return;
             let res = await xiadan({
                 type: this.activePane.type,
-                orderNo:order.orderNo
+                orderNo: order.orderNo
             });
             if (res.code == 0) {
-                order.currentStatus ='已下单';
+                order.currentStatus = '已下单';
                 this.$notify.success({
                     title: '成功',
                     message: res.codeInfo
@@ -186,8 +210,86 @@ export default {
                 });
             }
         },
-        async chehui(order){
-            order.currentStatus = '未安排';
+        //撤回
+        async cehui(order) {
+            let res = await cehui({
+                type: this.activePane.type,
+                orderNo: order.orderNo
+            });
+            if (res.code == 0) {
+                order.currentStatus = '未安排';
+                this.$notify.success({
+                    title: '成功',
+                    message: res.codeInfo
+                });
+            } else {
+                this.$notify.error({
+                    type: '错误',
+                    message: res.codeInfo
+                });
+            }
+        },
+        //生产
+        async shengchan(order) {
+            let res = await shengchan({
+                type: this.activePane.type,
+                orderNo: order.orderNo
+            });
+            if (res.code == 0) {
+                order.currentStatus = '生产中';
+                this.$notify.success({
+                    title: '成功',
+                    message: res.codeInfo
+                });
+            } else {
+                this.$notify.error({
+                    type: '错误',
+                    message: res.codeInfo
+                });
+            }
+        },
+        //完成
+        async shengchanwancheng(order) {
+            let res = await shengchanwancheng({
+                type: this.activePane.type,
+                orderNo: order.orderNo
+            });
+            if (res.code == 0) {
+                let orderIndex = this.tableData.indexOf(order);
+                this.tableData.splice(orderIndex, 1);
+                // order.currentStatus = '订单完成';
+                this.$notify.success({
+                    title: '成功',
+                    message: res.codeInfo
+                });
+            } else {
+                this.$notify.error({
+                    type: '错误',
+                    message: res.codeInfo
+                });
+            }
+        },
+        //缺料
+        async queliao(order) {
+            let res = await queliao({
+                type: this.activePane.type,
+                orderNo: order.orderNo
+            });
+            if (res.code == 0) {
+                let orderIndex = this.tableData.indexOf(order);
+                this.tableData.splice(orderIndex, 1);
+                // order.currentStatus = '缺料';
+
+                this.$notify.success({
+                    title: '成功',
+                    message: res.codeInfo
+                });
+            } else {
+                this.$notify.error({
+                    type: '错误',
+                    message: res.codeInfo
+                });
+            }
         },
         // deleteRow(index, rows) {
         //     rows.splice(index, 1);
@@ -205,6 +307,7 @@ export default {
         //     this.multipleSelection = val;
         // },
         async getData() {
+            this.tableData = [];
             let res = await ladongOrder({
                 type: this.activePane.type,
                 currentpage: 1,
@@ -239,6 +342,11 @@ export default {
         if (this.userRoleMaxType == 'ZX') {
             this.activePane = this.pullPanes[0];
             this.headers = this.pullPanes[0].headers;
+        } else if (this.userRoleMaxType == 'QB') {
+            this.activePane = this.pullPanes.find(item => {
+                return (item.type = this.userInfo.role);
+            });
+            this.headers = this.activePane.headers;
         }
 
         this.getData();
