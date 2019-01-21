@@ -10,7 +10,7 @@
           <el-button type="primary" size="mini">一键确认</el-button>
         </template>
 
-        <template v-if="userRoleMaxType == 'QB'"></template>
+        <!-- <template v-if="userRoleMaxType == 'QB'"></template> -->
       </template>
       <template slot-scope="slotProps" slot="itemAction">
         <template v-if="userRoleMaxType == 'ZX'">
