@@ -28,10 +28,11 @@
       <el-tab-pane v-for="(item,i) in pullPanes" :key="i" :label="item.label" :name="item.name"></el-tab-pane>
     </el-tabs>
     <div v-for="(item,i) in tableData" :key="i">
-      <data-list 
-      :orderName="`${activePane.label} - ${item.batchNo} ${item.piciDate}`"
-      :orderList="item.orderList" 
-      :headers="headers">
+      <data-list
+        :orderName="`${activePane.label} - ${item.batchNo} ${item.piciDate}`"
+        :orderList="item.orderList"
+        :headers="headers"
+      >
         <template slot-scope="slotProps" slot="allAction">
           <template v-if="userRoleMaxType == 'ZX'">
             <el-button type="danger" size="mini">一键撤回</el-button>
@@ -51,7 +52,7 @@
               class="minimum"
               size="mini"
               @click="xiadan(i,slotProps.rowData)"
-            >下单</el-button> -->
+            >下单</el-button>-->
             <el-button
               v-if="slotProps.rowData.currentStatus == '已下单'"
               type="danger"
@@ -205,7 +206,7 @@ export default {
         };
     },
     methods: {
-        //选择产线tab
+    //选择产线tab
         chooseCx(tab, event) {
             this.activePane = this.pullPanes[tab.index];
             this.headers = this.pullPanes[tab.index].headers;
@@ -232,18 +233,18 @@ export default {
             }
         },
         //撤回
-        async cehui(orderObject,orderItem) {
+        async cehui(orderObject, orderItem) {
             let res = await cehui({
                 type: this.activePane.type,
                 orderNo: orderItem.orderNo,
-                batchNo:orderObject.batchNo
+                batchNo: orderObject.batchNo
             });
             if (res.code == 0) {
                 let orderObjectIndex = this.tableData.indexOf(orderObject);
                 let orderItemIndex = orderObject.orderList.indexOf(orderItem);
-                orderObject.orderList.splice(orderItemIndex,1);
-                if(orderObject.orderList.length == 0){
-                    this.tableData.splice(orderObjectIndex,1);
+                orderObject.orderList.splice(orderItemIndex, 1);
+                if (orderObject.orderList.length == 0) {
+                    this.tableData.splice(orderObjectIndex, 1);
                 }
                 this.$notify.success({
                     title: '成功',
@@ -257,11 +258,11 @@ export default {
             }
         },
         //生产
-        async shengchan(orderObject,orderItem) {
+        async shengchan(orderObject, orderItem) {
             let res = await shengchan({
-                type: this.activePane.type,
+                type: this.userInfo.role,
                 orderNo: orderItem.orderNo,
-                batchNo:orderObject.batchNo
+                batchNo: orderObject.batchNo
             });
             if (res.code == 0) {
                 orderItem.currentStatus = '生产中';
@@ -277,18 +278,18 @@ export default {
             }
         },
         //完成
-        async shengchanwancheng(orderObject,orderItem) {
+        async shengchanwancheng(orderObject, orderItem) {
             let res = await shengchanwancheng({
-                type: this.activePane.type,
+                type: this.userInfo.role,
                 orderNo: orderItem.orderNo,
-                batchNo:orderObject.batchNo
+                batchNo: orderObject.batchNo
             });
             if (res.code == 0) {
                 let orderObjectIndex = this.tableData.indexOf(orderObject);
                 let orderItemIndex = orderObject.orderList.indexOf(orderItem);
-                orderObject.orderList.splice(orderItemIndex,1);
-                if(orderObject.orderList.length == 0){
-                    this.tableData.splice(orderObjectIndex,1);
+                orderObject.orderList.splice(orderItemIndex, 1);
+                if (orderObject.orderList.length == 0) {
+                    this.tableData.splice(orderObjectIndex, 1);
                 }
                 this.$notify.success({
                     title: '成功',
@@ -302,19 +303,18 @@ export default {
             }
         },
         //缺料
-        async queliao(orderObject,orderItem) {
+        async queliao(orderObject, orderItem) {
             let res = await queliao({
-                type: this.activePane.type,
+                type: this.userInfo.role,
                 orderNo: orderItem.orderNo,
-                batchNo:orderObject.batchNo
+                batchNo: orderObject.batchNo
             });
             if (res.code == 0) {
-
                 let orderObjectIndex = this.tableData.indexOf(orderObject);
                 let orderItemIndex = orderObject.orderList.indexOf(orderItem);
-                orderObject.orderList.splice(orderItemIndex,1);
-                if(orderObject.orderList.length == 0){
-                    this.tableData.splice(orderObjectIndex,1);
+                orderObject.orderList.splice(orderItemIndex, 1);
+                if (orderObject.orderList.length == 0) {
+                    this.tableData.splice(orderObjectIndex, 1);
                 }
                 // console.log(orderObjectIndex,orderItemIndex);
 
@@ -361,23 +361,23 @@ export default {
                 currentpage: 1,
                 pagesize: 100000
             });
-            if (res.code == 0 ) {
+            if (res.code == 0) {
                 console.log(this.activePane);
-                res.objects.forEach(orderArray=>{
-                    orderArray.orderList.forEach(item=>{
-                        if (this.activePane.type == 4 || this.userInfo.role==4) {
+                res.objects.forEach(orderArray => {
+                    orderArray.orderList.forEach(item => {
+                        if (this.activePane.type == 4 || this.userInfo.role == 4) {
                             item.currentStatus = item.qbStatus;
-                        } else if (this.activePane.type == 5 || this.userInfo.role==5) {
+                        } else if (this.activePane.type == 5 || this.userInfo.role == 5) {
                             item.currentStatus = item.thStatus;
-                        } else if (this.activePane.type == 6  || this.userInfo.role==6) {
+                        } else if (this.activePane.type == 6 || this.userInfo.role == 6) {
                             item.currentStatus = item.jmStatus;
-                        } else if (this.activePane.type == 7  || this.userInfo.role==7) {
+                        } else if (this.activePane.type == 7 || this.userInfo.role == 7) {
                             item.currentStatus = item.ajStatus;
                         }
 
                         console.log(item.currentStatus);
-                    })
-                })
+                    });
+                });
                 this.tableData = res.objects;
                 console.log(this.tableData);
             } else {
