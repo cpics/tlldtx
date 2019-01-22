@@ -1,37 +1,39 @@
 <template>
   <div class="g-order-main">
     <!--当前Wip区订单-->
-    <el-tabs v-model="activeName" @tab-click="chooseCx" >
+    <el-tabs v-model="activeName" @tab-click="chooseCx">
       <el-tab-pane v-for="(item,i) in pullPanes" :key="i" :label="item.label" :name="item.name"></el-tab-pane>
     </el-tabs>
-    <data-list :tableData="tableData" :headers="headers">
-      <template slot-scope="slotProps" slot="allAction">
-        <template v-if="userRoleMaxType == 'ZX'">
-          <el-button type="primary" size="mini">一键确认</el-button>
-        </template>
+    <div v-for="(item,i) in tableData" :key="i">
+      <data-list :orderList="item.orderList" :headers="headers">
+        <template slot-scope="slotProps" slot="allAction">
+          <template v-if="userRoleMaxType == 'ZX'">
+            <el-button type="primary" size="mini">一键确认</el-button>
+          </template>
 
-        <!-- <template v-if="userRoleMaxType == 'QB'"></template> -->
-      </template>
-      <template slot-scope="slotProps" slot="itemAction">
-        <template v-if="userRoleMaxType == 'ZX'">
-          <el-button 
-          type="primary" 
-          class="minimum" 
-          size="mini"
-          @click="orderFinish(slotProps.rowData)"
-          >确认</el-button>
+          <!-- <template v-if="userRoleMaxType == 'QB'"></template> -->
         </template>
-        <template v-if="userRoleMaxType == 'QB'">
-          <!-- <el-button type="primary" size="mini">取消标记</el-button> -->
+        <template slot-scope="slotProps" slot="itemAction">
+          <template v-if="userRoleMaxType == 'ZX'">
+            <el-button
+              type="primary"
+              class="minimum"
+              size="mini"
+              @click="orderFinish(slotProps.rowData)"
+            >确认</el-button>
+          </template>
+          <template v-if="userRoleMaxType == 'QB'">
+            <!-- <el-button type="primary" size="mini">取消标记</el-button> -->
+          </template>
         </template>
-      </template>
-    </data-list>
+      </data-list>
+    </div>
   </div>
 </template>
 <script>
 import dataList from '../../components/dataList/dataList';
 import cookies from '../../../../common/utils/cookies.js';
-import { wipOrder, shengchan,orderFinish } from '../../../../api/index';
+import { wipOrder, shengchan, orderFinish } from '../../../../api/index';
 
 import qianbi from '../../../../common/category/qianbi';
 import tianhua from '../../../../common/category/tianhua';
@@ -95,7 +97,7 @@ export default {
         };
     },
     methods: {
-    //选择产线tab
+        //选择产线tab
         chooseCx(tab, event) {
             this.activePane = this.pullPanes[tab.index];
             this.headers = this.pullPanes[tab.index].headers;
@@ -111,7 +113,7 @@ export default {
                 pagesize: 100000
             });
             if (res.code == 0) {
-                this.tableData = res.objects.entityList;
+                this.tableData = res.objects;
             } else {
                 this.$notify.error({
                     type: '错误',
@@ -139,7 +141,7 @@ export default {
                     message: res.codeInfo
                 });
             }
-        },
+        }
     },
     created() {
         this.userInfo = cookies.get('userInfo');
@@ -149,14 +151,14 @@ export default {
             this.activePane = this.pullPanes[0];
             this.headers = this.pullPanes[0].headers;
         } else if (this.userRoleMaxType == 'QB') {
-            this.pullPanes.forEach((item)=>{
-                if(item.type == this.userInfo.role){
-                    this.qbPullPanes.forEach(pane=>{
+            this.pullPanes.forEach(item => {
+                if (item.type == this.userInfo.role) {
+                    this.qbPullPanes.forEach(pane => {
                         pane.headers = item.headers;
                     });
                 }
             });
-            
+
             this.pullPanes = this.qbPullPanes;
             this.activePane = this.pullPanes[0];
             this.activeName = this.activePane.name;

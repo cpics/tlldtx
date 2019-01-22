@@ -6,82 +6,86 @@
         type="primary"
         v-if="userRoleMaxType == 'ZX'"
         size="small"
-        @click="dialogTableVisible = true"
+        @click="showGridPoP"
       >一键下单</el-button>
     </div>
     <el-dialog style="z-index: 9999" title="一键下单" :visible.sync="dialogTableVisible">
       <!--加急 单元行-标红 tr  + c-red-->
-      <el-table :data="gridData" max-height="300">
-        <el-table-column type="selection" width="55"></el-table-column>
-        <el-table-column fixed prop="order" label="订单号" width="100"></el-table-column>
-        <el-table-column prop="parts1" label="部件1"></el-table-column>
-        <el-table-column prop="parts2" label="部件2"></el-table-column>
-        <el-table-column prop="parts3" label="部件3"></el-table-column>
-        <el-table-column prop="parts4" label="部件4"></el-table-column>
-        <el-table-column prop="time" label="交付时间" width="120"></el-table-column>
-        <el-table-column prop="remarks" label="备注说明" width="180"></el-table-column>
+      <el-table :data="gridData" @selection-change="handleSelectionChange" max-height="300">
+        <el-table-column type="selection" fixed width="55"></el-table-column>
+        <el-table-column
+          v-for="(item,index) in headers"
+          :key="index"
+          :prop="item.props"
+          :label="item.name"
+        ></el-table-column>
       </el-table>
       <div class="m-dialog-btn">
-        <el-button type="primary">自动</el-button>
+        <el-button type="primary" @click="yijianxiadan">下单</el-button>
       </div>
     </el-dialog>
-    <el-tabs v-model="activeName" @tab-click="chooseCx" >
+    <el-tabs v-model="activeName" @tab-click="chooseCx">
       <el-tab-pane v-for="(item,i) in pullPanes" :key="i" :label="item.label" :name="item.name"></el-tab-pane>
     </el-tabs>
-    <data-list :tableData="tableData" :headers="headers">
-      <template slot-scope="slotProps" slot="allAction">
-        <template v-if="userRoleMaxType == 'ZX'">
-          <el-button type="danger" size="mini">一键撤回</el-button>
-        </template>
+    <div v-for="(item,i) in tableData" :key="i">
+      <data-list 
+      :orderName="`${activePane.label} - ${item.batchNo} ${item.piciDate}`"
+      :orderList="item.orderList" 
+      :headers="headers">
+        <template slot-scope="slotProps" slot="allAction">
+          <template v-if="userRoleMaxType == 'ZX'">
+            <el-button type="danger" size="mini">一键撤回</el-button>
+          </template>
 
-        <template v-if="userRoleMaxType == 'QB'">
-          <el-button type="danger" size="mini">一键缺料</el-button>
-          <el-button type="warning" size="mini">一键生产</el-button>
-          <el-button type="primary" size="mini">一键完成</el-button>
+          <template v-if="userRoleMaxType == 'QB'">
+            <el-button type="danger" size="mini">一键缺料</el-button>
+            <el-button type="warning" size="mini">一键生产</el-button>
+            <el-button type="primary" size="mini">一键完成</el-button>
+          </template>
         </template>
-      </template>
-      <template slot-scope="slotProps" slot="itemAction">
-        <template v-if="userRoleMaxType == 'ZX'">
-          <el-button
-            v-if="slotProps.rowData.currentStatus == '未安排'"
-            type="primary"
-            class="minimum"
-            size="mini"
-            @click="xiadan(slotProps.rowData)"
-          >下单</el-button>
-          <el-button
-            v-if="slotProps.rowData.currentStatus == '已下单'"
-            type="danger"
-            class="minimum"
-            size="mini"
-            @click="cehui(slotProps.rowData)"
-          >撤回</el-button>
+        <template slot-scope="slotProps" slot="itemAction">
+          <template v-if="userRoleMaxType == 'ZX'">
+            <!-- <el-button
+              v-if="slotProps.rowData.currentStatus == '未安排'"
+              type="primary"
+              class="minimum"
+              size="mini"
+              @click="xiadan(i,slotProps.rowData)"
+            >下单</el-button> -->
+            <el-button
+              v-if="slotProps.rowData.currentStatus == '已下单'"
+              type="danger"
+              class="minimum"
+              size="mini"
+              @click="cehui(item,slotProps.rowData)"
+            >撤回</el-button>
+          </template>
+          <template v-if="userRoleMaxType == 'QB'">
+            <el-button
+              type="danger"
+              class="minimum"
+              size="mini"
+              v-if="slotProps.rowData.currentStatus == '已下单'"
+              @click="queliao(item,slotProps.rowData)"
+            >缺料</el-button>
+            <el-button
+              v-if="slotProps.rowData.currentStatus == '已下单'"
+              type="warning"
+              class="minimum"
+              size="mini"
+              @click="shengchan(item,slotProps.rowData)"
+            >生产</el-button>
+            <el-button
+              v-if="slotProps.rowData.currentStatus == '生产中'"
+              type="primary"
+              class="minimum"
+              size="mini"
+              @click="shengchanwancheng(item,slotProps.rowData)"
+            >完成</el-button>
+          </template>
         </template>
-        <template v-if="userRoleMaxType == 'QB'">
-          <el-button
-            type="danger"
-            class="minimum"
-            size="mini"
-            v-if="slotProps.rowData.currentStatus == '已下单'"
-            @click="queliao(slotProps.rowData)"
-          >缺料</el-button>
-          <el-button
-            v-if="slotProps.rowData.currentStatus == '已下单'"
-            type="warning"
-            class="minimum"
-            size="mini"
-            @click="shengchan(slotProps.rowData)"
-          >生产</el-button>
-          <el-button
-            v-if="slotProps.rowData.currentStatus == '生产中'"
-            type="primary"
-            class="minimum"
-            size="mini"
-            @click="shengchanwancheng(slotProps.rowData)"
-          >完成</el-button>
-        </template>
-      </template>
-    </data-list>
+      </data-list>
+    </div>
   </div>
 </template>
 <script>
@@ -93,7 +97,9 @@ import {
     shengchan,
     cehui,
     shengchanwancheng,
-    queliao
+    queliao,
+    queryWeianpai,
+    yijianxiadan
 } from '../../../../api/index';
 
 import qianbi from '../../../../common/category/qianbi';
@@ -199,7 +205,7 @@ export default {
         };
     },
     methods: {
-    //选择产线tab
+        //选择产线tab
         chooseCx(tab, event) {
             this.activePane = this.pullPanes[tab.index];
             this.headers = this.pullPanes[tab.index].headers;
@@ -226,13 +232,19 @@ export default {
             }
         },
         //撤回
-        async cehui(order) {
+        async cehui(orderObject,orderItem) {
             let res = await cehui({
                 type: this.activePane.type,
-                orderNo: order.orderNo
+                orderNo: orderItem.orderNo,
+                batchNo:orderObject.batchNo
             });
             if (res.code == 0) {
-                order.currentStatus = '未安排';
+                let orderObjectIndex = this.tableData.indexOf(orderObject);
+                let orderItemIndex = orderObject.orderList.indexOf(orderItem);
+                orderObject.orderList.splice(orderItemIndex,1);
+                if(orderObject.orderList.length == 0){
+                    this.tableData.splice(orderObjectIndex,1);
+                }
                 this.$notify.success({
                     title: '成功',
                     message: res.codeInfo
@@ -245,13 +257,14 @@ export default {
             }
         },
         //生产
-        async shengchan(order) {
+        async shengchan(orderObject,orderItem) {
             let res = await shengchan({
                 type: this.activePane.type,
-                orderNo: order.orderNo
+                orderNo: orderItem.orderNo,
+                batchNo:orderObject.batchNo
             });
             if (res.code == 0) {
-                order.currentStatus = '生产中';
+                orderItem.currentStatus = '生产中';
                 this.$notify.success({
                     title: '成功',
                     message: res.codeInfo
@@ -264,15 +277,19 @@ export default {
             }
         },
         //完成
-        async shengchanwancheng(order) {
+        async shengchanwancheng(orderObject,orderItem) {
             let res = await shengchanwancheng({
                 type: this.activePane.type,
-                orderNo: order.orderNo
+                orderNo: orderItem.orderNo,
+                batchNo:orderObject.batchNo
             });
             if (res.code == 0) {
-                let orderIndex = this.tableData.indexOf(order);
-                this.tableData.splice(orderIndex, 1);
-                // order.currentStatus = '订单完成';
+                let orderObjectIndex = this.tableData.indexOf(orderObject);
+                let orderItemIndex = orderObject.orderList.indexOf(orderItem);
+                orderObject.orderList.splice(orderItemIndex,1);
+                if(orderObject.orderList.length == 0){
+                    this.tableData.splice(orderObjectIndex,1);
+                }
                 this.$notify.success({
                     title: '成功',
                     message: res.codeInfo
@@ -285,14 +302,24 @@ export default {
             }
         },
         //缺料
-        async queliao(order) {
+        async queliao(orderObject,orderItem) {
             let res = await queliao({
                 type: this.activePane.type,
-                orderNo: order.orderNo
+                orderNo: orderItem.orderNo,
+                batchNo:orderObject.batchNo
             });
             if (res.code == 0) {
-                let orderIndex = this.tableData.indexOf(order);
-                this.tableData.splice(orderIndex, 1);
+
+                let orderObjectIndex = this.tableData.indexOf(orderObject);
+                let orderItemIndex = orderObject.orderList.indexOf(orderItem);
+                orderObject.orderList.splice(orderItemIndex,1);
+                if(orderObject.orderList.length == 0){
+                    this.tableData.splice(orderObjectIndex,1);
+                }
+                // console.log(orderObjectIndex,orderItemIndex);
+
+                // return;
+                // this.getData();
                 // order.currentStatus = '缺料';
 
                 this.$notify.success({
@@ -306,21 +333,27 @@ export default {
                 });
             }
         },
+        showGridPoP() {
+            this.dialogTableVisible = true;
+            this.getGridData();
+        },
         // deleteRow(index, rows) {
         //     rows.splice(index, 1);
         // },
-        // toggleSelection(rows) {
-        //     if (rows) {
-        //         rows.forEach(row => {
-        //             this.$refs.multipleTable.toggleRowSelection(row);
-        //         });
-        //     } else {
-        //         this.$refs.multipleTable.clearSelection();
-        //     }
-        // },
-        // handleSelectionChange(val) {
-        //     this.multipleSelection = val;
-        // },
+        toggleSelection(rows) {
+            if (rows) {
+                rows.forEach(row => {
+                    this.$refs.multipleTable.toggleRowSelection(row);
+                });
+            } else {
+                this.$refs.multipleTable.clearSelection();
+            }
+        },
+        handleSelectionChange(val) {
+            this.multipleSelection = val;
+            console.log(this.multipleSelection);
+        },
+        //获取拉动接口数据
         async getData() {
             this.tableData = [];
             let res = await ladongOrder({
@@ -328,20 +361,70 @@ export default {
                 currentpage: 1,
                 pagesize: 100000
             });
-            if (res.code == 0 && res.objects.entityList) {
-                this.tableData = res.objects.entityList.map(item => {
-                    if (this.activePane.type == 4) {
-                        item.currentStatus = item.qbStatus;
-                    } else if (this.activePane.type == 5) {
-                        item.currentStatus = item.thStatus;
-                    } else if (this.activePane.type == 6) {
-                        item.currentStatus = item.jmStatus;
-                    } else if (this.activePane.type == 7) {
-                        item.currentStatus = item.ajStatus;
-                    }
-                    return item;
-                });
+            if (res.code == 0 ) {
+                console.log(this.activePane);
+                res.objects.forEach(orderArray=>{
+                    orderArray.orderList.forEach(item=>{
+                        if (this.activePane.type == 4 || this.userInfo.role==4) {
+                            item.currentStatus = item.qbStatus;
+                        } else if (this.activePane.type == 5 || this.userInfo.role==5) {
+                            item.currentStatus = item.thStatus;
+                        } else if (this.activePane.type == 6  || this.userInfo.role==6) {
+                            item.currentStatus = item.jmStatus;
+                        } else if (this.activePane.type == 7  || this.userInfo.role==7) {
+                            item.currentStatus = item.ajStatus;
+                        }
+
+                        console.log(item.currentStatus);
+                    })
+                })
+                this.tableData = res.objects;
                 console.log(this.tableData);
+            } else {
+                this.$notify.error({
+                    type: '错误',
+                    message: res.codeInfo
+                });
+            }
+        },
+        //获取一键下单的列表数据
+        async getGridData() {
+            let res = await queryWeianpai({
+                type: this.activePane.type
+            });
+            if (res.code == 0) {
+                this.gridData = res.objects;
+            } else {
+                this.$notify.error({
+                    type: '错误',
+                    message: res.codeInfo
+                });
+            }
+        },
+        //一键下单
+        async yijianxiadan() {
+            let orderArr = [];
+            if (this.multipleSelection.length == 0) {
+                this.$notify.error({
+                    type: '错误',
+                    message: '请选择要下单的数据'
+                });
+                return false;
+            }
+            this.multipleSelection.forEach(item => {
+                orderArr.push(item.orderNo);
+            });
+            let res = await yijianxiadan({
+                type: this.activePane.type,
+                ordersNo: orderArr.join(',')
+            });
+            if (res.code == 0) {
+                this.$notify.success({
+                    title: '成功',
+                    message: res.codeInfo
+                });
+                this.getGridData();
+                this.getData();
             } else {
                 this.$notify.error({
                     type: '错误',
@@ -358,14 +441,14 @@ export default {
             this.activePane = this.pullPanes[0];
             this.headers = this.pullPanes[0].headers;
         } else if (this.userRoleMaxType == 'QB') {
-            this.pullPanes.forEach((item)=>{
-                if(item.type == this.userInfo.role){
-                    this.qbPullPanes.forEach(pane=>{
+            this.pullPanes.forEach(item => {
+                if (item.type == this.userInfo.role) {
+                    this.qbPullPanes.forEach(pane => {
                         pane.headers = item.headers;
                     });
                 }
             });
-            
+
             this.pullPanes = this.qbPullPanes;
             this.activePane = this.pullPanes[0];
             this.activeName = this.activePane.name;

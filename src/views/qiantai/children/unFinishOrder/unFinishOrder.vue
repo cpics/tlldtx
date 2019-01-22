@@ -1,24 +1,26 @@
 <template>
   <div class="g-order-main">
     <!--当前Wip区订单-->
-    <el-tabs v-model="activeName" @tab-click="chooseCx" >
+    <el-tabs v-model="activeName" @tab-click="chooseCx">
       <el-tab-pane v-for="(item,i) in pullPanes" :key="i" :label="item.label" :name="item.name"></el-tab-pane>
     </el-tabs>
-    <data-list :tableData="tableData" :headers="headers">
-      <template slot-scope="slotProps" slot="allAction">
-        <template v-if="userRoleMaxType == 'ZX'"></template>
+    <div v-for="(item,i) in tableData" :key="i">
+      <data-list :orderList="item.orderList" :headers="headers">
+        <template slot-scope="slotProps" slot="allAction">
+          <template v-if="userRoleMaxType == 'ZX'"></template>
 
-        <template v-if="userRoleMaxType == 'QB'">
-          <el-button type="primary" size="mini">一键取消标记</el-button>
+          <template v-if="userRoleMaxType == 'QB'">
+            <el-button type="primary" size="mini">一键取消标记</el-button>
+          </template>
         </template>
-      </template>
-      <template slot-scope="slotProps" slot="itemAction">
-        <template v-if="userRoleMaxType == 'ZX'"></template>
-        <template v-if="userRoleMaxType == 'QB'">
-          <el-button @click="quxiaoqueliao((slotProps.rowData))" type="primary" size="mini">取消标记</el-button>
+        <template slot-scope="slotProps" slot="itemAction">
+          <template v-if="userRoleMaxType == 'ZX'"></template>
+          <template v-if="userRoleMaxType == 'QB'">
+            <el-button @click="quxiaoqueliao((slotProps.rowData))" type="primary" size="mini">取消标记</el-button>
+          </template>
         </template>
-      </template>
-    </data-list>
+      </data-list>
+    </div>
   </div>
 </template>
 <script>
@@ -122,7 +124,7 @@ export default {
                 pagesize: 100000
             });
             if (res.code == 0) {
-                this.tableData = res.objects.entityList;
+                this.tableData = res.objects;
             } else {
                 this.$notify.error({
                     type: '错误',
@@ -139,14 +141,14 @@ export default {
             this.activePane = this.pullPanes[0];
             this.headers = this.pullPanes[0].headers;
         } else if (this.userRoleMaxType == 'QB') {
-            this.pullPanes.forEach((item)=>{
-                if(item.type == this.userInfo.role){
-                    this.qbPullPanes.forEach(pane=>{
+            this.pullPanes.forEach(item => {
+                if (item.type == this.userInfo.role) {
+                    this.qbPullPanes.forEach(pane => {
                         pane.headers = item.headers;
                     });
                 }
             });
-            
+
             this.pullPanes = this.qbPullPanes;
             this.activePane = this.pullPanes[0];
             this.activeName = this.activePane.name;

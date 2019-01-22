@@ -140,8 +140,14 @@ export const yijianxiadan = params =>
         params: params
     })
 
-//
+//排产订单查询
 export const queryPaichan = params =>
     fetch.get(domain + '/queryPaichan.2x', {
+        params: params
+    })
+
+//未安排订单查询
+export const queryWeianpai = params =>
+    fetch.get(domain + '/queryweianpai.2x', {
         params: params
     })
