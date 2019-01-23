@@ -65,7 +65,7 @@ export const queliaoOrder = params =>
 
 //查询Wip订单
 export const wipOrder = params =>
-    fetch.get(domain + '/queryShengchan.2x', {
+    fetch.get(domain + '/queryWipsOrder.2x', {
         params: params
     })
 
@@ -149,5 +149,36 @@ export const queryPaichan = params =>
 //未安排订单查询
 export const queryWeianpai = params =>
     fetch.get(domain + '/queryweianpai.2x', {
+        params: params
+    })
+
+//一键撤回
+export const yijiancehui = params =>
+    fetch.get(domain + '/yijiancehui.2x', {
+        params: params
+    })
+//一键生产
+export const yijianshengchan = params =>
+    fetch.get(domain + '/yijianshengchan.2x', {
+        params: params
+    })
+//一键生产完成
+export const yijianshengchanwancheng = params =>
+    fetch.get(domain + '/yijianshengchanwancheng.2x', {
+        params: params
+    })
+//一键订单完成
+export const yijiandingdanwancheng = params =>
+    fetch.get(domain + '/yijiandingdanwancheng.2x', {
+        params: params
+    })
+//一键缺料
+export const yijianqueliao = params =>
+    fetch.get(domain + '/yijianqueliao.2x', {
+        params: params
+    })
+//一键取消缺料
+export const yijianquxiaoqueliao = params =>
+    fetch.get(domain + '/yijianquxiaoqueliao.2x', {
         params: params
     })

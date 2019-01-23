@@ -10,13 +10,17 @@
           <template v-if="userRoleMaxType == 'ZX'"></template>
 
           <template v-if="userRoleMaxType == 'QB'">
-            <el-button type="primary" size="mini">一键取消标记</el-button>
+            <el-button type="primary" @click="yijianquxiaoqueliao(item)" size="mini">一键取消标记</el-button>
           </template>
         </template>
         <template slot-scope="slotProps" slot="itemAction">
           <template v-if="userRoleMaxType == 'ZX'"></template>
           <template v-if="userRoleMaxType == 'QB'">
-            <el-button @click="quxiaoqueliao((slotProps.rowData))" type="primary" size="mini">取消标记</el-button>
+            <el-button
+              @click="quxiaoqueliao(item,slotProps.rowData)"
+              type="primary"
+              size="mini"
+            >取消标记</el-button>
           </template>
         </template>
       </data-list>
@@ -26,7 +30,11 @@
 <script>
 import dataList from '../../components/dataList/dataList';
 import cookies from '../../../../common/utils/cookies.js';
-import { queliaoOrder, quxiaoqueliao } from '../../../../api/index';
+import {
+    queliaoOrder,
+    quxiaoqueliao,
+    yijianquxiaoqueliao
+} from '../../../../api/index';
 
 import qianbi from '../../../../common/category/qianbi';
 import tianhua from '../../../../common/category/tianhua';
@@ -90,22 +98,47 @@ export default {
         };
     },
     methods: {
-        //选择产线tab
+    //选择产线tab
         chooseCx(tab, event) {
             this.activePane = this.pullPanes[tab.index];
             this.headers = this.pullPanes[tab.index].headers;
             this.getData();
         },
-        //缺料
-        async quxiaoqueliao(order) {
+        //取消缺料
+        async quxiaoqueliao(orderObject, orderItem) {
             // return;
             let res = await quxiaoqueliao({
-                type: this.activePane.type,
-                orderNo: order.orderNo
+                type: orderObject.batchType,
+                orderNo: orderItem.orderNo,
+                batchNo: orderObject.batchNo
             });
             if (res.code == 0) {
-                let orderIndex = this.tableData.indexOf(order);
-                this.tableData.splice(orderIndex, 1);
+                let orderObjectIndex = this.tableData.indexOf(orderObject);
+                let orderItemIndex = orderObject.orderList.indexOf(orderItem);
+                orderObject.orderList.splice(orderItemIndex, 1);
+                if (orderObject.orderList.length == 0) {
+                    this.tableData.splice(orderObjectIndex, 1);
+                }
+                this.$notify.success({
+                    title: '成功',
+                    message: res.codeInfo
+                });
+            } else {
+                this.$notify.error({
+                    type: '错误',
+                    message: res.codeInfo
+                });
+            }
+        },
+        //一键取消缺料
+        async yijianquxiaoqueliao(orderObject) {
+            // return;
+            let res = await yijianquxiaoqueliao({
+                batchNo: orderObject.batchNo
+            });
+            if (res.code == 0) {
+                let orderObjectIndex = this.tableData.indexOf(orderObject);
+                this.tableData.splice(orderObjectIndex, 1);
                 this.$notify.success({
                     title: '成功',
                     message: res.codeInfo

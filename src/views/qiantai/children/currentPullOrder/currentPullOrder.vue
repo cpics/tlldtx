@@ -35,13 +35,28 @@
       >
         <template slot-scope="slotProps" slot="allAction">
           <template v-if="userRoleMaxType == 'ZX'">
-            <el-button type="danger" size="mini">一键撤回</el-button>
+            <el-button type="danger" size="mini" @click="yijiancehui(item)">一键撤回</el-button>
           </template>
 
           <template v-if="userRoleMaxType == 'QB'">
-            <el-button type="danger" size="mini">一键缺料</el-button>
-            <el-button type="warning" size="mini">一键生产</el-button>
-            <el-button type="primary" size="mini">一键完成</el-button>
+            <el-button
+              type="danger"
+              v-if="item.orderArrayStatus == '已下单'"
+              @click="yijianqueliao(item)"
+              size="mini"
+            >一键缺料</el-button>
+            <el-button
+              type="warning"
+              v-if="item.orderArrayStatus == '已下单'"
+              @click="yijianshengchan(item)"
+              size="mini"
+            >一键生产</el-button>
+            <el-button
+              type="primary"
+              v-if="item.orderArrayStatus == '生产中'"
+              @click="yijianshengchanwancheng(item)"
+              size="mini"
+            >一键完成</el-button>
           </template>
         </template>
         <template slot-scope="slotProps" slot="itemAction">
@@ -100,7 +115,11 @@ import {
     shengchanwancheng,
     queliao,
     queryWeianpai,
-    yijianxiadan
+    yijianxiadan,
+    yijiancehui,
+    yijianshengchan,
+    yijianshengchanwancheng,
+    yijianqueliao
 } from '../../../../api/index';
 
 import qianbi from '../../../../common/category/qianbi';
@@ -212,6 +231,17 @@ export default {
             this.headers = this.pullPanes[tab.index].headers;
             this.getData();
         },
+        filterStatus(orderObject) {
+            let orderArrayStatus = '';
+            orderObject.orderList.forEach(item => {
+                if (item.currentStatus == '已下单') {
+                    orderArrayStatus = '已下单';
+                } else if (item.currentStatus == '生产中') {
+                    orderArrayStatus = '生产中';
+                }
+            });
+            orderObject.orderArrayStatus = orderArrayStatus;
+        },
         //更新订单为下单
         async xiadan(order) {
             // return;
@@ -235,7 +265,7 @@ export default {
         //撤回
         async cehui(orderObject, orderItem) {
             let res = await cehui({
-                type: this.activePane.type,
+                type: orderObject.batchType,
                 orderNo: orderItem.orderNo,
                 batchNo: orderObject.batchNo
             });
@@ -246,6 +276,27 @@ export default {
                 if (orderObject.orderList.length == 0) {
                     this.tableData.splice(orderObjectIndex, 1);
                 }
+                this.$notify.success({
+                    title: '成功',
+                    message: res.codeInfo
+                });
+            } else {
+                this.$notify.error({
+                    type: '错误',
+                    message: res.codeInfo
+                });
+            }
+        },
+        //一键撤回
+        async yijiancehui(orderObject) {
+            let res = await yijiancehui({
+                type: orderObject.batchType,
+                batchNo: orderObject.batchNo
+            });
+            if (res.code == 0) {
+                let orderObjectIndex = this.tableData.indexOf(orderObject);
+                this.tableData.splice(orderObjectIndex, 1);
+
                 this.$notify.success({
                     title: '成功',
                     message: res.codeInfo
@@ -260,12 +311,13 @@ export default {
         //生产
         async shengchan(orderObject, orderItem) {
             let res = await shengchan({
-                type: this.userInfo.role,
+                type: orderObject.batchType,
                 orderNo: orderItem.orderNo,
                 batchNo: orderObject.batchNo
             });
             if (res.code == 0) {
                 orderItem.currentStatus = '生产中';
+                this.filterStatus(orderObject);
                 this.$notify.success({
                     title: '成功',
                     message: res.codeInfo
@@ -277,10 +329,31 @@ export default {
                 });
             }
         },
-        //完成
+        //一键生产
+        async yijianshengchan(orderObject) {
+            let res = await yijianshengchan({
+                batchNo: orderObject.batchNo
+            });
+            if (res.code == 0) {
+                orderObject.orderList.forEach(item => {
+                    item.currentStatus = '生产中';
+                });
+                this.filterStatus(orderObject);
+                this.$notify.success({
+                    title: '成功',
+                    message: res.codeInfo
+                });
+            } else {
+                this.$notify.error({
+                    type: '错误',
+                    message: res.codeInfo
+                });
+            }
+        },
+        //生产完成
         async shengchanwancheng(orderObject, orderItem) {
             let res = await shengchanwancheng({
-                type: this.userInfo.role,
+                type: orderObject.batchType,
                 orderNo: orderItem.orderNo,
                 batchNo: orderObject.batchNo
             });
@@ -291,6 +364,28 @@ export default {
                 if (orderObject.orderList.length == 0) {
                     this.tableData.splice(orderObjectIndex, 1);
                 }
+                this.$notify.success({
+                    title: '成功',
+                    message: res.codeInfo
+                });
+            } else {
+                this.$notify.error({
+                    type: '错误',
+                    message: res.codeInfo
+                });
+            }
+        },
+
+        //一键生产完成
+        async yijianshengchanwancheng(orderObject) {
+            let res = await yijianshengchanwancheng({
+                batchNo: orderObject.batchNo
+            });
+            if (res.code == 0) {
+                let orderObjectIndex = this.tableData.indexOf(orderObject);
+
+                this.tableData.splice(orderObjectIndex, 1);
+
                 this.$notify.success({
                     title: '成功',
                     message: res.codeInfo
@@ -305,7 +400,7 @@ export default {
         //缺料
         async queliao(orderObject, orderItem) {
             let res = await queliao({
-                type: this.userInfo.role,
+                type: orderObject.batchType,
                 orderNo: orderItem.orderNo,
                 batchNo: orderObject.batchNo
             });
@@ -316,11 +411,27 @@ export default {
                 if (orderObject.orderList.length == 0) {
                     this.tableData.splice(orderObjectIndex, 1);
                 }
-                // console.log(orderObjectIndex,orderItemIndex);
+                this.$notify.success({
+                    title: '成功',
+                    message: res.codeInfo
+                });
+            } else {
+                this.$notify.error({
+                    type: '错误',
+                    message: res.codeInfo
+                });
+            }
+        },
 
-                // return;
-                // this.getData();
-                // order.currentStatus = '缺料';
+        //一键缺料
+        async yijianqueliao(orderObject) {
+            let res = await yijianqueliao({
+                batchNo: orderObject.batchNo
+            });
+            if (res.code == 0) {
+                let orderObjectIndex = this.tableData.indexOf(orderObject);
+
+                this.tableData.splice(orderObjectIndex, 1);
 
                 this.$notify.success({
                     title: '成功',
@@ -365,18 +476,19 @@ export default {
                 console.log(this.activePane);
                 res.objects.forEach(orderArray => {
                     orderArray.orderList.forEach(item => {
-                        if (this.activePane.type == 4 || this.userInfo.role == 4) {
+                        if (orderArray.batchType == 4) {
                             item.currentStatus = item.qbStatus;
-                        } else if (this.activePane.type == 5 || this.userInfo.role == 5) {
+                        } else if (orderArray.batchType == 5) {
                             item.currentStatus = item.thStatus;
-                        } else if (this.activePane.type == 6 || this.userInfo.role == 6) {
+                        } else if (orderArray.batchType == 6) {
                             item.currentStatus = item.jmStatus;
-                        } else if (this.activePane.type == 7 || this.userInfo.role == 7) {
+                        } else if (orderArray.batchType == 7) {
                             item.currentStatus = item.ajStatus;
                         }
 
                         console.log(item.currentStatus);
                     });
+                    this.filterStatus(orderArray);
                 });
                 this.tableData = res.objects;
                 console.log(this.tableData);
