@@ -6,7 +6,7 @@
     </div>
     <div class="u-slide-content">
       <div class="d-slide-column">
-        <h5>{{maxClassString}}</h5>
+        <h5>{{todayLeftData.lineName}}</h5>
         <ul>
           <li>2018-10-15 13.21.12</li>
           <li>
@@ -15,15 +15,15 @@
           </li>
           <li>
             <div class="d-label">当前完成：</div>
-            <div>{{todayLeftData.total-todayLeftData.unfinish}}</div>
+            <div>{{todayLeftData.finished}}</div>
           </li>
           <li>
             <div class="d-label">完成率：</div>
-            <div>{{parseInt((todayLeftData.total-todayLeftData.unfinish)/todayLeftData.unfinish*100)}}%</div>
+            <div>{{todayLeftData.finishPercent}}</div>
           </li>
           <li>
             <div class="d-label">运行状态：</div>
-            <div class="c-green">正常</div>
+            <div class="c-green">{{todayLeftData.workStatus}}</div>
           </li>
         </ul>
       </div>

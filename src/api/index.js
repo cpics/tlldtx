@@ -182,3 +182,8 @@ export const yijianquxiaoqueliao = params =>
     fetch.get(domain + '/yijianquxiaoqueliao.2x', {
         params: params
     })
+//一键取消缺料
+export const jinrikanban = params =>
+    fetch.get(domain + '/queryJinrikanban.2x.2x', {
+        params: params
+    })

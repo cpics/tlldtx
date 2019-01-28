@@ -30,14 +30,19 @@ import cookies from '../../common/utils/cookies';
 
 import { qiantaiRouters } from '../../router';
 import { roleMaxType } from '../../common/role-types/role-types';
-import { todayTongji, queryScInfo, updateScInfo } from '../../api/index';
+import {
+    todayTongji,
+    queryScInfo,
+    updateScInfo,
+    jinrikanban
+} from '../../api/index';
 export default {
     name: 'qiantai',
     data() {
         return {
             tabsList: [],
             todayLeftData: {},
-            scInfo:{},
+            scInfo: {},
             activeName: 'first',
             userInfo: {},
             zxSort: [0, 1, 2, 3, 4],
@@ -55,21 +60,26 @@ export default {
         },
         //获取左边的今日数据
         async getTodayData(type) {
-            let res = await todayTongji({
-                type
-            });
-            if (res.code == 0) {
-                this.todayLeftData = res.objects;
+            let res = await jinrikanban();
+            if (res.code === 0) {
+                res.objects.forEach(item => {
+                    item.finishPercent = item.finishPercent * 100 + '%';
+                    if (item.type == type) {
+                        this.todayLeftData = item;
+                    }
+                });
+
+                // this.tableData = res.objects;
             } else {
                 this.$notify.error({
-                    title: '错误',
+                    type: '错误',
                     message: res.codeInfo
                 });
             }
         },
         async getQueryScInfo(type) {
             let res = await queryScInfo({
-                zplineno:type
+                zplineno: type
             });
             if (res.code == 0) {
                 console.log(res);

@@ -550,6 +550,9 @@ export default {
         this.userRoleMaxType = this.userInfo.roleMaxType;
 
         if (this.userRoleMaxType == 'ZX') {
+            if(this.userInfo.role==3){
+                this.pullPanes.splice(0,2);
+            }
             this.activePane = this.pullPanes[0];
             this.headers = this.pullPanes[0].headers;
         } else if (this.userRoleMaxType == 'QB') {

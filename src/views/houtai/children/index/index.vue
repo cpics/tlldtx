@@ -4,25 +4,25 @@
             border
             style="width: 100%">
         <el-table-column
-                prop="proLine"
+                prop="lineName"
                 label="产线"
                 width="180">
         </el-table-column>
         <el-table-column
-                prop="number"
+                prop="total"
                 label="今日订单量"
                 width="180">
         </el-table-column>
         <el-table-column
-                prop="CompletedNumber"
+                prop="finished"
                 label="已完成订单">
         </el-table-column>
         <el-table-column
-                prop="finish"
+                prop="finishPercent"
                 label="完成进度">
         </el-table-column>
         <el-table-column
-                prop="state"
+                prop="workStatus"
                 label="状态">
         </el-table-column>
     </el-table>
@@ -33,36 +33,34 @@
 </template>
 
 <script>
+
+import { jinrikanban } from '../../../../api/index';
 export default {
     name: 'index',
     data() {
         return {
-            tableData: [{
-                proLine: '装箱产线',
-                number: '128',
-                CompletedNumber: '89',
-                finish: '69.5%',
-                state: '正常'
-            }, {
-                proLine: '产线',
-                number: '128',
-                CompletedNumber: '89',
-                finish: '69.5%',
-                state: '正常'
-            }, {
-                proLine: '产线',
-                number: '128',
-                CompletedNumber: '89',
-                finish: '69.5%',
-                state: '正常'
-            }, {
-                proLine: '产线',
-                number: '128',
-                CompletedNumber: '89',
-                finish: '69.5%',
-                state: '正常'
-            }]
+            tableData: []
         }
+    },
+    methods: {
+        async getData(){
+            let res = await jinrikanban();
+            if(res.code === 0){
+                res.objects.forEach(item => {
+                    item.finishPercent = item.finishPercent*100+'%';
+                });
+                this.tableData = res.objects;
+            }else{
+                this.$notify.error({
+                    type: '错误',
+                    message: res.codeInfo
+                });
+            }
+            
+        }
+    },
+    created() {
+        this.getData();
     }
 }
 </script>
