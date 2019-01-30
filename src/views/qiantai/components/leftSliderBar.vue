@@ -29,34 +29,18 @@
       </div>
       <div class="d-slide-column">
         <ul>
-          <li>
-            <div class="d-label">Wip-前壁:</div>
+          <li 
+          v-for="(item,i) in wipsInfo"  
+          :key="i" >
+
+            <div class="d-label">Wip-{{item.lineName}}:</div>
             <div class="d-info">
-              <i class="u-cart-icon"></i>
-              <i class="u-cart-icon"></i>
-              <em class="slide-mark-icon">FULL</em>
-            </div>
-          </li>
-          <li>
-            <div class="d-label">Wip-天花:</div>
-            <div class="d-info">
-              <i class="u-cart-icon"></i>
-            </div>
-          </li>
-          <li>
-            <div class="d-label">Wip-前壁:</div>
-            <div class="d-info">
-              <i class="u-cart-icon"></i>
-              <i class="u-cart-icon"></i>
-              <em class="slide-mark-icon">FULL</em>
-            </div>
-          </li>
-          <li>
-            <div class="d-label">Wip-木箱:</div>
-            <div class="d-info">
-              <i class="u-cart-icon"></i>
-              <i class="u-cart-icon"></i>
-              <em class="slide-mark-icon">FULL</em>
+              <i class="u-cart-icon" 
+              v-show="item.workingCars !=0"
+              v-for="(num,index) in item.item"
+              :key="index"
+              ></i>
+              <em v-show="item.carsFull"  class="slide-mark-icon">FULL</em>
             </div>
           </li>
         </ul>
@@ -69,7 +53,8 @@ export default {
     name: 'leftSliderBar',
     props: {
         maxClassString: String,
-        todayLeftData: Object
+        todayLeftData: Object,
+        wipsInfo:Array
     }
 };
 </script>

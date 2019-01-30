@@ -35,6 +35,14 @@ export const houtaiRouters = [{
     }
 },
 {
+    path: 'systemEdit',
+    name: 'systemEdit',
+    component: systemEdit,
+    meta: {
+        title: '系统设置'
+    }
+},
+{
     path: 'system/manage',
     name: 'manage',
     component: manage,

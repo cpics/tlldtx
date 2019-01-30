@@ -1,7 +1,7 @@
 <template>
   <el-container class="mod-wrapper">
     <el-aside class="g-slide-bar" width="200px">
-      <leftSliderbar :maxClassString="userInfo.roleString" :todayLeftData="todayLeftData"/>
+      <leftSliderbar :maxClassString="userInfo.roleString" :todayLeftData="todayLeftData" :wipsInfo="wipsInfo"/>
     </el-aside>
     <el-container>
       <el-header class="f-header-bar">
@@ -29,10 +29,11 @@ import leftSliderbar from './components/leftSliderBar';
 import cookies from '../../common/utils/cookies';
 
 import { qiantaiRouters } from '../../router';
-import { roleMaxType } from '../../common/role-types/role-types';
+import { roleMaxType, roleEnum } from '../../common/role-types/role-types';
 import {
+    domain,
     todayTongji,
-    queryScInfo,
+    queryWipsInfo,
     updateScInfo,
     jinrikanban
 } from '../../api/index';
@@ -42,12 +43,13 @@ export default {
         return {
             tabsList: [],
             todayLeftData: {},
-            scInfo: {},
+            wipsInfo: [],
             activeName: 'first',
             userInfo: {},
             zxSort: [0, 1, 2, 3, 4],
             qbSort: [1, 0, 2, 3, 4],
-            defaultSort: []
+            defaultSort: [],
+            ws:null
         };
     },
     components: {
@@ -77,20 +79,56 @@ export default {
                 });
             }
         },
-        async getQueryScInfo(type) {
-            let res = await queryScInfo({
-                zplineno: type
-            });
+        async getQueryWipsInfo(currentUserMaxType) {
+            let res = await queryWipsInfo();
             if (res.code == 0) {
                 console.log(res);
-                this.scInfo = res.objects;
+                this.wipsInfo = res.objects;
+                this.wipsInfo.forEach(item => {
+                    if (currentUserMaxType == roleMaxType.ZX) {
+                        item.lineName = roleEnum[item.sclineno];
+                        // this.defaultSort = this.zxSort;
+                    } else if (currentUserMaxType == roleMaxType.QB) {
+                        item.lineName = roleEnum[item.zplineno];
+                        // this.defaultSort = this.qbSort;
+                    }
+                    let workingCars = item.ordercount / item.cars;
+                    if(workingCars >= item.wips){
+                        workingCars = Math.floor(workingCars);
+                        item.carsFull = true;
+                    }else{
+                        workingCars = Math.ceil(workingCars);
+                        item.carsFull = false;
+                    }
+
+                    item.workingCars = workingCars;
+                });
+                console.log(this.wipsInfo);
             } else {
                 this.$notify.error({
                     title: '错误',
                     message: res.codeInfo
                 });
             }
-        }
+        },
+        openWebSocket(username,role){
+            console.log(username,role);
+            this.ws = new WebSocket(`ws:${domain}/websocket/${username}`);
+
+            this.ws.onopen = () => {
+                console.log('服务器连接成功！');
+            }; 
+            this.ws.onmessage = event => {
+                var obj = JSON.parse(event.data);
+                console.log(obj);
+            }
+            this.ws.onclose = event => {
+                console.log('连接已断开！');
+            };
+        },
+        closeWebSocket() {
+            this.ws.close();
+        },
     },
     mounted() {
         if (!cookies.get('userInfo')) {
@@ -100,10 +138,10 @@ export default {
         this.userInfo = cookies.get('userInfo');
 
         this.getTodayData(this.userInfo.role);
-        this.getQueryScInfo(this.userInfo.role);
 
         //获取当前用户的大类型
         let currentUserMaxType = this.userInfo.roleMaxType;
+        this.getQueryWipsInfo(currentUserMaxType);
 
         //根据大类型来展示使用那种数据展示Tab
         if (currentUserMaxType == roleMaxType.ZX) {
@@ -114,6 +152,8 @@ export default {
 
         this.tabsList = qiantaiRouters;
         this.activeName = this.$route.name;
+
+        this.openWebSocket(this.userInfo.username,this.userInfo.role);
     }
 };
 </script>

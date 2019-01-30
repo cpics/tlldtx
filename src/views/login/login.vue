@@ -14,7 +14,7 @@
                 <input type="text" v-model="username" placeholder="请输入用户名">
               </div>
               <div class="form-row">
-                <input type="password" v-model="password" placeholder="请输入密码">
+                <input type="password" @keyup.enter="login" v-model="password" placeholder="请输入密码">
               </div>
             </div>
             <div class="m-login-button" @click="login">登 录</div>

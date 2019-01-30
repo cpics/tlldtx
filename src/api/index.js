@@ -1,5 +1,5 @@
 import fetch from '../common/fetch/index';
-const domain = '//kone.2xnet.net:8023';
+export const domain = '//kone.2xnet.net:8023';
 // export const domain = '//' + location.host;
 
 //用户登录
@@ -184,6 +184,17 @@ export const yijianquxiaoqueliao = params =>
     })
 //一键取消缺料
 export const jinrikanban = params =>
-    fetch.get(domain + '/queryJinrikanban.2x.2x', {
+    fetch.get(domain + '/queryJinrikanban.2x', {
+        params: params
+    })
+
+//查询小车信息
+export const queryWipsInfo = params =>
+    fetch.get(domain + '/queryWipsInfo.2x', {
+        params: params
+    })
+//更新小车信息
+export const saveOrupdateWipsInfo = params =>
+    fetch.get(domain + '/saveOrupdateWipsInfo.2x', {
         params: params
     })
