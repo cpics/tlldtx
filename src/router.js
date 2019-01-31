@@ -110,6 +110,11 @@ const router = new Router({
         name: 'qiantai',
         component: Qiantai,
         children: qiantaiRouters
+    },
+    {
+        path: '/',
+        name: 'default',
+        redirect: '/login'
     }
     ]
 });

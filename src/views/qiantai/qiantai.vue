@@ -86,7 +86,7 @@ export default {
         async getQueryWipsInfo(currentUserMaxType) {
             let res = await queryWipsInfo();
             if (res.code == 0) {
-                console.log(res);
+                // console.log(res);
                 this.wipsInfo = res.objects;
                 this.wipsInfo.forEach(item => {
                     if (currentUserMaxType == roleMaxType.ZX) {
@@ -107,7 +107,7 @@ export default {
 
                     item.workingCars = workingCars;
                 });
-                console.log(this.wipsInfo);
+                // console.log(this.wipsInfo);
             } else {
                 this.$notify.error({
                     title: '错误',
@@ -116,15 +116,23 @@ export default {
             }
         },
         openWebSocket(username,role){
-            console.log(username,role);
+            // console.log(username,role);
             this.ws = new WebSocket(`ws:${domain}/websocket/${username}`);
 
             this.ws.onopen = () => {
                 console.log('服务器连接成功！');
             }; 
             this.ws.onmessage = event => {
+                
                 var obj = JSON.parse(event.data);
-                console.log(obj);
+                console.log(JSON.parse(event.data));
+                // return ;
+
+                // if(!obj.role.split(',').include(role))return;
+
+                if(obj.notifyType == 1){
+                    this.xddPlay();
+                }
             }
             this.ws.onclose = event => {
                 console.log('连接已断开！');
@@ -136,33 +144,36 @@ export default {
         //标记异常
         bjycPlay(){
             setTimeout(()=>{
-                window.biaojiyichang.player();
+                document.querySelector('#biaojiyichang').play();
                
-            },500);
+            });
         },
         //订单完成
         ddwcPlay(){
             setTimeout(()=>{
-                window.dingdanwancheng.player();
-            },500);
+                document.querySelector('#dingdanwancheng').play();
+                // window.dingdanwancheng.player();
+            });
         },
         //取消标记
         qxbjPlay(){
             setTimeout(()=>{
-                window.quxiaoyichang.player();
-            },500);
+                document.querySelector('#quxiaoyichang').play();
+                // window.quxiaoyichang.player();
+            });
         },
         //新订单
         xddPlay(){
             setTimeout(()=>{
-                window.xindedingdan.player();
-            },500);
+                document.querySelector('#xindedingdan').play();
+                // window.xindedingdan.player();
+            });
         },
     },
     
     mounted() {
         // setInterval(()=>{
-        this.bjycPlay();
+        // this.bjycPlay();
         // },10);
         
         // setTimeout(() => {
@@ -192,7 +203,7 @@ export default {
         this.tabsList = qiantaiRouters;
         this.activeName = this.$route.name;
 
-        // this.openWebSocket(this.userInfo.username,this.userInfo.role);
+        this.openWebSocket(this.userInfo.username,this.userInfo.role);
     }
 };
 </script>
