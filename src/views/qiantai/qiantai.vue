@@ -132,6 +132,12 @@ export default {
 
                 if(obj.notifyType == 1){
                     this.xddPlay();
+                }else if(obj.notifyType == 2){
+                    this.ddwcPlay();
+                }else if(obj.notifyType == 3){
+                    this.bjycPlay();
+                }else if(obj.notifyType == 4){
+                    this.qxbjPlay();
                 }
             }
             this.ws.onclose = event => {
