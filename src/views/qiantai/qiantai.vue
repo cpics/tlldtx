@@ -20,6 +20,10 @@
         <router-view/>
       </el-main>
     </el-container>
+    <audio style="display:none" controls="controls" id="biaojiyichang" preload v-bind:src="`${require('../../assets/audio/biaojiyichang.mp3')}`" />
+    <audio style="display:none" controls="controls" id="dingdanwancheng" preload v-bind:src="`${require('../../assets/audio/dingdanwancheng.mp3')}`" />
+    <audio style="display:none" controls="controls" id="quxiaoyichang" preload v-bind:src="`${require('../../assets/audio/quxiaoyichang.mp3')}`" />
+    <audio style="display:none" controls="controls" id="xindedingdan" preload v-bind:src="`${require('../../assets/audio/xindedingdan.mp3')}`" />
   </el-container>
 </template>
 <script>
@@ -129,8 +133,43 @@ export default {
         closeWebSocket() {
             this.ws.close();
         },
+        //标记异常
+        bjycPlay(){
+            setTimeout(()=>{
+                window.biaojiyichang.player();
+               
+            },500);
+        },
+        //订单完成
+        ddwcPlay(){
+            setTimeout(()=>{
+                window.dingdanwancheng.player();
+            },500);
+        },
+        //取消标记
+        qxbjPlay(){
+            setTimeout(()=>{
+                window.quxiaoyichang.player();
+            },500);
+        },
+        //新订单
+        xddPlay(){
+            setTimeout(()=>{
+                window.xindedingdan.player();
+            },500);
+        },
     },
+    
     mounted() {
+        // setInterval(()=>{
+        this.bjycPlay();
+        // },10);
+        
+        // setTimeout(() => {
+        //     window.biaojiyichang.player();
+        // });
+        
+
         if (!cookies.get('userInfo')) {
             this.$router.push('/login');
             return;
@@ -153,7 +192,7 @@ export default {
         this.tabsList = qiantaiRouters;
         this.activeName = this.$route.name;
 
-        this.openWebSocket(this.userInfo.username,this.userInfo.role);
+        // this.openWebSocket(this.userInfo.username,this.userInfo.role);
     }
 };
 </script>
