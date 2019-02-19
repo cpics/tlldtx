@@ -8,7 +8,7 @@
       <div class="d-slide-column">
         <h5>{{todayLeftData.lineName}}</h5>
         <ul>
-          <li>2018-10-15 13.21.12</li>
+          <li>{{dateFormat(new Date())}}</li>
           <li>
             <div class="d-label">今日计划：</div>
             <div>{{todayLeftData.total}}</div>
@@ -55,6 +55,35 @@ export default {
         maxClassString: String,
         todayLeftData: Object,
         wipsInfo:Array
+    },
+    methods:{
+        dateFormat(_value, _format) {
+            if (!_value) return _value;
+            let value = _value;
+            if (Object.prototype.toString.call(value) != '[object Date]') {
+                value = value.replace(/-/g, '/');
+            }
+            value = new Date(value);
+            let format = _format || 'yyyy-MM-dd hh:mm:ss';
+            let args = {
+                'M+': value.getMonth() + 1,
+                'd+': value.getDate(),
+                'h+': value.getHours(),
+                'm+': value.getMinutes(),
+                's+': value.getSeconds(),
+                'q+': Math.floor((value.getMonth() + 3) / 3), // quarter
+                S: value.getMilliseconds()
+            };
+            if (/(y+)/.test(format)) format = format.replace(RegExp.$1, (String(value.getFullYear())).substr(4 - RegExp.$1.length));
+            for (let i in args) {
+                if (args.hasOwnProperty(i)) {
+                    let n = args[i];
+                    if (new RegExp('(' + i + ')').test(format)) format = format.replace(RegExp.$1, RegExp.$1.length == 1 ? n : ('00' + n).substr((String(n)).length));
+                }
+            }
+            return format;
+
+        },
     }
 };
 </script>
