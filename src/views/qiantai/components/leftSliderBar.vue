@@ -8,7 +8,7 @@
       <div class="d-slide-column">
         <h5>{{todayLeftData.lineName}}</h5>
         <ul>
-          <li>{{dateFormat(new Date())}}</li>
+          <li>{{DateTime}}</li>
           <li>
             <div class="d-label">今日计划：</div>
             <div>{{todayLeftData.total}}</div>
@@ -55,6 +55,16 @@ export default {
         maxClassString: String,
         todayLeftData: Object,
         wipsInfo:Array
+    },
+    data(){
+        return {
+            DateTime:this.dateFormat(new Date())
+        }
+    },
+    mounted(){
+        setInterval(() => {
+            this.DateTime = this.dateFormat(new Date())
+        }, 1000);
     },
     methods:{
         dateFormat(_value, _format) {
