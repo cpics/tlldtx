@@ -280,7 +280,7 @@ export default {
                 });
             }
         },
-
+        
         showEditPwd(person) {
             this.editPwdDir = true;
 
