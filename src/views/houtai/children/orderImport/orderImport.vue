@@ -51,6 +51,19 @@ export default {
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 }
+            }).then(res=>{
+                if(res.data.code == 0){
+                    this.$notify({
+                        type: 'success',
+                        message: res.data.codeInfo,
+                        title: '成功'
+                    });
+                }else{
+                    this.$notify.error({
+                        type: '错误',
+                        message: res.data.codeInfo
+                    });
+                }
             });
         },
         uploadSuccess(file, fileList) {

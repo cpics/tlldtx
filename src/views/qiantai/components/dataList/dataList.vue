@@ -11,12 +11,14 @@
       </div>
     </div>
     <!--加急 单元行-标红 tr  + c-red-->
-    <el-table :data="orderList" style="width: 100%">
+    <el-table :data="orderList" style="width: 100%" defaultExpandAll="'1'">
       <el-table-column 
       v-for="(item,index) in headers" 
       :key="index"
       :prop="item.props"
-      :label="item.name"></el-table-column>
+      :label="item.name">
+       
+      </el-table-column>
 
       <!-- <el-table-column fixed prop="order" label="订单号" width="140"></el-table-column>
       <el-table-column prop="parts1" label="部件1"></el-table-column>
@@ -32,6 +34,15 @@
           <slot :rowData="scope.row" name="itemAction"></slot>
         </template>
       </el-table-column>
+      <el-table-column type="expand" >
+        <template slot-scope="props">
+          <div class="jmtm">
+            <div>{{ props.row.jmtm2}}</div>
+            <div>{{ props.row.jmtm1}}</div>
+            <div>{{ props.row.jmtm3}}</div>
+          </div>
+        </template>
+      </el-table-column>
     </el-table>
   </div>
 </template>
@@ -42,8 +53,11 @@ export default {
     props: {
         headers:Array,
         orderList: Array,
-        orderName:String
+        orderName:String,
+        isJmDir:Boolean
 
+    },
+    methods:{
     },
     mounted(){
         // console.log(this.headers);
@@ -53,4 +67,14 @@ export default {
 </script>
 
 <style>
+.jmtm{
+  font-family: 'code128';
+  font-size:25px;
+}
+.jmtm div{
+  float:left;
+  width:30%;
+  text-align:center;
+  /* padding-right:100px; */
+}
 </style>

@@ -5,7 +5,7 @@
       <el-tab-pane v-for="(item,i) in pullPanes" :key="i" :label="item.label" :name="item.name"></el-tab-pane>
     </el-tabs>
     <div v-for="(item,i) in tableData" :key="i">
-      <data-list :orderList="item.orderList" :headers="headers">
+      <data-list :orderList="item.orderList" :headers="headers" :isJmDir="item.batchType === 6">
         <template slot-scope="slotProps" slot="allAction">
           <template v-if="userRoleMaxType == 'ZX'">
             <el-button

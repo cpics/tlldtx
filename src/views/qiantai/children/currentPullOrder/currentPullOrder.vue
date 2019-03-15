@@ -29,6 +29,7 @@
     </el-tabs>
     <div v-for="(item,i) in tableData" :key="i">
       <data-list
+        :isJmDir="item.batchType === 6"
         :orderName="`${activePane.label} - ${item.batchNo} ${item.piciDate}`"
         :orderList="item.orderList"
         :headers="headers"
@@ -550,8 +551,8 @@ export default {
         this.userRoleMaxType = this.userInfo.roleMaxType;
 
         if (this.userRoleMaxType == 'ZX') {
-            if(this.userInfo.role==3){
-                this.pullPanes.splice(0,2);
+            if (this.userInfo.role == 3) {
+                this.pullPanes.splice(0, 2);
             }
             this.activePane = this.pullPanes[0];
             this.headers = this.pullPanes[0].headers;
