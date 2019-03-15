@@ -15,6 +15,14 @@ body {
     overflow: hidden;
 }
 
+@font-face{
+    font-family: 'code128';
+    src: url('../fonts/code128.ttf');
+    font-weight: normal;
+    font-style: normal;
+}
+
+
 html,
 body,
 #app {
