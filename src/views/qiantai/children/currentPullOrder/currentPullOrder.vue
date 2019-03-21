@@ -24,13 +24,13 @@
         <el-button type="primary" @click="yijianxiadan">下单</el-button>
       </div>
     </el-dialog>
-    <el-tabs v-model="activeName" @tab-click="chooseCx">
+    <el-tabs v-model="activeName" @tab-click="chooseCx" v-if="userRoleMaxType=='ZX'">
       <el-tab-pane v-for="(item,i) in pullPanes" :key="i" :label="item.label" :name="item.name"></el-tab-pane>
     </el-tabs>
     <div v-for="(item,i) in tableData" :key="i">
       <data-list
-        :isJmDir="item.batchType === 6"
-        :orderName="`${activePane.label} - ${item.batchNo} ${item.piciDate}`"
+        :isJmDir="item.batchType == 6"
+        :orderName="`${userRoleMaxType=='ZX'?activePane.label:(item.batchLine==1?'装箱南线':'装箱北线')} - ${item.batchNo} ${item.piciDate}`"
         :orderList="item.orderList"
         :headers="headers"
       >
@@ -468,11 +468,14 @@ export default {
         //获取拉动接口数据
         async getData() {
             this.tableData = [];
-            let res = await ladongOrder({
-                type: this.activePane.type,
+            let params = {
                 currentpage: 1,
                 pagesize: 100000
-            });
+            };
+            if(this.userRoleMaxType == 'ZX'){
+                params.type = this.activePane.type;
+            }
+            let res = await ladongOrder(params);
             if (res.code == 0) {
                 console.log(this.activePane);
                 res.objects.forEach(orderArray => {

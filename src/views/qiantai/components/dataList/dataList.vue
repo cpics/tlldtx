@@ -11,7 +11,7 @@
       </div>
     </div>
     <!--加急 单元行-标红 tr  + c-red-->
-    <el-table :data="orderList" style="width: 100%" defaultExpandAll="'1'">
+    <el-table :data="orderList" style="width: 100%" :defaultExpandAll="isJmDir">
       <el-table-column 
       v-for="(item,index) in headers" 
       :key="index"
@@ -34,7 +34,7 @@
           <slot :rowData="scope.row" name="itemAction"></slot>
         </template>
       </el-table-column>
-      <el-table-column type="expand" >
+      <el-table-column type="expand" v-if="isJmDir">
         <template slot-scope="props">
           <div class="jmtm">
             <div>{{ props.row.jmtm2}}</div>
