@@ -128,6 +128,8 @@ import tianhua from '../../../../common/category/tianhua';
 import jiaomen from '../../../../common/category/jiaomen';
 import anjie from '../../../../common/category/anjie';
 
+import getQrStr from '../../../../common/utils/getQRstring';
+
 export default {
     name: 'currentPullOrder',
     components: {
@@ -486,6 +488,8 @@ export default {
                             item.currentStatus = item.thStatus;
                         } else if (orderArray.batchType == 6) {
                             item.currentStatus = item.jmStatus;
+                            getQrStr(item);
+                            console.log(this.headers);
                         } else if (orderArray.batchType == 7) {
                             item.currentStatus = item.ajStatus;
                         }
@@ -495,7 +499,7 @@ export default {
                     this.filterStatus(orderArray);
                 });
                 this.tableData = res.objects;
-                console.log(this.tableData);
+                // console.log(this.tableData);
             } else {
                 this.$notify.error({
                     type: '错误',

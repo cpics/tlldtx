@@ -6,60 +6,68 @@
       <!-- <div class="tipper-txt">前壁产线 - 拉动批次01 2018-10-21 10:21:32</div> -->
       <div class="tipper-handle">
         <!-- <template slot-scope="scope"> -->
-          <slot name="allAction" ></slot>
+        <slot name="allAction"></slot>
         <!-- </template> -->
       </div>
     </div>
     <!--加急 单元行-标红 tr  + c-red-->
     <el-table :data="orderList" style="width: 100%" :defaultExpandAll="isJmDir">
-      <el-table-column 
-      v-for="(item,index) in headers" 
-      :key="index"
-      :prop="item.props"
-      :label="item.name">
-       
-      </el-table-column>
-
-      <!-- <el-table-column fixed prop="order" label="订单号" width="140"></el-table-column>
-      <el-table-column prop="parts1" label="部件1"></el-table-column>
-      <el-table-column prop="parts2" label="部件2"></el-table-column>
-      <el-table-column prop="parts3" label="部件3"></el-table-column>
-      <el-table-column prop="parts4" label="部件4"></el-table-column>
-      <el-table-column prop="time" label="交付时间" width="140"></el-table-column>
-      <el-table-column prop="current" label="当前状态" width="120"></el-table-column>
-      <el-table-column prop="place" label="当前位置" width="140"></el-table-column>
-      <el-table-column prop="remarks" label="备注说明" width="180"></el-table-column>-->
-      <el-table-column prop="handle" label="操作" width="180"> 
+      <el-table-column
+        v-for="(item,index) in headers"
+        :key="index"
+        :prop="item.props"
+        :label="item.name"
+      ></el-table-column>
+      <el-table-column prop="handle" label="操作" width="180">
         <template slot-scope="scope">
           <slot :rowData="scope.row" name="itemAction"></slot>
         </template>
       </el-table-column>
       <el-table-column type="expand" v-if="isJmDir">
-        <template slot-scope="props">
+        <template slot-scope="props">
           <div class="jmtm">
-            <div>{{ props.row.jmtm2}}</div>
+            <div>
+              <!-- {{props.row}} -->
+              <canvas :id="'qr1'+props.row.orderNo" width="100px" height="100px"></canvas>
+            </div>
+            <div>
+              <!-- {{props.row}} -->
+              <canvas :id="'qr2'+props.row.orderNo" width="100px" height="100px"></canvas>
+            </div>
+            <div>
+              <!-- {{props.row}} -->
+              <canvas :id="'qr3'+props.row.orderNo" width="100px" height="100px"></canvas>
+            </div>
+            <!-- <div>{{ props.row.jmtm2}}</div>
             <div>{{ props.row.jmtm1}}</div>
-            <div>{{ props.row.jmtm3}}</div>
+            <div>{{ props.row.jmtm3}}</div>-->
           </div>
-        </template>
-      </el-table-column>
+        </template>
+      </el-table-column>
     </el-table>
   </div>
 </template>
 
 <script>
+import QRCode from 'qrcode';
 export default {
     name: 'dataList',
     props: {
-        headers:Array,
+        headers: Array,
         orderList: Array,
-        orderName:String,
-        isJmDir:Boolean
-
+        orderName: String,
+        isJmDir: Boolean
     },
-    methods:{
-    },
-    mounted(){
+    methods: {},
+    mounted() {
+        if(this.isJmDir){
+            this.orderList.forEach(item => {
+                QRCode.toCanvas(document.getElementById('qr1'+item.orderNo), item.qr1);
+                QRCode.toCanvas(document.getElementById('qr2'+item.orderNo), item.qr2);
+                QRCode.toCanvas(document.getElementById('qr3'+item.orderNo), item.qr3);
+            });
+        }
+        // QRCode.toCanvas(document.getElementById('qr1'), this.shareUrl);
         // console.log(this.headers);
         // console.log()
     }
@@ -67,14 +75,14 @@ export default {
 </script>
 
 <style>
-.jmtm{
-  font-family: 'code128';
-  font-size:25px;
+.jmtm {
+  /* font-family: 'code128'; */
+  /* font-size:25px; */
 }
-.jmtm div{
-  float:left;
-  width:30%;
-  text-align:center;
+.jmtm div {
+  float: left;
+  width: 30%;
+  text-align: center;
   /* padding-right:100px; */
 }
 </style>

@@ -17,11 +17,11 @@ const jiaomen = [
     },
     {
         name:'门材质',
-        props:''
+        props:'jc'
     },
     {
         name:'门开类型',
-        props:''
+        props:'zkck'
     },
     {
         name:'Panel',
@@ -37,7 +37,7 @@ const jiaomen = [
     },
     {
         name:'CARTYPE',
-        props:''
+        props:'secttc'
     },
     {
         name:'Cladding',
