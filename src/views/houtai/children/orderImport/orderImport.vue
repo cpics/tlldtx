@@ -4,22 +4,20 @@
     <div class="m-import-box">
       <el-form class="m-form" ref="form" :model="form" label-width="120px">
         <el-form-item label="请输入工时：">
-          <el-input v-model="worktime"></el-input>
+          <el-time-select
+            placeholder="起始时间"
+            v-model="startTime"
+            :picker-options="{start: '00:00',step: '01:00',end: '24:00'}"
+          ></el-time-select>
+          <el-time-select
+            placeholder="结束时间"
+            v-model="endTime"
+            :picker-options="{start: '00:00',step: '01:00',end: '24:00',minTime: startTime}"
+          ></el-time-select>
+          <!-- <el-input v-model="worktime"></el-input> -->
         </el-form-item>
         <el-form-item class="import-row" label>
           <input type="file" name="file" ref="uploadImg">
-          <!-- <el-upload
-            class="upload-demo"
-            action="https://jsonplaceholder.typicode.com/posts/"
-            multiple
-            :limit="1"
-            :file-list="fileList"
-            :on-success="uploadSuccess"
-          >
-            <el-button class="d-import-btn" type="primary">选择文件</el-button>
-            <el-button class="d-choose-file">点击选择文件</el-button>
-            <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
-          </el-upload>-->
         </el-form-item>
         <el-form-item class="pt-50">
           <el-button type="primary" @click="onSubmit">确定</el-button>
@@ -34,6 +32,8 @@ import axios from 'axios';
 export default {
     data() {
         return {
+            startTime:'',
+            endTime:'',
             worktime: '',
             fileList: [],
             form: {}
@@ -43,28 +43,39 @@ export default {
         async onSubmit() {
             let file = this.$refs.uploadImg.files[0];
             let form = new FormData();
+            if(this.startTime =='' || this.endTime ==''){
+                this.$notify.error({
+                    type: '错误',
+                    message: '请选择时间！'
+                });
+                return false;
+            }
+            this.worktime = parseInt(this.endTime.split(':')[0]) - parseInt(this.startTime.split(':')[0]);
+            console.log(this.worktime);
             form.append('worktime', this.worktime);
             form.append('file', file);
             // let res = await importOrder({ worktime: this.worktime }, file);
 
-            axios.post('//' + domain + '/importOrder.2x', form, {
-                headers: {
-                    'Content-Type': 'multipart/form-data'
-                }
-            }).then(res=>{
-                if(res.data.code == 0){
-                    this.$notify({
-                        type: 'success',
-                        message: res.data.codeInfo,
-                        title: '成功'
-                    });
-                }else{
-                    this.$notify.error({
-                        type: '错误',
-                        message: res.data.codeInfo
-                    });
-                }
-            });
+            axios
+                .post('//' + domain + '/importOrder.2x', form, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data'
+                    }
+                })
+                .then(res => {
+                    if (res.data.code == 0) {
+                        this.$notify({
+                            type: 'success',
+                            message: res.data.codeInfo,
+                            title: '成功'
+                        });
+                    } else {
+                        this.$notify.error({
+                            type: '错误',
+                            message: res.data.codeInfo
+                        });
+                    }
+                });
         },
         uploadSuccess(file, fileList) {
             console.log(fileList);

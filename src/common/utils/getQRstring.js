@@ -19,14 +19,19 @@ function qr1(item) {
     }
     strArr.push(item.jc);
     strArr.push(item.zkck);
-    // strArr.push('3');//Panel
-    strArr.push(item.LL);
-    strArr.push(item.HH);
-    strArr.push(item.secttc);
+    strArr.push(item.panel); //Panel
+    strArr.push(item.ll.replace(/[^0-9]/ig,''));
+    strArr.push(item.hh);
+    strArr.push(item.carType);
     //如果大于1则直接使用1 如果小于1 例如0.6就要变成.6
+    if (item.tpgd < 1) {
+        strArr.push('.' + item.tpgd.split('.')[1]);
+    } else if (item.tpgd >= 1) {
+        strArr.push(item.tpgd);
+    }
     // strArr.push('.6');//贴皮厚度
 
-
+    console.log(strArr.join('|'));
     return strArr.join('|');
 
 }
@@ -34,7 +39,7 @@ function qr1(item) {
 function qr2(item) {
     let strArr = ['CB+C'];
     let LL = item.ll / 10;
-    debugger;
+    // debugger;
     if (LL / 100 < 10) {
         LL = '0' + '' + LL;
     }

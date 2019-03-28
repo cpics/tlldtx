@@ -28,15 +28,15 @@
           <div class="jmtm">
             <div>
               <!-- {{props.row}} -->
-              <canvas :id="'qr1'+props.row.orderNo" width="100px" height="100px"></canvas>
+              <canvas :id="'qr1'+props.row.orderNo" width="150px" height="150px"></canvas>
             </div>
             <div>
               <!-- {{props.row}} -->
-              <canvas :id="'qr2'+props.row.orderNo" width="100px" height="100px"></canvas>
+              <canvas :id="'qr2'+props.row.orderNo" width="150px" height="150px"></canvas>
             </div>
             <div>
               <!-- {{props.row}} -->
-              <canvas :id="'qr3'+props.row.orderNo" width="100px" height="100px"></canvas>
+              <canvas :id="'qr3'+props.row.orderNo" width="150px" height="150px"></canvas>
             </div>
             <!-- <div>{{ props.row.jmtm2}}</div>
             <div>{{ props.row.jmtm1}}</div>
@@ -62,9 +62,18 @@ export default {
     mounted() {
         if(this.isJmDir){
             this.orderList.forEach(item => {
-                QRCode.toCanvas(document.getElementById('qr1'+item.orderNo), item.qr1);
-                QRCode.toCanvas(document.getElementById('qr2'+item.orderNo), item.qr2);
-                QRCode.toCanvas(document.getElementById('qr3'+item.orderNo), item.qr3);
+                QRCode.toCanvas(document.getElementById('qr1'+item.orderNo), item.qr1,{
+                    width:150,
+                    height:150
+                });
+                QRCode.toCanvas(document.getElementById('qr2'+item.orderNo), item.qr2,{
+                    width:150,
+                    height:150
+                });
+                QRCode.toCanvas(document.getElementById('qr3'+item.orderNo), item.qr3,{
+                    width:150,
+                    height:150
+                });
             });
         }
         // QRCode.toCanvas(document.getElementById('qr1'), this.shareUrl);

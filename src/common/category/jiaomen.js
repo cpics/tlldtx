@@ -25,7 +25,7 @@ const jiaomen = [
     },
     {
         name:'Panel',
-        props:''
+        props:'panel'
     },
     {
         name:'LL',
@@ -37,7 +37,7 @@ const jiaomen = [
     },
     {
         name:'CARTYPE',
-        props:'secttc'
+        props:'carType'
     },
     {
         name:'Cladding',
@@ -45,19 +45,19 @@ const jiaomen = [
     },
     {
         name:'贴皮厚度',
-        props:''
+        props:'tphd'
     },
     {
         name:'宽度',
-        props:''
+        props:'tpkd'
     },
     {
         name:'基板高度',
-        props:''
+        props:'jbgd'
     },
     {
         name:'贴皮高度',
-        props:''
+        props:'tpgd'
     },
     {
         name:'非标信息',
