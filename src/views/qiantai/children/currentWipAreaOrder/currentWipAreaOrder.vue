@@ -45,6 +45,8 @@ import qianbi from '../../../../common/category/qianbi';
 import tianhua from '../../../../common/category/tianhua';
 import jiaomen from '../../../../common/category/jiaomen';
 import anjie from '../../../../common/category/anjie';
+
+import getQrStr from '../../../../common/utils/getQRstring';
 export default {
     name: 'currentWipAreaOrder',
     components: {
@@ -140,6 +142,7 @@ export default {
                             item.currentStatus = item.thStatus;
                         } else if (orderArray.batchType == 6) {
                             item.currentStatus = item.jmStatus;
+                            getQrStr(item);
                         } else if (orderArray.batchType == 7) {
                             item.currentStatus = item.ajStatus;
                         }

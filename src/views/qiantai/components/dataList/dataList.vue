@@ -11,39 +11,48 @@
       </div>
     </div>
     <!--加急 单元行-标红 tr  + c-red-->
-    <el-table :data="orderList" style="width: 100%" :defaultExpandAll="isJmDir">
+    <el-table :data="orderList" style="width: 100%">
       <el-table-column
         v-for="(item,index) in headers"
         :key="index"
         :prop="item.props"
         :label="item.name"
       ></el-table-column>
-      <el-table-column prop="handle" label="操作" width="180">
+      <el-table-column v-if="isJmDir" width="300">
+        <template slot-scope="props">
+          <div class="jmtm">
+            <div>
+              <canvas :id="'qr1'+props.row.orderNo"  ></canvas>
+            </div>
+            <div>
+              <canvas :id="'qr2'+props.row.orderNo"  ></canvas>
+            </div>
+            <div>
+              <canvas :id="'qr3'+props.row.orderNo"  ></canvas>
+            </div>
+          </div>
+        </template>
+      </el-table-column>
+      <el-table-column prop="handle"  label="操作">
         <template slot-scope="scope">
           <slot :rowData="scope.row" name="itemAction"></slot>
         </template>
       </el-table-column>
-      <el-table-column type="expand" v-if="isJmDir">
+      <!-- <el-table-column type="expand" v-if="isJmDir">
         <template slot-scope="props">
           <div class="jmtm">
             <div>
-              <!-- {{props.row}} -->
               <canvas :id="'qr1'+props.row.orderNo" width="150px" height="150px"></canvas>
             </div>
             <div>
-              <!-- {{props.row}} -->
               <canvas :id="'qr2'+props.row.orderNo" width="150px" height="150px"></canvas>
             </div>
             <div>
-              <!-- {{props.row}} -->
               <canvas :id="'qr3'+props.row.orderNo" width="150px" height="150px"></canvas>
             </div>
-            <!-- <div>{{ props.row.jmtm2}}</div>
-            <div>{{ props.row.jmtm1}}</div>
-            <div>{{ props.row.jmtm3}}</div>-->
           </div>
         </template>
-      </el-table-column>
+      </el-table-column>-->
     </el-table>
   </div>
 </template>
@@ -60,22 +69,36 @@ export default {
     },
     methods: {},
     mounted() {
-        if(this.isJmDir){
-            this.orderList.forEach(item => {
-                QRCode.toCanvas(document.getElementById('qr1'+item.orderNo), item.qr1,{
-                    width:150,
-                    height:150
+        this.$nextTick(() => {
+            if (this.isJmDir) {
+                this.orderList.forEach(item => {
+                    QRCode.toCanvas(
+                        document.getElementById('qr1' + item.orderNo),
+                        item.qr1,
+                        {
+                            width: 80,
+                            height: 80
+                        }
+                    );
+                    QRCode.toCanvas(
+                        document.getElementById('qr2' + item.orderNo),
+                        item.qr2,
+                        {
+                            width: 80,
+                            height: 80
+                        }
+                    );
+                    QRCode.toCanvas(
+                        document.getElementById('qr3' + item.orderNo),
+                        item.qr3,
+                        {
+                            width: 80,
+                            height: 80
+                        }
+                    );
                 });
-                QRCode.toCanvas(document.getElementById('qr2'+item.orderNo), item.qr2,{
-                    width:150,
-                    height:150
-                });
-                QRCode.toCanvas(document.getElementById('qr3'+item.orderNo), item.qr3,{
-                    width:150,
-                    height:150
-                });
-            });
-        }
+            }
+        });
         // QRCode.toCanvas(document.getElementById('qr1'), this.shareUrl);
         // console.log(this.headers);
         // console.log()
@@ -93,5 +116,8 @@ export default {
   width: 30%;
   text-align: center;
   /* padding-right:100px; */
+}
+.el-table__expand-icon {
+  display: none;
 }
 </style>

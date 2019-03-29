@@ -489,7 +489,7 @@ export default {
                         } else if (orderArray.batchType == 6) {
                             item.currentStatus = item.jmStatus;
                             getQrStr(item);
-                            console.log(this.headers);
+                            // console.log(this.headers);
                         } else if (orderArray.batchType == 7) {
                             item.currentStatus = item.ajStatus;
                         }
