@@ -9,9 +9,9 @@
         @click="showGridPoP"
       >一键下单</el-button>
     </div>
-    <el-dialog style="z-index: 9999" title="一键下单" :visible.sync="dialogTableVisible">
+    <el-dialog style="z-index: 9999;" title="一键下单" :visible.sync="dialogTableVisible" width="80%">
       <!--加急 单元行-标红 tr  + c-red-->
-      <el-table :data="gridData" @selection-change="handleSelectionChange" max-height="300">
+      <el-table :data="gridData" @selection-change="handleSelectionChange" max-height="300" >
         <el-table-column type="selection" fixed width="55"></el-table-column>
         <el-table-column
           v-for="(item,index) in headers"

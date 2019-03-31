@@ -13,27 +13,61 @@
     <!--加急 单元行-标红 tr  + c-red-->
     <el-table :data="orderList" style="width: 100%">
       <el-table-column
+        v-if="!isJmDir"
         v-for="(item,index) in headers"
         :key="index"
         :prop="item.props"
         :label="item.name"
       ></el-table-column>
-      <el-table-column v-if="isJmDir" width="300">
-        <template slot-scope="props">
-          <div class="jmtm">
-            <div>
-              <canvas :id="'qr1'+props.row.orderNo"  ></canvas>
+      <template v-if="isJmDir">
+        <el-table-column
+          v-for="(item,ii) in jiaomen1"
+          :key="ii"
+          :prop="item.props"
+          :label="item.name"
+        ></el-table-column>
+
+        <el-table-column v-if="isJmDir" width="100" label="二维码1">
+          <template slot-scope="props">
+            <div class="jmtm">
+              <div>
+                <canvas :id="'qr1'+props.row.orderNo"></canvas>
+              </div>
             </div>
-            <div>
-              <canvas :id="'qr2'+props.row.orderNo"  ></canvas>
+          </template>
+        </el-table-column>
+        <el-table-column
+          v-for="(item,iii) in jiaomen2"
+          :key="10+iii"
+          :prop="item.props"
+          :label="item.name"
+        ></el-table-column>
+        <el-table-column v-if="isJmDir" width="100" label="二维码2">
+          <template slot-scope="props">
+            <div class="jmtm">
+              <div>
+                <canvas :id="'qr2'+props.row.orderNo"></canvas>
+              </div>
             </div>
-            <div>
-              <canvas :id="'qr3'+props.row.orderNo"  ></canvas>
+          </template>
+        </el-table-column>
+        <el-table-column
+          v-for="(item,iiii) in jiaomen3"
+          :key="100+iiii"
+          :prop="item.props"
+          :label="item.name"
+        ></el-table-column>
+        <el-table-column v-if="isJmDir" width="100" label="二维码3">
+          <template slot-scope="props">
+            <div class="jmtm">
+              <div>
+                <canvas :id="'qr3'+props.row.orderNo"></canvas>
+              </div>
             </div>
-          </div>
-        </template>
-      </el-table-column>
-      <el-table-column prop="handle"  label="操作">
+          </template>
+        </el-table-column>
+      </template>
+      <el-table-column prop="handle" label="操作">
         <template slot-scope="scope">
           <slot :rowData="scope.row" name="itemAction"></slot>
         </template>
@@ -58,6 +92,11 @@
 </template>
 
 <script>
+import {
+    jiaomen2,
+    jiaomen1,
+    jiaomen3
+} from '../../../../common/category/jiaomen.js';
 import QRCode from 'qrcode';
 export default {
     name: 'dataList',
@@ -67,8 +106,16 @@ export default {
         orderName: String,
         isJmDir: Boolean
     },
+    data() {
+        return {
+            jiaomen1: jiaomen1,
+            jiaomen2: jiaomen2,
+            jiaomen3: jiaomen3
+        };
+    },
     methods: {},
     mounted() {
+        console.log(jiaomen1, jiaomen2, jiaomen3);
         this.$nextTick(() => {
             if (this.isJmDir) {
                 this.orderList.forEach(item => {
