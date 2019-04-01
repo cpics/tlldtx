@@ -11,10 +11,11 @@
       </div>
     </div>
     <!--加急 单元行-标红 tr  + c-red-->
-    <el-table :data="orderList" style="width: 100%">
+    <el-table :data="orderList" style="width: 100%" >
       <el-table-column
         v-if="!isJmDir"
         v-for="(item,index) in headers"
+        :width="item.props=='orderBatch'?140:(item.props=='tixing'?140:(item.props=='orderNo'?140:''))"
         :key="index"
         :prop="item.props"
         :label="item.name"
@@ -22,6 +23,7 @@
       <template v-if="isJmDir">
         <el-table-column
           v-for="(item,ii) in jiaomen1"
+          :width="item.props=='orderBatch'?140:(item.props=='tixing'?140:(item.props=='orderNo'?140:(item.props=='Orderdate'?200:'')))"
           :key="ii"
           :prop="item.props"
           :label="item.name"
@@ -66,8 +68,15 @@
             </div>
           </template>
         </el-table-column>
+        <el-table-column
+          v-for="(item,iiii) in jiaomen4"
+          :width="item.props=='orderBatch'?140:(item.props=='tixing'?140:(item.props=='orderNo'?140:(item.props=='createTime'?200:'')))"
+          :key="1000+iiii"
+          :prop="item.props"
+          :label="item.name"
+        ></el-table-column>
       </template>
-      <el-table-column prop="handle" label="操作">
+      <el-table-column prop="handle" fixed="right" label="操作" width="150">
         <template slot-scope="scope">
           <slot :rowData="scope.row" name="itemAction"></slot>
         </template>
@@ -95,7 +104,8 @@
 import {
     jiaomen2,
     jiaomen1,
-    jiaomen3
+    jiaomen3,
+    jiaomen4
 } from '../../../../common/category/jiaomen.js';
 import QRCode from 'qrcode';
 export default {
@@ -110,7 +120,8 @@ export default {
         return {
             jiaomen1: jiaomen1,
             jiaomen2: jiaomen2,
-            jiaomen3: jiaomen3
+            jiaomen3: jiaomen3,
+            jiaomen4: jiaomen4
         };
     },
     methods: {},
@@ -159,12 +170,9 @@ export default {
   /* font-size:25px; */
 }
 .jmtm div {
-  float: left;
-  width: 30%;
+  /* float: left; */
+  /* width: 30%; */
   text-align: center;
   /* padding-right:100px; */
-}
-.el-table__expand-icon {
-  display: none;
 }
 </style>

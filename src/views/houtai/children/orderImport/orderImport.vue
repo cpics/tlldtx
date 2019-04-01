@@ -69,7 +69,7 @@ export default {
 
             this.worktime = endTime - startTime;
             console.log(this.worktime);
-            return false;
+            // return false;
             form.append('worktime', this.worktime);
             form.append('file', file);
             // let res = await importOrder({ worktime: this.worktime }, file);

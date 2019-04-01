@@ -118,7 +118,8 @@ export const jiaomen3 = [{
     name: '贴皮厚度',
     props: 'tphd'
 },
-{
+]
+export const jiaomen4 = [{
     name: '宽度',
     props: 'tpkd'
 },
@@ -138,10 +139,10 @@ export const jiaomen3 = [{
 //     name: '非标信息',
 //     props: ''
 // },
-{
-    name: 'Orderdate',
-    props: 'createTime'
-}
+// {
+//     name: 'Orderdate',
+//     props: 'createTime'
+// }
 ]
 
 

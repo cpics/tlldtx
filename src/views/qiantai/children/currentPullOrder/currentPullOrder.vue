@@ -11,9 +11,10 @@
     </div>
     <el-dialog style="z-index: 9999;" title="一键下单" :visible.sync="dialogTableVisible" width="80%">
       <!--加急 单元行-标红 tr  + c-red-->
-      <el-table :data="gridData" @selection-change="handleSelectionChange" max-height="300" >
+      <el-table :data="gridData" @selection-change="handleSelectionChange" max-height="300">
         <el-table-column type="selection" fixed width="55"></el-table-column>
         <el-table-column
+          :width="item.props=='orderBatch'?150:(item.props=='tixing'?150:(item.props=='orderNo'?150:''))"
           v-for="(item,index) in headers"
           :key="index"
           :prop="item.props"
@@ -228,7 +229,7 @@ export default {
         };
     },
     methods: {
-    //选择产线tab
+        //选择产线tab
         chooseCx(tab, event) {
             this.activePane = this.pullPanes[tab.index];
             this.headers = this.pullPanes[tab.index].headers;
@@ -474,7 +475,7 @@ export default {
                 currentpage: 1,
                 pagesize: 100000
             };
-            if(this.userRoleMaxType == 'ZX'){
+            if (this.userRoleMaxType == 'ZX') {
                 params.type = this.activePane.type;
             }
             let res = await ladongOrder(params);
