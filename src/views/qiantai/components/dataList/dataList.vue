@@ -170,9 +170,11 @@ export default {
   /* font-size:25px; */
 }
 .jmtm div {
+  width: 80px;
+  height: 80px;
   /* float: left; */
   /* width: 30%; */
-  text-align: center;
+  /* text-align: center; */
   /* padding-right:100px; */
 }
 </style>
