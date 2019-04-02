@@ -40,6 +40,10 @@ import qianbi from '../../../../common/category/qianbi';
 import tianhua from '../../../../common/category/tianhua';
 import jiaomen from '../../../../common/category/jiaomen';
 import anjie from '../../../../common/category/anjie';
+
+
+import getQrStr from '../../../../common/utils/getQRstring';
+
 export default {
     name: 'unFinishOrder',
     components: {
@@ -98,7 +102,7 @@ export default {
         };
     },
     methods: {
-    //选择产线tab
+        //选择产线tab
         chooseCx(tab, event) {
             this.activePane = this.pullPanes[tab.index];
             this.headers = this.pullPanes[tab.index].headers;
@@ -157,6 +161,16 @@ export default {
                 pagesize: 100000
             });
             if (res.code == 0) {
+                res.objects.forEach(orderArray => {
+                    orderArray.orderList.forEach(item => {
+                        if (orderArray.batchType == 6) {
+                            item.currentStatus = item.jmStatus;
+                            getQrStr(item);
+                            // console.log(this.headers);
+                        }
+                    });
+                    // this.filterStatus(orderArray);
+                });
                 this.tableData = res.objects;
             } else {
                 this.$notify.error({
@@ -171,8 +185,8 @@ export default {
         this.userRoleMaxType = this.userInfo.roleMaxType;
 
         if (this.userRoleMaxType == 'ZX') {
-            if(this.userInfo.role==3){
-                this.pullPanes.splice(0,2);
+            if (this.userInfo.role == 3) {
+                this.pullPanes.splice(0, 2);
             }
             this.activePane = this.pullPanes[0];
             this.headers = this.pullPanes[0].headers;

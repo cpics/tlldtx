@@ -11,10 +11,10 @@
     </div>
     <el-dialog style="z-index: 9999;" title="一键下单" :visible.sync="dialogTableVisible" width="80%">
       <!--加急 单元行-标红 tr  + c-red-->
-      <el-table :data="gridData" @selection-change="handleSelectionChange" max-height="300">
+      <el-table :data="gridData" @selection-change="handleSelectionChange" max-height="500">
         <el-table-column type="selection" fixed width="55"></el-table-column>
         <el-table-column
-          :width="item.props=='orderBatch'?150:(item.props=='tixing'?150:(item.props=='orderNo'?150:''))"
+          :width="getWidth(item)"
           v-for="(item,index) in headers"
           :key="index"
           :prop="item.props"
@@ -131,6 +131,8 @@ import anjie from '../../../../common/category/anjie';
 
 import getQrStr from '../../../../common/utils/getQRstring';
 
+import getWidth from '../../../../common/utils/getWidth.js';
+
 export default {
     name: 'currentPullOrder',
     components: {
@@ -229,6 +231,10 @@ export default {
         };
     },
     methods: {
+        getWidth(item) {
+            let width = getWidth(item);
+            return width;
+        },
         //选择产线tab
         chooseCx(tab, event) {
             this.activePane = this.pullPanes[tab.index];

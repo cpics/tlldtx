@@ -2,10 +2,10 @@ const jiaomen = [{
     name: '批次',
     props: 'orderBatch'
 },
-{
-    name: '梯型',
-    props: 'tixing'
-},
+// {
+//     name: '梯型',
+//     props: 'tixing'
+// },
 {
     name: '定单号',
     props: 'orderNo'
@@ -64,20 +64,20 @@ const jiaomen = [{
 //     name: '非标信息',
 //     props: ''
 // },
-{
-    name: 'Orderdate',
-    props: 'createTime'
-},
+// {
+//     name: 'Orderdate',
+//     props: 'createTime'
+// },
 ]
 
 export const jiaomen1 = [{
     name: '批次',
     props: 'orderBatch'
 },
-{
-    name: '梯型',
-    props: 'tixing'
-},
+// {
+//     name: '梯型',
+//     props: 'tixing'
+// },
 {
     name: '定单号',
     props: 'orderNo'

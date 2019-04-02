@@ -11,11 +11,11 @@
       </div>
     </div>
     <!--加急 单元行-标红 tr  + c-red-->
-    <el-table :data="orderList" style="width: 100%" >
+    <el-table :data="orderList" style="width: 100%;">
       <el-table-column
         v-if="!isJmDir"
         v-for="(item,index) in headers"
-        :width="item.props=='orderBatch'?140:(item.props=='tixing'?140:(item.props=='orderNo'?140:''))"
+        :width="getWidth(item)"
         :key="index"
         :prop="item.props"
         :label="item.name"
@@ -23,7 +23,7 @@
       <template v-if="isJmDir">
         <el-table-column
           v-for="(item,ii) in jiaomen1"
-          :width="item.props=='orderBatch'?140:(item.props=='tixing'?140:(item.props=='orderNo'?140:(item.props=='Orderdate'?200:'')))"
+          :width="getWidth(item)"
           :key="ii"
           :prop="item.props"
           :label="item.name"
@@ -40,6 +40,7 @@
         </el-table-column>
         <el-table-column
           v-for="(item,iii) in jiaomen2"
+          :width="getWidth(item)"
           :key="10+iii"
           :prop="item.props"
           :label="item.name"
@@ -55,6 +56,7 @@
         </el-table-column>
         <el-table-column
           v-for="(item,iiii) in jiaomen3"
+          :width="getWidth(item)"
           :key="100+iiii"
           :prop="item.props"
           :label="item.name"
@@ -70,7 +72,7 @@
         </el-table-column>
         <el-table-column
           v-for="(item,iiii) in jiaomen4"
-          :width="item.props=='orderBatch'?140:(item.props=='tixing'?140:(item.props=='orderNo'?140:(item.props=='createTime'?200:'')))"
+          :width="getWidth(item)"
           :key="1000+iiii"
           :prop="item.props"
           :label="item.name"
@@ -107,6 +109,7 @@ import {
     jiaomen3,
     jiaomen4
 } from '../../../../common/category/jiaomen.js';
+import getWidth from '../../../../common/utils/getWidth.js';
 import QRCode from 'qrcode';
 export default {
     name: 'dataList',
@@ -116,6 +119,7 @@ export default {
         orderName: String,
         isJmDir: Boolean
     },
+
     data() {
         return {
             jiaomen1: jiaomen1,
@@ -124,12 +128,18 @@ export default {
             jiaomen4: jiaomen4
         };
     },
-    methods: {},
+    methods: {
+        getWidth(item) {
+            let width = getWidth(item);
+            return width;
+        }
+    },
     mounted() {
-        console.log(jiaomen1, jiaomen2, jiaomen3);
+        console.log(this.orderList);
         this.$nextTick(() => {
             if (this.isJmDir) {
                 this.orderList.forEach(item => {
+                    // debugger;
                     QRCode.toCanvas(
                         document.getElementById('qr1' + item.orderNo),
                         item.qr1,
@@ -168,6 +178,9 @@ export default {
 .jmtm {
   /* font-family: 'code128'; */
   /* font-size:25px; */
+}
+table tbody {
+  font-weight: bolder;
 }
 .jmtm div {
   width: 80px;
