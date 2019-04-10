@@ -3,10 +3,10 @@ const qianbi = [
         name: '批次',
         props: 'orderBatch'
     },
-    {
-        name: '梯型',
-        props: 'tixing'
-    },
+    // {
+    //     name: '梯型',
+    //     props: 'tixing'
+    // },
     {
         name: '定单号',
         props: 'orderNo'
@@ -46,11 +46,11 @@ const qianbi = [
     },
     {
         name: '位置1',
-        props: 'weizhi1'
+        props: 'copWeizhi'
     },
     {
-        name: '高度',
-        props: 'qianbigaodu'
+        name: 'cop高度',
+        props: 'copgaodu'
     },
     {
         name: 'CH',

@@ -1,12 +1,27 @@
 function getWidth(item) {
     let width;
     let props = item.props;
-    if (props == 'orderBatch' || props == 'tixing' || props == 'orderNo' || props == 'ak' || props == 'tp') {
-        width = 140;
+
+    if (
+        props == 'orderBatch' ||
+        props == 'tixing' ||
+        props == 'orderNo' ||
+        props == 'tp'
+    ) {
+        width = 160;
     } else if (props == 'Orderdate') {
         width = 200;
-    } else if (props == 'carType' || props == 'hmchouDu' || props == 'sz' || props == 'produceDate') {
+    } else if (
+        props == 'carType' ||
+        props == 'hmchouDu' ||
+        props == 'produceDate'
+    ) {
         width = 100;
+    } 
+    else if (props == 'ak') {
+        width = 70;
+    } else if(props == 'sz'){
+        width = 60;
     }
     return width;
 }
