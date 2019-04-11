@@ -127,6 +127,7 @@ export default {
                     title: '成功',
                     message: res.codeInfo
                 });
+                this.$emit('getCountQueliao');
             } else {
                 this.$notify.error({
                     type: '错误',
@@ -147,6 +148,7 @@ export default {
                     title: '成功',
                     message: res.codeInfo
                 });
+                this.$emit('getCountQueliao');
             } else {
                 this.$notify.error({
                     type: '错误',

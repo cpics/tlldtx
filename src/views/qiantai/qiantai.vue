@@ -1,7 +1,11 @@
 <template>
   <el-container class="mod-wrapper">
     <el-aside class="g-slide-bar" width="200px">
-      <leftSliderbar :maxClassString="userInfo.roleString" :todayLeftData="todayLeftData" :wipsInfo="wipsInfo"/>
+      <leftSliderbar
+        :maxClassString="userInfo.roleString"
+        :todayLeftData="todayLeftData"
+        :wipsInfo="wipsInfo"
+      />
     </el-aside>
     <el-container>
       <el-header class="f-header-bar">
@@ -12,18 +16,50 @@
         <el-tabs v-model="activeName" type="card" @tab-click="tabClick">
           <el-tab-pane v-for="(item,index) in defaultSort" :key="index" :name="tabsList[item].name">
             <span slot="label">
-              <el-badge class="item m-inside">{{tabsList[item].meta.title}}</el-badge>
+              <el-badge
+                v-if="tabsList[item].meta.title !='缺料装箱订单'"
+                class="item m-inside"
+              >{{tabsList[item].meta.title}}</el-badge>
+              <el-badge
+                :value="vvv"
+                v-if="tabsList[item].meta.title =='缺料装箱订单'"
+                class="item m-inside"
+              >{{tabsList[item].meta.title}}</el-badge>
               <!-- <el-badge :value="99" class="item m-inside">{{tabsList[item].meta.title}}</el-badge> -->
             </span>
           </el-tab-pane>
         </el-tabs>
-        <router-view/>
+        <router-view @getCountQueliao="getCountQueliao"/>
       </el-main>
     </el-container>
-    <audio style="display:none" controls="controls" id="biaojiyichang" preload v-bind:src="`${require('../../assets/audio/biaojiyichang.mp3')}`" />
-    <audio style="display:none" controls="controls" id="dingdanwancheng" preload v-bind:src="`${require('../../assets/audio/dingdanwancheng.mp3')}`" />
-    <audio style="display:none" controls="controls" id="quxiaoyichang" preload v-bind:src="`${require('../../assets/audio/quxiaoyichang.mp3')}`" />
-    <audio style="display:none" controls="controls" id="xindedingdan" preload v-bind:src="`${require('../../assets/audio/xindedingdan.mp3')}`" />
+    <audio
+      style="display:none"
+      controls="controls"
+      id="biaojiyichang"
+      preload
+      v-bind:src="`${require('../../assets/audio/biaojiyichang.mp3')}`"
+    />
+    <audio
+      style="display:none"
+      controls="controls"
+      id="dingdanwancheng"
+      preload
+      v-bind:src="`${require('../../assets/audio/dingdanwancheng.mp3')}`"
+    />
+    <audio
+      style="display:none"
+      controls="controls"
+      id="quxiaoyichang"
+      preload
+      v-bind:src="`${require('../../assets/audio/quxiaoyichang.mp3')}`"
+    />
+    <audio
+      style="display:none"
+      controls="controls"
+      id="xindedingdan"
+      preload
+      v-bind:src="`${require('../../assets/audio/xindedingdan.mp3')}`"
+    />
   </el-container>
 </template>
 <script>
@@ -39,7 +75,8 @@ import {
     todayTongji,
     queryWipsInfo,
     updateScInfo,
-    jinrikanban
+    jinrikanban,
+    countQueliao
 } from '../../api/index';
 export default {
     name: 'qiantai',
@@ -53,7 +90,11 @@ export default {
             zxSort: [0, 1, 2, 3, 4],
             qbSort: [1, 0, 2, 3, 4],
             defaultSort: [],
-            ws:null
+            ws: null,
+            count:{
+
+            },
+            vvv: ''
         };
     },
     components: {
@@ -63,6 +104,7 @@ export default {
     methods: {
         tabClick(tab, event) {
             this.$router.push(this.tabsList[this.defaultSort[tab.index]].path);
+            this.getCountQueliao();
         },
         //获取左边的今日数据
         async getTodayData(type) {
@@ -97,10 +139,10 @@ export default {
                         // this.defaultSort = this.qbSort;
                     }
                     let workingCars = item.ordercount / item.cars;
-                    if(workingCars >= item.wips){
+                    if (workingCars >= item.wips) {
                         workingCars = Math.floor(workingCars);
                         item.carsFull = true;
-                    }else{
+                    } else {
                         workingCars = Math.ceil(workingCars);
                         item.carsFull = false;
                     }
@@ -115,31 +157,30 @@ export default {
                 });
             }
         },
-        openWebSocket(username,role){
+        openWebSocket(username, role) {
             // console.log(username,role);
             this.ws = new WebSocket(`ws:${domain}/websocket/${username}`);
 
             this.ws.onopen = () => {
                 console.log('服务器连接成功！');
-            }; 
+            };
             this.ws.onmessage = event => {
-                
                 var obj = JSON.parse(event.data);
                 console.log(JSON.parse(event.data));
                 // return ;
 
                 // if(!obj.role.split(',').include(role))return;
 
-                if(obj.notifyType == 1){
+                if (obj.notifyType == 1) {
                     this.xddPlay();
-                }else if(obj.notifyType == 2){
+                } else if (obj.notifyType == 2) {
                     this.ddwcPlay();
-                }else if(obj.notifyType == 3){
+                } else if (obj.notifyType == 3) {
                     this.bjycPlay();
-                }else if(obj.notifyType == 4){
+                } else if (obj.notifyType == 4) {
                     this.qxbjPlay();
                 }
-            }
+            };
             this.ws.onclose = event => {
                 console.log('连接已断开！');
             };
@@ -148,44 +189,53 @@ export default {
             this.ws.close();
         },
         //标记异常
-        bjycPlay(){
-            setTimeout(()=>{
+        bjycPlay() {
+            setTimeout(() => {
                 document.querySelector('#biaojiyichang').play();
-               
             });
         },
         //订单完成
-        ddwcPlay(){
-            setTimeout(()=>{
+        ddwcPlay() {
+            setTimeout(() => {
                 document.querySelector('#dingdanwancheng').play();
                 // window.dingdanwancheng.player();
             });
         },
         //取消标记
-        qxbjPlay(){
-            setTimeout(()=>{
+        qxbjPlay() {
+            setTimeout(() => {
                 document.querySelector('#quxiaoyichang').play();
                 // window.quxiaoyichang.player();
             });
         },
         //新订单
-        xddPlay(){
-            setTimeout(()=>{
+        xddPlay() {
+            setTimeout(() => {
                 document.querySelector('#xindedingdan').play();
                 // window.xindedingdan.player();
             });
         },
+        async getCountQueliao() {
+            console.log(this.userInfo);
+            let res = await countQueliao();
+            if (res.code == 0) {
+                
+                // let count = res.objects['南'] + res.objects['北'];
+                // if (count > 0) {
+                //     this.vvv = count;
+                // }
+            }
+        }
     },
-    
+
     mounted() {
         // setInterval(()=>{
         // this.bjycPlay();
         // },10);
-        
+
         // setTimeout(() => {
         //     window.biaojiyichang.player();
         // });
-        
 
         if (!cookies.get('userInfo')) {
             this.$router.push('/login');
@@ -208,8 +258,8 @@ export default {
 
         this.tabsList = qiantaiRouters;
         this.activeName = this.$route.name;
-
-        this.openWebSocket(this.userInfo.username,this.userInfo.role);
+        this.getCountQueliao();
+        this.openWebSocket(this.userInfo.username, this.userInfo.role);
     }
 };
 </script>
