@@ -21,7 +21,7 @@
                 class="item m-inside"
               >{{tabsList[item].meta.title}}</el-badge>
               <el-badge
-                :value="vvv"
+                :value="qlCount"
                 v-if="tabsList[item].meta.title =='缺料装箱订单'"
                 class="item m-inside"
               >{{tabsList[item].meta.title}}</el-badge>
@@ -29,7 +29,7 @@
             </span>
           </el-tab-pane>
         </el-tabs>
-        <router-view @getCountQueliao="getCountQueliao"/>
+        <router-view @getCountQueliao="getCountQueliao" :count="count"/>
       </el-main>
     </el-container>
     <audio
@@ -91,10 +91,8 @@ export default {
             qbSort: [1, 0, 2, 3, 4],
             defaultSort: [],
             ws: null,
-            count:{
-
-            },
-            vvv: ''
+            count: [],
+            qlCount: ''
         };
     },
     components: {
@@ -219,7 +217,27 @@ export default {
             console.log(this.userInfo);
             let res = await countQueliao();
             if (res.code == 0) {
-                
+                let count = res.objects;
+                if (this.userInfo.roleMaxType == 'ZX') {
+                    this.count = [];
+                    this.qlCount = '';
+                    this.count.push(count.qb);
+                    this.count.push(count.th);
+                    this.count.push(count.jm);
+                    this.count.push(count.aj);
+                    let qlCount = 0;
+                    this.count.forEach(item => {
+                        qlCount += item;
+                    });
+                    if (qlCount > 0) {
+                        this.qlCount = qlCount;
+                    }
+                } else {
+                    this.count = [];
+                    //
+                }
+                this.count = [1,1,1,1];
+                this.qlCount = 4;
                 // let count = res.objects['南'] + res.objects['北'];
                 // if (count > 0) {
                 //     this.vvv = count;

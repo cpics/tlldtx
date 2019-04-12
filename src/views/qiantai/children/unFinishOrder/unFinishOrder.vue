@@ -2,7 +2,7 @@
   <div class="g-order-main">
     <!--当前Wip区订单-->
     <el-tabs v-model="activeName" @tab-click="chooseCx">
-      <el-tab-pane v-for="(item,i) in pullPanes" :key="i" :label="item.label" :name="item.name"></el-tab-pane>
+      <el-tab-pane :value="1" v-for="(item,i) in pullPanes" :key="i" :label="item.label" :name="item.name"></el-tab-pane>
     </el-tabs>
     <div v-for="(item,i) in tableData" :key="i">
       <data-list :orderList="item.orderList" :headers="headers" :isJmDir="item.batchType == 6">
@@ -46,6 +46,9 @@ import getQrStr from '../../../../common/utils/getQRstring';
 
 export default {
     name: 'unFinishOrder',
+    props:{
+        count:Array
+    },
     components: {
         'data-list': dataList
     },
