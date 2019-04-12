@@ -221,10 +221,41 @@ export default {
                 if (this.userInfo.roleMaxType == 'ZX') {
                     this.count = [];
                     this.qlCount = '';
-                    this.count.push(count.qb);
-                    this.count.push(count.th);
-                    this.count.push(count.jm);
-                    this.count.push(count.aj);
+                    if (this.userInfo.role == 1 || this.userInfo.role == 2) {
+                        if (count.qb == 0) {
+                            this.count.push('');
+                        } else {
+                            this.count.push(count.qb);
+                        }
+                        if (count.th == 0) {
+                            this.count.push('');
+                        } else {
+                            this.count.push(count.th);
+                        }
+                        if (count.jm == 0) {
+                            this.count.push('');
+                        } else {
+                            this.count.push(count.jm);
+                        }
+                        if (count.aj == 0) {
+                            this.count.push('');
+                        } else {
+                            this.count.push(count.aj);
+                        }
+                    } else if (this.userInfo.role == 3) {
+                        if (count.jm == 0) {
+                            this.count.push('');
+                        } else {
+                            this.count.push(count.jm);
+                        }
+                        if (count.aj == 0) {
+                            this.count.push('');
+                        } else {
+                            this.count.push(count.aj);
+                        }
+                        // this.count = [1,1];
+                        // this.qlCount = 4;
+                    }
                     let qlCount = 0;
                     this.count.forEach(item => {
                         qlCount += item;
@@ -232,12 +263,29 @@ export default {
                     if (qlCount > 0) {
                         this.qlCount = qlCount;
                     }
-                } else {
+                } else if (this.userInfo.roleMaxType == 'QB') {
                     this.count = [];
-                    //
+                    this.qlCount = '';
+                    if (count.nan == 0) {
+                        this.count.push('');
+                    } else {
+                        this.count.push(count.nan);
+                    }
+                    if (count.bei == 0) {
+                        this.count.push('');
+                    } else {
+                        this.count.push(count.bei);
+                    }
+                    let qlCount = 0;
+                    this.count.forEach(item => {
+                        qlCount += item;
+                    });
+                    if (qlCount > 0) {
+                        this.qlCount = qlCount;
+                    }
                 }
-                this.count = [1,1,1,1];
-                this.qlCount = 4;
+                // this.count = [1,1,1,1];
+                // this.qlCount = 4;
                 // let count = res.objects['南'] + res.objects['北'];
                 // if (count > 0) {
                 //     this.vvv = count;

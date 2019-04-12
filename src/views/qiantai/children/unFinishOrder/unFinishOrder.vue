@@ -2,7 +2,12 @@
   <div class="g-order-main">
     <!--当前Wip区订单-->
     <el-tabs v-model="activeName" @tab-click="chooseCx">
-      <el-tab-pane :value="1" v-for="(item,i) in pullPanes" :key="i" :label="item.label" :name="item.name"></el-tab-pane>
+      <el-tab-pane v-for="(item,i) in pullPanes" :key="i" :name="item.name">
+        <span slot="label">
+          <!-- <el-tab-pane :value="1" v-for="(item,i) in pullPanes" :key="i" :label="item.label" :name="item.name"> -->
+          <el-badge :value="count[i]" class="item m-inside">{{item.label}}</el-badge>
+        </span>
+      </el-tab-pane>
     </el-tabs>
     <div v-for="(item,i) in tableData" :key="i">
       <data-list :orderList="item.orderList" :headers="headers" :isJmDir="item.batchType == 6">
@@ -41,13 +46,12 @@ import tianhua from '../../../../common/category/tianhua';
 import jiaomen from '../../../../common/category/jiaomen';
 import anjie from '../../../../common/category/anjie';
 
-
 import getQrStr from '../../../../common/utils/getQRstring';
 
 export default {
     name: 'unFinishOrder',
-    props:{
-        count:Array
+    props: {
+        count: Array
     },
     components: {
         'data-list': dataList
@@ -110,6 +114,7 @@ export default {
             this.activePane = this.pullPanes[tab.index];
             this.headers = this.pullPanes[tab.index].headers;
             this.getData();
+            this.$emit('getCountQueliao');
         },
         //取消缺料
         async quxiaoqueliao(orderObject, orderItem) {
