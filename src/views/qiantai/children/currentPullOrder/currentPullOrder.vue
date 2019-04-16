@@ -31,7 +31,7 @@
     <div v-for="(item,i) in tableData" :key="i">
       <data-list
         :isJmDir="item.batchType == 6"
-        :orderName="`${userRoleMaxType=='ZX'?activePane.label:(item.batchLine==1?'装箱南线':'装箱北线')} - ${item.batchNo} ${item.piciDate}`"
+        :orderName="`${userRoleMaxType=='ZX'?activePane.label:(item.batchLine==1?'装箱南线':(item.batchLine==2?'装箱北线':'E-mini'))} - ${item.batchNo} ${item.piciDate}`"
         :orderList="item.orderList"
         :headers="headers"
       >

@@ -201,7 +201,7 @@ export default {
             this.activePane = this.pullPanes[0];
             this.headers = this.pullPanes[0].headers;
         } else if (this.userRoleMaxType == 'QB') {
-            if (this.userInfo.role == 6) {
+            if(this.userInfo.role == 6 || this.userInfo.role ==7){
                 this.qbPullPanes.push({
                     label: 'EMINI',
                     type: 3,

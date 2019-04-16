@@ -278,6 +278,15 @@ export default {
                     } else {
                         this.count.push(count.bei);
                     }
+
+                    if(this.userInfo.role == 6 || this.userInfo.role ==7){
+                        if (count.emini == 0) {
+                            this.count.push('');
+                        } else {
+                            this.count.push(count.emini);
+                        }
+                    }
+
                     let qlCount = 0;
                     this.count.forEach(item => {
                         if (item != '') {

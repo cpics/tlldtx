@@ -28,6 +28,7 @@ import qianbi from '../../../../common/category/qianbi';
 import tianhua from '../../../../common/category/tianhua';
 import jiaomen from '../../../../common/category/jiaomen';
 import anjie from '../../../../common/category/anjie';
+import quanbu from '../../../../common/category/quanbu';
 export default {
     name: 'toDayProOrder',
     components: {
@@ -35,13 +36,19 @@ export default {
     },
     data() {
         return {
-            activeName: 'qianbi',
+            activeName: 'quanbu',
             activePane: {},
             headers: [],
             userInfo: {},
             userRoleMaxType: '',
             pullPanes: [
                 //产线类型
+                {
+                    label: '全部',
+                    type: 8,
+                    name: 'quanbu',
+                    headers: quanbu
+                },
                 {
                     label: '前壁产线',
                     type: 4,
@@ -117,13 +124,16 @@ export default {
 
         if (this.userRoleMaxType == 'ZX') {
             if(this.userInfo.role==3){
-                this.pullPanes.splice(0,2);
+                this.pullPanes.splice(1,2);
+                
             }
+            // this.pullPanes.splice(0, 0,  );
+            console.log(this.pullPanes[0]);
             this.activePane = this.pullPanes[0];
             this.headers = this.pullPanes[0].headers;
         } else if (this.userRoleMaxType == 'QB') {
             // console.log(this.userInfo);
-            if(this.userInfo.role == 6){
+            if(this.userInfo.role == 6 || this.userInfo.role ==7){
                 this.qbPullPanes.push({
                     label: 'EMINI',
                     type: 3,
