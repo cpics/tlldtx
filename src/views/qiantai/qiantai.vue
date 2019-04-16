@@ -258,7 +258,9 @@ export default {
                     }
                     let qlCount = 0;
                     this.count.forEach(item => {
-                        qlCount += item;
+                        if (item != '') {
+                            qlCount += item;
+                        }
                     });
                     if (qlCount > 0) {
                         this.qlCount = qlCount;
@@ -278,7 +280,9 @@ export default {
                     }
                     let qlCount = 0;
                     this.count.forEach(item => {
-                        qlCount += item;
+                        if (item != '') {
+                            qlCount += item;
+                        }
                     });
                     if (qlCount > 0) {
                         this.qlCount = qlCount;

@@ -201,6 +201,14 @@ export default {
             this.activePane = this.pullPanes[0];
             this.headers = this.pullPanes[0].headers;
         } else if (this.userRoleMaxType == 'QB') {
+            if (this.userInfo.role == 6) {
+                this.qbPullPanes.push({
+                    label: 'EMINI',
+                    type: 3,
+                    name: 'emimi',
+                    headers: null
+                });
+            }
             this.pullPanes.forEach(item => {
                 if (item.type == this.userInfo.role) {
                     this.qbPullPanes.forEach(pane => {

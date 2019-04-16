@@ -39,7 +39,12 @@
 <script>
 import dataList from '../../components/dataList/dataList';
 import cookies from '../../../../common/utils/cookies.js';
-import { wipOrder, shengchan, orderFinish,yijiandingdanwancheng } from '../../../../api/index';
+import {
+    wipOrder,
+    shengchan,
+    orderFinish,
+    yijiandingdanwancheng
+} from '../../../../api/index';
 
 import qianbi from '../../../../common/category/qianbi';
 import tianhua from '../../../../common/category/tianhua';
@@ -105,7 +110,7 @@ export default {
         };
     },
     methods: {
-    //选择产线tab
+        //选择产线tab
         chooseCx(tab, event) {
             this.activePane = this.pullPanes[tab.index];
             this.headers = this.pullPanes[tab.index].headers;
@@ -209,12 +214,20 @@ export default {
         this.userRoleMaxType = this.userInfo.roleMaxType;
 
         if (this.userRoleMaxType == 'ZX') {
-            if(this.userInfo.role==3){
-                this.pullPanes.splice(0,2);
+            if (this.userInfo.role == 3) {
+                this.pullPanes.splice(0, 2);
             }
             this.activePane = this.pullPanes[0];
             this.headers = this.pullPanes[0].headers;
         } else if (this.userRoleMaxType == 'QB') {
+            if (this.userInfo.role == 6) {
+                this.qbPullPanes.push({
+                    label: 'EMINI',
+                    type: 3,
+                    name: 'emimi',
+                    headers: null
+                });
+            }
             this.pullPanes.forEach(item => {
                 if (item.type == this.userInfo.role) {
                     this.qbPullPanes.forEach(pane => {
