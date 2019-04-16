@@ -22,6 +22,8 @@ function getWidth(item) {
         width = 70;
     } else if(props == 'sz'){
         width = 60;
+    } else if(props == 'guigeRiqi'){
+        width = 60;
     }
     return width;
 }

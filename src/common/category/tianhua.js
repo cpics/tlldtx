@@ -45,7 +45,7 @@ const tianhua = [
     },
     {
         name:'日期',
-        props:'produceDate'
+        props:'guigeRiqi'
     },
     {
         name:'KCE/LCE',

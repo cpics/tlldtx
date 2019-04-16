@@ -492,6 +492,7 @@ export default {
                 console.log(this.activePane);
                 res.objects.forEach(orderArray => {
                     orderArray.orderList.forEach(item => {
+                        // item.guigeRiqi = item.guigeRiqi.replace(/\r\n/g, '\n');
                         if (orderArray.batchType == 4) {
                             item.currentStatus = item.qbStatus;
                         } else if (orderArray.batchType == 5) {
