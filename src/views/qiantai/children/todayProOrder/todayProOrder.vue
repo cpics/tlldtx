@@ -1,9 +1,7 @@
 <template>
   <div class="g-order-main">
     <!--当前Wip区订单-->
-    <el-tabs v-model="activeName" 
-    @tab-click="chooseCx" 
-    >
+    <el-tabs v-model="activeName" @tab-click="chooseCx">
       <el-tab-pane v-for="(item,i) in pullPanes" :key="i" :label="item.label" :name="item.name"></el-tab-pane>
     </el-tabs>
     <data-list :orderList="tableData" :headers="headers" :isJmDir="batchType == 6">
@@ -15,7 +13,7 @@
       <template slot-scope="slotProps" slot="itemAction">
         <template v-if="userRoleMaxType == 'ZX'"></template>
         <template v-if="userRoleMaxType == 'QB'"></template>
-      </template> -->
+      </template>-->
     </data-list>
   </div>
 </template>
@@ -93,7 +91,7 @@ export default {
         };
     },
     methods: {
-    //选择产线tab
+        //选择产线tab
         chooseCx(tab, event) {
             this.activePane = this.pullPanes[tab.index];
             this.headers = this.pullPanes[tab.index].headers;
@@ -109,6 +107,14 @@ export default {
                 pagesize: 100000
             });
             if (res.code == 0) {
+                res.objects.entityList.forEach(item => {
+                    let feibiao = item.feibiao.split('\r\n');
+                    if (feibiao.length == 1) {
+                        item.feibiao = '';
+                    } else {
+                        item.feibiao = feibiao[1];
+                    }
+                });
                 this.tableData = res.objects.entityList;
             } else {
                 this.$notify.error({
@@ -123,32 +129,41 @@ export default {
         this.userRoleMaxType = this.userInfo.roleMaxType;
 
         if (this.userRoleMaxType == 'ZX') {
-            if(this.userInfo.role==3){
-                this.pullPanes.splice(1,2);
-                
+            if (this.userInfo.role == 3) {
+                this.pullPanes.splice(1, 2);
             }
             // this.pullPanes.splice(0, 0,  );
-            console.log(this.pullPanes[0]);
+            // console.log(this.pullPanes[0]);
             this.activePane = this.pullPanes[0];
             this.headers = this.pullPanes[0].headers;
+            this.pullPanes.forEach(item => {
+                if (item.name == 'jiaomen') {
+                    
+                    item.headers.push({
+                        name: '非标信息',
+                        props: 'feibiao'
+                    });
+                    console.log(item);
+                }
+            });
         } else if (this.userRoleMaxType == 'QB') {
             // console.log(this.userInfo);
-            if(this.userInfo.role == 6 || this.userInfo.role ==7){
+            if (this.userInfo.role == 6 || this.userInfo.role == 7) {
                 this.qbPullPanes.push({
                     label: 'EMINI',
                     type: 3,
                     name: 'emimi',
                     headers: null
-                })
+                });
             }
-            this.pullPanes.forEach((item)=>{
-                if(item.type == this.userInfo.role){
-                    this.qbPullPanes.forEach(pane=>{
+            this.pullPanes.forEach(item => {
+                if (item.type == this.userInfo.role) {
+                    this.qbPullPanes.forEach(pane => {
                         pane.headers = item.headers;
                     });
                 }
             });
-            
+
             this.pullPanes = this.qbPullPanes;
             this.activePane = this.pullPanes[0];
             this.activeName = this.activePane.name;

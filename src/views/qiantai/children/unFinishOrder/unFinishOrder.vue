@@ -173,6 +173,12 @@ export default {
             if (res.code == 0) {
                 res.objects.forEach(orderArray => {
                     orderArray.orderList.forEach(item => {
+                        let feibiao = item.feibiao.split('\r\n');
+                        if (feibiao.length == 1) {
+                            item.feibiao = '';
+                        } else {
+                            item.feibiao = feibiao[1];
+                        }
                         if (orderArray.batchType == 6) {
                             item.currentStatus = item.jmStatus;
                             getQrStr(item);
@@ -201,7 +207,7 @@ export default {
             this.activePane = this.pullPanes[0];
             this.headers = this.pullPanes[0].headers;
         } else if (this.userRoleMaxType == 'QB') {
-            if(this.userInfo.role == 6 || this.userInfo.role ==7){
+            if (this.userInfo.role == 6 || this.userInfo.role == 7) {
                 this.qbPullPanes.push({
                     label: 'EMINI',
                     type: 3,

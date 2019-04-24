@@ -492,6 +492,14 @@ export default {
                 console.log(this.activePane);
                 res.objects.forEach(orderArray => {
                     orderArray.orderList.forEach(item => {
+                        let feibiao = item.feibiao.split('\r\n');
+                        if (feibiao.length == 1) {
+                            item.feibiao = '';
+                        } else {
+                            item.feibiao = feibiao[1];
+                        }
+                        // console.log(feibiao);
+
                         // item.guigeRiqi = item.guigeRiqi.replace(/\r\n/g, '\n');
                         if (orderArray.batchType == 4) {
                             item.currentStatus = item.qbStatus;
@@ -524,6 +532,14 @@ export default {
                 type: this.activePane.type
             });
             if (res.code == 0) {
+                res.objects.forEach(item => {
+                    let feibiao = item.feibiao.split('\r\n');
+                    if (feibiao.length == 1) {
+                        item.feibiao = '';
+                    } else {
+                        item.feibiao = feibiao[1];
+                    }
+                });
                 this.gridData = res.objects;
             } else {
                 this.$notify.error({

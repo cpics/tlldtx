@@ -1,10 +1,10 @@
 function getQrStr(item) {
-    console.log(item);
+    // console.log(item);
     item.qr1 = qr1(item);
     item.qr2 = qr2(item);
     item.qr3 = qr3(item);
-    console.log(item.qr2);
-    console.log(item.qr3);
+    // console.log(item.qr2);
+    // console.log(item.qr3);
 }
 
 function qr1(item) {
@@ -31,7 +31,7 @@ function qr1(item) {
     }
     // strArr.push('.6');//贴皮厚度
 
-    console.log(strArr.join('|'));
+    // console.log(strArr.join('|'));
     return strArr.join('|');
 
 }

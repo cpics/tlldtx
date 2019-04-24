@@ -6,7 +6,8 @@ function getWidth(item) {
         props == 'orderBatch' ||
         props == 'tixing' ||
         props == 'orderNo' ||
-        props == 'tp'
+        props == 'tp' ||
+        props == 'feibiao'
     ) {
         width = 160;
     } else if (props == 'Orderdate') {
@@ -17,12 +18,11 @@ function getWidth(item) {
         props == 'produceDate'
     ) {
         width = 100;
-    } 
-    else if (props == 'ak') {
+    } else if (props == 'ak') {
         width = 70;
-    } else if(props == 'sz'){
+    } else if (props == 'sz') {
         width = 60;
-    } else if(props == 'guigeRiqi'){
+    } else if (props == 'guigeRiqi') {
         width = 60;
     }
     return width;
