@@ -35,6 +35,7 @@ export default {
     data() {
         return {
             activeName: 'quanbu',
+            batchType: '',
             activePane: {},
             headers: [],
             userInfo: {},
@@ -107,6 +108,9 @@ export default {
                 pagesize: 100000
             });
             if (res.code == 0) {
+                if (res.objects == null) {
+                    res.objects = { entityList: [] };
+                }
                 res.objects.entityList.forEach(item => {
                     let feibiao = item.feibiao.split('\r\n');
                     if (feibiao.length == 1) {
@@ -138,7 +142,6 @@ export default {
             this.headers = this.pullPanes[0].headers;
             this.pullPanes.forEach(item => {
                 if (item.name == 'jiaomen') {
-                    
                     item.headers.push({
                         name: '非标信息',
                         props: 'feibiao'
