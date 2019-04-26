@@ -82,6 +82,7 @@ export default {
     name: 'qiantai',
     data() {
         return {
+            t: null,
             tabsList: [],
             todayLeftData: {},
             wipsInfo: [],
@@ -279,7 +280,7 @@ export default {
                         this.count.push(count.bei);
                     }
 
-                    if(this.userInfo.role == 6 || this.userInfo.role ==7){
+                    if (this.userInfo.role == 6 || this.userInfo.role == 7) {
                         if (count.emini == 0) {
                             this.count.push('');
                         } else {
@@ -337,8 +338,14 @@ export default {
 
         this.tabsList = qiantaiRouters;
         this.activeName = this.$route.name;
-        this.getCountQueliao();
+        // this.getCountQueliao();
+        this.t = setInterval(() => {
+            this.getCountQueliao();
+        }, 3000);
         this.openWebSocket(this.userInfo.username, this.userInfo.role);
+    },
+    destroyed() {
+        clearInterval(this.t);
     }
 };
 </script>

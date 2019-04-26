@@ -59,6 +59,7 @@ export default {
     },
     data() {
         return {
+            t: null,
             activeName: 'qianbi',
             activePane: {},
             headers: [],
@@ -114,6 +115,7 @@ export default {
         chooseCx(tab, event) {
             this.activePane = this.pullPanes[tab.index];
             this.headers = this.pullPanes[tab.index].headers;
+            this.tableData = [];
             this.getData();
         },
         filterStatus(orderObject) {
@@ -164,7 +166,7 @@ export default {
                 });
                 this.tableData = res.objects;
 
-                console.log(this.tableData);
+                // console.log(this.tableData);
             } else {
                 this.$notify.error({
                     type: '错误',
@@ -225,6 +227,7 @@ export default {
             }
             this.activePane = this.pullPanes[0];
             this.headers = this.pullPanes[0].headers;
+            this.activeName = this.activePane.name;
         } else if (this.userRoleMaxType == 'QB') {
             if (this.userInfo.role == 6 || this.userInfo.role == 7) {
                 this.qbPullPanes.push({
@@ -251,7 +254,12 @@ export default {
             this.headers = this.activePane.headers;
         }
 
-        this.getData();
+        this.t = setInterval(() => {
+            this.getData();
+        }, 3000);
+    },
+    destroyed() {
+        clearInterval(this.t);
     }
 };
 </script>

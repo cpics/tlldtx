@@ -140,6 +140,7 @@ export default {
     },
     data() {
         return {
+            t: null,
             activeName: 'qianbi',
             activePane: {},
             headers: [],
@@ -239,6 +240,7 @@ export default {
         chooseCx(tab, event) {
             this.activePane = this.pullPanes[tab.index];
             this.headers = this.pullPanes[tab.index].headers;
+            this.tableData = [];
             this.getData();
         },
         filterStatus(orderObject) {
@@ -479,7 +481,7 @@ export default {
         },
         //获取拉动接口数据
         async getData() {
-            this.tableData = [];
+            // this.tableData = [];
             let params = {
                 currentpage: 1,
                 pagesize: 100000
@@ -518,6 +520,11 @@ export default {
                     this.filterStatus(orderArray);
                 });
                 this.tableData = res.objects;
+                // res.objects.forEach(item => {
+                //     this.tableData.push(item);
+                // });
+
+                // this.tableData = this.tableData.concat(res.objects);
                 // console.log(this.tableData);
             } else {
                 this.$notify.error({
@@ -590,6 +597,7 @@ export default {
             }
             this.activePane = this.pullPanes[0];
             this.headers = this.pullPanes[0].headers;
+            this.activeName = this.activePane.name;
         } else if (this.userRoleMaxType == 'QB') {
             this.pullPanes.forEach(item => {
                 if (item.type == this.userInfo.role) {
@@ -607,8 +615,12 @@ export default {
             // });
             this.headers = this.activePane.headers;
         }
-
-        this.getData();
+        this.t = setInterval(() => {
+            this.getData();
+        }, 3000);
+    },
+    destroyed() {
+        clearInterval(this.t);
     }
 };
 </script>
