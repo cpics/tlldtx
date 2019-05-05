@@ -341,7 +341,7 @@ export default {
         // this.getCountQueliao();
         this.t = setInterval(() => {
             this.getCountQueliao();
-        }, 3000);
+        }, 5000);
         this.openWebSocket(this.userInfo.username, this.userInfo.role);
     },
     destroyed() {

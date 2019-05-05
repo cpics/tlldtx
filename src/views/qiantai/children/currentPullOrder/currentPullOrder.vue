@@ -617,7 +617,7 @@ export default {
         }
         this.t = setInterval(() => {
             this.getData();
-        }, 3000);
+        }, 5000);
     },
     destroyed() {
         clearInterval(this.t);
