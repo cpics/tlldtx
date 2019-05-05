@@ -13,9 +13,10 @@
     </el-form-item>
     <el-form-item label="关联生产部门及Wip区数量设置：">
       <div class="d-check-row" v-for="(item,index) in cxArray" :key="index">
-        <el-checkbox v-model="item.checked">{{item.name}}</el-checkbox>
+        <!-- <el-checkbox v-model="item.checked">{{item.name}}</el-checkbox> -->
+        <span style="padding-right:20px;">{{item.name}}</span>
         <el-input class="wips" v-model="item.wips" placeholder="Wip区数量"></el-input>
-        <el-input class="wips" v-model="item.cars" placeholder="cars订单量"></el-input>
+        <!-- <el-input class="wips" v-model="item.cars" placeholder="cars订单量"></el-input> -->
       </div>
     </el-form-item>
     <el-form-item class="pt-50">
@@ -33,14 +34,15 @@ export default {
     name: 'systemEdit',
     data() {
         return {
-            cxArray: [
+            cxArray:[],
+            deArray:[
                 {
                     name: '前壁',
                     id: 0,
                     wips: '',
                     cars: '',
                     type: 4,
-                    checked: false
+                    checked: true
                 },
                 {
                     name: '天花',
@@ -48,7 +50,7 @@ export default {
                     wips: '',
                     cars: '',
                     type: 5,
-                    checked: false
+                    checked: true
                 },
                 {
                     name: '轿门',
@@ -56,7 +58,7 @@ export default {
                     wips: '',
                     cars: '',
                     type: 6,
-                    checked: false
+                    checked: true
                 },
                 {
                     name: '木箱',
@@ -64,8 +66,27 @@ export default {
                     wips: '',
                     cars: '',
                     type: 7,
-                    checked: false
+                    checked: true
                 }
+            ],
+            spArray:[
+                {
+                    name: '轿门',
+                    id: 0,
+                    wips: '',
+                    cars: '',
+                    type: 6,
+                    checked: true
+                },
+                {
+                    name: '木箱',
+                    id: 0,
+                    wips: '',
+                    cars: '',
+                    type: 7,
+                    checked: true
+                }
+
             ],
             zxIndex: '',
             ZxArray: [
@@ -76,6 +97,10 @@ export default {
                 {
                     value: '2',
                     label: '北线'
+                },
+                {
+                    value:'3',
+                    label: 'Emini'
                 }
             ],
             form: {
@@ -180,8 +205,17 @@ export default {
         },
         selcetChange(type) {
             // console.log(this.zxIndex);
+            if(type == 3){
+                this.cxArray  = this.spArray;
+            }else{
+                this.cxArray = this.deArray;
+            }
             this.getScInfo(type);
+        
         }
+    },
+    created(){
+        this.cxArray = this.deArray;
     }
 };
 </script>

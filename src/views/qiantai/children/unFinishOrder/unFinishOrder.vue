@@ -1,49 +1,42 @@
 <template>
-    <div class="g-order-main">
-        <!--当前Wip区订单-->
-        <el-tabs v-model="activeName"
-                 @tab-click="chooseCx">
-            <el-tab-pane v-for="(item,i) in pullPanes"
-                         :key="i"
-                         :name="item.name">
-                <span slot="label">
-                    <!-- <el-tab-pane :value="1" v-for="(item,i) in pullPanes" :key="i" :label="item.label" :name="item.name"> -->
-                    <el-badge :value="count[i]"
-                              class="item m-inside">{{item.label}}</el-badge>
-                </span>
-            </el-tab-pane>
-        </el-tabs>
-        <div v-for="(item,i) in tableData"
-             :key="i">
-            <data-list :orderList="item.orderList"
-                       :headers="headers"
-                       :isJmDir="item.batchType == 6">
-                <template slot-scope="slotProps"
-                          slot="allAction">
-                    <template v-if="userRoleMaxType == 'ZX'"></template>
+  <div class="g-order-main">
+    <!--当前Wip区订单-->
+    <el-tabs v-model="activeName" @tab-click="chooseCx">
+      <el-tab-pane v-for="(item,i) in pullPanes" :key="i" :name="item.name">
+        <span slot="label">
+          <!-- <el-tab-pane :value="1" v-for="(item,i) in pullPanes" :key="i" :label="item.label" :name="item.name"> -->
+          <el-badge :value="count[i]" class="item m-inside">{{item.label}}</el-badge>
+        </span>
+      </el-tab-pane>
+    </el-tabs>
+    <div v-for="(item,i) in tableData" :key="i">
+      <data-list :orderList="item.orderList" :headers="headers" :isJmDir="item.batchType == 6">
+        <template slot-scope="slotProps" slot="allAction">
+          <template v-if="userRoleMaxType == 'ZX'"></template>
 
-                    <template v-if="userRoleMaxType == 'QB'">
-                        <el-button type="primary"
-                                   @click="yijianquxiaoqueliao(item)"
-                                   size="mini">一键取消标记</el-button>
-                    </template>
-                </template>
-                <template slot-scope="slotProps"
-                          slot="itemAction">
-                    <template v-if="userRoleMaxType == 'ZX'"></template>
-                    <template v-if="userRoleMaxType == 'QB'">
-                        <el-button @click="quxiaoqueliao(item,slotProps.rowData)"
-                                   type="primary"
-                                   size="mini">取消标记</el-button>
-                    </template>
-                </template>
-            </data-list>
-        </div>
-        <div>
-            <div class="">已解决的历史记录</div>
-
-        </div>
+          <template v-if="userRoleMaxType == 'QB'">
+            <el-button type="primary" @click="yijianquxiaoqueliao(item)" size="mini">一键取消标记</el-button>
+          </template>
+        </template>
+        <template slot-scope="slotProps" slot="itemAction">
+          <template v-if="userRoleMaxType == 'ZX'"></template>
+          <template v-if="userRoleMaxType == 'QB'">
+            <el-button
+              @click="quxiaoqueliao(item,slotProps.rowData)"
+              type="primary"
+              size="mini"
+            >取消标记</el-button>
+          </template>
+        </template>
+      </data-list>
     </div>
+    <div v-if="historyData.length>0">
+      <div class>已解决的历史记录</div>
+      <div v-for="(item,i) in historyData" :key="i">
+        <data-list :orderList="item.orderList" :headers="headers" :isJmDir="item.batchType == 6"></data-list>
+      </div>
+    </div>
+  </div>
 </template>
 <script>
 import dataList from '../../components/dataList/dataList';
@@ -52,7 +45,7 @@ import {
     queliaoOrder,
     quxiaoqueliao,
     yijianquxiaoqueliao,
-    quxiaohistory,
+    quxiaohistory
 } from '../../../../api/index';
 
 import qianbi from '../../../../common/category/qianbi';
@@ -120,7 +113,8 @@ export default {
                     headers: null
                 }
             ],
-            tableData: []
+            tableData: [],
+            historyData: []
         };
     },
     methods: {
@@ -136,7 +130,7 @@ export default {
         async quxiaoqueliao(orderObject, orderItem) {
             // return;
             let res = await quxiaoqueliao({
-                type: orderObject.batchType,
+                type: this.activePane.type,
                 orderNo: orderItem.orderNo,
                 batchNo: orderObject.batchNo
             });
@@ -213,7 +207,7 @@ export default {
         },
         async quxiaohistory() {
             let res = await quxiaohistory({
-                type: this.activePane.type,
+                type: this.activePane.type
                 // currentpage: 1,
                 // pagesize: 100000
             });
@@ -234,7 +228,7 @@ export default {
                     });
                     // this.filterStatus(orderArray);
                 });
-                this.tableData = res.objects;
+                this.historyData = res.objects;
             } else {
                 this.$notify.error({
                     type: '错误',
@@ -242,7 +236,6 @@ export default {
                 });
             }
         }
-
     },
 
     created() {
@@ -294,7 +287,7 @@ export default {
 </script>
 <style lang="scss" scoped>
 .m-inner-box {
-    margin-bottom: 25px;
+  margin-bottom: 25px;
 }
 </style>
 
