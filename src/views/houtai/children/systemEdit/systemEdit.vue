@@ -126,12 +126,13 @@ export default {
             }
 
             let array = [];
+            // debugger;
             this.cxArray.forEach(item => {
                 if (item.checked) {
                     array.push({
                         // zplineno: parseInt(this.zxIndex),
                         id: item.id,
-                        wips: parseInt(item.wips),
+                        wips: parseInt(item.wips) || 0,
                         cars: parseInt(item.cars),
                         sclineno: parseInt(item.type)
                     });
@@ -146,10 +147,10 @@ export default {
                 return false;
             }
 
-            console.log({
-                zplineno: parseInt(this.zxIndex),
-                wipsinfo: JSON.stringify(array)
-            });
+            // console.log({
+            //     zplineno: parseInt(this.zxIndex),
+            //     wipsinfo: JSON.stringify(array)
+            // });
             // return ;
             let res = await saveOrupdateWipsInfo({
                 wipsinfo: {
@@ -175,7 +176,7 @@ export default {
                 item.id = 0;
                 item.wips = '';
                 item.cars = '';
-                item.checked = false;
+                item.checked = true;
             });
             let res = await queryScInfo({
                 zplineno: type
@@ -185,9 +186,9 @@ export default {
                 res.objects.forEach(item => {
                     this.cxArray.forEach(cx => {
                         if (item.sclineno == cx.type) {
-                            console.log(item.sclineno);
+                            // console.log(item.sclineno);
                             cx.id = item.id;
-                            cx.wips = item.wips;
+                            cx.wips = item.wips == 0 ? '' : item.wips ;
                             cx.cars = item.cars;
                             if (cx.wips || cx.cars) {
                                 cx.checked = true;
@@ -195,7 +196,7 @@ export default {
                         }
                     });
                 });
-                console.log(this.cxArray);
+                // console.log(this.cxArray);
             } else {
                 this.$notify.error({
                     type: '错误',
@@ -207,6 +208,7 @@ export default {
             // console.log(this.zxIndex);
             if(type == 3){
                 this.cxArray  = this.spArray;
+                // console.log(this.spArray);
             }else{
                 this.cxArray = this.deArray;
             }
@@ -215,6 +217,7 @@ export default {
         }
     },
     created(){
+        // console.log(this.spArray);
         this.cxArray = this.deArray;
     }
 };

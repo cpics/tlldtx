@@ -34,13 +34,13 @@
           :key="i" >
 
             <div class="d-label">Wip-{{item.lineName}}:</div>
-            <div class="d-info">
-              <i class="u-cart-icon" 
+            <div class="d-info">{{item.wips}}
+              <!-- <i class="u-cart-icon" 
               v-show="item.workingCars !=0"
               v-for="(num,index) in item.item"
               :key="index"
               ></i>
-              <em v-show="item.carsFull"  class="slide-mark-icon">FULL</em>
+              <em v-show="item.carsFull"  class="slide-mark-icon">FULL</em> -->
             </div>
           </li>
         </ul>

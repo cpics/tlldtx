@@ -31,10 +31,10 @@
       </data-list>
     </div>
     <div v-if="historyData.length>0">
-      <div class>已解决的历史记录</div>
-      <div v-for="(item,i) in historyData" :key="i">
-        <data-list :orderList="item.orderList" :headers="headers" :isJmDir="item.batchType == 6"></data-list>
-      </div>
+      <div class>已解决的历史记录(<span style="color:red">{{historyData.length}}</span>)</div>
+      <!-- <div v-for="(item,i) in historyData" :key="i"> -->
+        <data-list :orderList="historyData" :headers="headers" :isJmDir="false"></data-list>
+      <!-- </div> -->
     </div>
   </div>
 </template>
@@ -212,22 +212,23 @@ export default {
                 // pagesize: 100000
             });
             if (res.code == 0) {
-                res.objects.forEach(orderArray => {
-                    orderArray.orderList.forEach(item => {
-                        let feibiao = item.feibiao.split('\r\n');
-                        if (feibiao.length == 1) {
-                            item.feibiao = '';
-                        } else {
-                            item.feibiao = feibiao[1];
-                        }
-                        if (orderArray.batchType == 6) {
-                            item.currentStatus = item.jmStatus;
-                            getQrStr(item);
-                            // console.log(this.headers);
-                        }
-                    });
-                    // this.filterStatus(orderArray);
+                // console.log(res.objects);
+                // res.objects.forEach(orderArray => {
+                res.objects.forEach(item => {
+                    let feibiao = item.feibiao.split('\r\n');
+                    if (feibiao.length == 1) {
+                        item.feibiao = '';
+                    } else {
+                        item.feibiao = feibiao[1];
+                    }
+                    // if (orderArray.batchType == 6) {
+                    //     item.currentStatus = item.jmStatus;
+                    //     getQrStr(item);
+                    //     // console.log(this.headers);
+                    // }
                 });
+                // this.filterStatus(orderArray);
+                // });
                 this.historyData = res.objects;
             } else {
                 this.$notify.error({
