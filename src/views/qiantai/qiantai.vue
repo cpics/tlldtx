@@ -128,25 +128,27 @@ export default {
             let res = await queryWipsInfo();
             if (res.code == 0) {
                 // console.log(res);
+
                 this.wipsInfo = res.objects;
                 this.wipsInfo.forEach(item => {
-                    if (currentUserMaxType == roleMaxType.ZX) {
-                        item.lineName = roleEnum[item.sclineno];
-                        // this.defaultSort = this.zxSort;
-                    } else if (currentUserMaxType == roleMaxType.QB) {
-                        item.lineName = roleEnum[item.zplineno];
-                        // this.defaultSort = this.qbSort;
-                    }
-                    let workingCars = item.ordercount / item.cars;
-                    if (workingCars >= item.wips) {
-                        workingCars = Math.floor(workingCars);
-                        item.carsFull = true;
-                    } else {
-                        workingCars = Math.ceil(workingCars);
-                        item.carsFull = false;
-                    }
+                    item.lineName = roleEnum[item.lineno];
+                    // if (currentUserMaxType == roleMaxType.ZX) {
+                    //     item.lineName = roleEnum[item.sclineno];
+                    //     // this.defaultSort = this.zxSort;
+                    // } else if (currentUserMaxType == roleMaxType.QB) {
+                    //     item.lineName = roleEnum[item.zplineno];
+                    //     // this.defaultSort = this.qbSort;
+                    // }
+                    // let workingCars = item.ordercount / item.cars;
+                    // if (workingCars >= item.wips) {
+                    //     workingCars = Math.floor(workingCars);
+                    //     item.carsFull = true;
+                    // } else {
+                    //     workingCars = Math.ceil(workingCars);
+                    //     item.carsFull = false;
+                    // }
 
-                    item.workingCars = workingCars;
+                    // item.workingCars = workingCars;
                 });
                 // console.log(this.wipsInfo);
             } else {

@@ -253,10 +253,10 @@ export default {
             // });
             this.headers = this.activePane.headers;
         }
-
-        this.t = setInterval(() => {
-            this.getData();
-        }, 5000);
+        this.getData();
+        // this.t = setInterval(() => {
+        //     this.getData();
+        // }, 5000);
     },
     destroyed() {
         clearInterval(this.t);

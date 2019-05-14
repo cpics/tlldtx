@@ -3,7 +3,7 @@
     <!--批量导入-->
     <div class="m-import-box">
       <el-form class="m-form" ref="form" :model="form" label-width="120px">
-        <el-form-item label="请输入工时：">
+        <!-- <el-form-item label="请输入工时：">
           <el-time-select
             placeholder="起始时间"
             v-model="startTime"
@@ -14,7 +14,10 @@
             v-model="endTime"
             :picker-options="{start: '00:00',step: '00:30',end: '24:00',minTime: startTime}"
           ></el-time-select>
-          <!-- <el-input v-model="worktime"></el-input> -->
+        </el-form-item> -->
+        <el-form-item label="排班类型：">
+          <el-radio v-model="radio" label="day">白班</el-radio>
+          <el-radio v-model="radio" label="night">夜班</el-radio>
         </el-form-item>
         <el-form-item class="import-row" label>
           <input type="file" name="file" ref="uploadImg">
@@ -36,41 +39,42 @@ export default {
             endTime: '',
             worktime: '',
             fileList: [],
-            form: {}
+            form: {},
+            radio:'day'
         };
     },
     methods: {
         async onSubmit() {
             let file = this.$refs.uploadImg.files[0];
             let form = new FormData();
-            if (this.startTime == '' || this.endTime == '') {
-                this.$notify.error({
-                    type: '错误',
-                    message: '请选择时间！'
-                });
-                return false;
-            }
-            let endTime, startTime;
-            let endArr = this.endTime.split(':');
-            let startArr = this.startTime.split(':');
+            // if (this.startTime == '' || this.endTime == '') {
+            //     this.$notify.error({
+            //         type: '错误',
+            //         message: '请选择时间！',
+            //     });
+            //     return false;
+            // }
+            // let endTime, startTime;
+            // let endArr = this.endTime.split(':');
+            // let startArr = this.startTime.split(':');
 
-            // debugger;
-            if (endArr[1] == '30') {
-                endTime = parseFloat(endArr[0] + '' + '.5');
-            } else {
-                endTime = endArr[0];
-            }
+            // // debugger;
+            // if (endArr[1] == '30') {
+            //     endTime = parseFloat(endArr[0] + '' + '.5');
+            // } else {
+            //     endTime = endArr[0];
+            // }
 
-            if (startArr[1] == '30') {
-                startTime = parseFloat(startArr[0] + '' + '.5');
-            } else {
-                startTime = startArr[0];
-            }
+            // if (startArr[1] == '30') {
+            //     startTime = parseFloat(startArr[0] + '' + '.5');
+            // } else {
+            //     startTime = startArr[0];
+            // }
 
-            this.worktime = endTime - startTime;
-            console.log(this.worktime);
+            // this.worktime = endTime - startTime;
+            // console.log(this.worktime);
             // return false;
-            form.append('worktime', this.worktime);
+            form.append('worktype', this.radio);
             form.append('file', file);
             // let res = await importOrder({ worktime: this.worktime }, file);
 

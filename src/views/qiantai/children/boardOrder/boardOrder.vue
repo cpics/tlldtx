@@ -1,5 +1,8 @@
 <template>
   <div class="g-order-main">
+    <el-tabs v-model="activeName" @tab-click="chooseCx">
+      <el-tab-pane v-for="(item,i) in pullPanes" :key="i" :label="item.label" :name="item.name"></el-tab-pane>
+    </el-tabs>
     <!--订单看板-->
     <div class="board-center-hd">
       <h4>拉动系统产线生产状态</h4>
@@ -24,28 +27,52 @@ export default {
     name: 'boardOrder',
     data() {
         return {
-            tableData: []
+            tableData: [],
+            activeName: 'baiban',
+            activePane: {
+                label: '白班',
+                type: 'day',
+                name: 'baiban'
+            },
+            pullPanes: [
+                {
+                    label: '白班',
+                    type: 'day',
+                    name: 'baiban'
+                },
+                {
+                    label: '夜班',
+                    type: 'night',
+                    name: 'yeban'
+                }
+            ]
         };
     },
     methods: {
-        async getData(){
-            let res = await jinrikanban();
-            if(res.code === 0){
+        async getData(type) {
+            let res = await jinrikanban({
+                worktype: type
+            });
+            if (res.code === 0) {
                 res.objects.forEach(item => {
-                    item.finishPercent = item.finishPercent*100+'%';
+                    item.finishPercent = parseInt(item.finishPercent * 100) + '%';
                 });
                 this.tableData = res.objects;
-            }else{
+            } else {
                 this.$notify.error({
                     type: '错误',
                     message: res.codeInfo
                 });
             }
-            
+        },
+        chooseCx(tab, event) {
+            this.activePane = this.pullPanes[tab.index];
+            this.activeName = this.pullPanes[tab.index].name;
+            this.getData(this.activePane.type);
         }
     },
     created() {
-        this.getData();
+        this.getData('day');
     }
 };
 </script>

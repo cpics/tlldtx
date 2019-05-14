@@ -34,7 +34,7 @@
           :key="i" >
 
             <div class="d-label">Wip-{{item.lineName}}:</div>
-            <div class="d-info">{{item.wips}}
+            <div class="d-info">{{item.total}}
               <!-- <i class="u-cart-icon" 
               v-show="item.workingCars !=0"
               v-for="(num,index) in item.item"

@@ -31,7 +31,7 @@
       </data-list>
     </div>
     <div v-if="historyData.length>0">
-      <div class>已解决的历史记录(<span style="color:red">{{historyData.length}}</span>)</div>
+      <div style="font-size:18px;font-weight:bold">已解决的历史记录(<span style="color:red">{{historyData.length}}</span>)</div>
       <!-- <div v-for="(item,i) in historyData" :key="i"> -->
         <data-list :orderList="historyData" :headers="headers" :isJmDir="false"></data-list>
       <!-- </div> -->
@@ -124,6 +124,7 @@ export default {
             this.headers = this.pullPanes[tab.index].headers;
             this.tableData = [];
             this.getData();
+            this.quxiaohistory();
             this.$emit('getCountQueliao');
         },
         //取消缺料
@@ -275,11 +276,12 @@ export default {
             // });
             this.headers = this.activePane.headers;
         }
-
-        this.t = setInterval(() => {
-            this.getData();
-            this.quxiaohistory();
-        }, 5000);
+        this.getData();
+        this.quxiaohistory();
+        // this.t = setInterval(() => {
+        //     this.getData();
+        //     this.quxiaohistory();
+        // }, 5000);
     },
     destroyed() {
         clearInterval(this.t);

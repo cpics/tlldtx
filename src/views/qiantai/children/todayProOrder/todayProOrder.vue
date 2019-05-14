@@ -159,6 +159,17 @@ export default {
                     headers: null
                 });
             }
+            if(this.userInfo.role == 6){
+                this.pullPanes.forEach(item => {
+                    if (item.name == 'jiaomen') {
+                        item.headers.push({
+                            name: '非标信息',
+                            props: 'feibiao'
+                        });
+                        console.log(item);
+                    }
+                });
+            }
             this.pullPanes.forEach(item => {
                 if (item.type == this.userInfo.role) {
                     this.qbPullPanes.forEach(pane => {
@@ -177,6 +188,18 @@ export default {
         }
 
         this.getData();
+    },
+    destroyed(){
+        this.pullPanes.forEach(item => {
+            if (item.name == 'jiaomen') {
+                item.headers.splice(item.headers.length -1,1);
+                // item.headers.push({
+                //     name: '非标信息',
+                //     props: 'feibiao'
+                // });
+                // console.log(item);
+            }
+        });
     }
 };
 </script>
