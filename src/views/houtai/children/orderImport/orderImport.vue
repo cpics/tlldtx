@@ -3,7 +3,7 @@
     <!--批量导入-->
     <div class="m-import-box">
       <el-form class="m-form" ref="form" :model="form" label-width="120px">
-        <!-- <el-form-item label="请输入工时：">
+        <el-form-item label="请输入工时：">
           <el-time-select
             placeholder="起始时间"
             v-model="startTime"
@@ -14,7 +14,7 @@
             v-model="endTime"
             :picker-options="{start: '00:00',step: '00:30',end: '24:00',minTime: startTime}"
           ></el-time-select>
-        </el-form-item> -->
+        </el-form-item>
         <el-form-item label="排班类型：">
           <el-radio v-model="radio" label="day">白班</el-radio>
           <el-radio v-model="radio" label="night">夜班</el-radio>

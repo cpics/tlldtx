@@ -110,7 +110,7 @@ export default {
             let res = await jinrikanban();
             if (res.code === 0) {
                 res.objects.forEach(item => {
-                    item.finishPercent = item.finishPercent * 100 + '%';
+                    item.finishPercent = parseInt(item.finishPercent * 100) + '%';
                     if (item.type == type) {
                         this.todayLeftData = item;
                     }

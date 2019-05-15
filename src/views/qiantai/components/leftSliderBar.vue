@@ -23,7 +23,10 @@
           </li>
           <li>
             <div class="d-label">运行状态：</div>
-            <div class="c-green">{{todayLeftData.workStatus}}</div>
+            <!-- <div>{{todayLeftData.workStatus}}</div> -->
+            <div style="color:red" v-if="todayLeftData.workStatus && todayLeftData.workStatus.indexOf('超前')>-1">{{todayLeftData.workStatus}}</div>
+            <div style="color:green" v-if="todayLeftData.workStatus && todayLeftData.workStatus.indexOf('落后')>-1">{{todayLeftData.workStatus}}</div>
+            <div style="color:white" v-if="todayLeftData.workStatus && todayLeftData.workStatus.indexOf('正常')>-1">{{todayLeftData.workStatus}}</div>
           </li>
         </ul>
       </div>
