@@ -5,7 +5,10 @@
       <el-tab-pane v-for="(item,i) in pullPanes" :key="i" :name="item.name">
         <span slot="label">
           <!-- <el-tab-pane :value="1" v-for="(item,i) in pullPanes" :key="i" :label="item.label" :name="item.name"> -->
-          <el-badge :value="count[i]" class="item m-inside">{{item.label}}</el-badge>
+          <el-badge :value="count[i]" class="item m-inside">
+            {{item.label}}
+            <span class="qlhi" v-if="HistoryCount[i]">{{HistoryCount[i]}}</span>
+          </el-badge>
         </span>
       </el-tab-pane>
     </el-tabs>
@@ -31,9 +34,12 @@
       </data-list>
     </div>
     <div v-if="historyData.length>0">
-      <div style="font-size:18px;font-weight:bold">已解决的历史记录(<span style="color:red">{{historyData.length}}</span>)</div>
+      <div style="font-size:18px;font-weight:bold">
+        已解决的历史记录(
+        <span style="color:red">{{historyData.length}}</span>)
+      </div>
       <!-- <div v-for="(item,i) in historyData" :key="i"> -->
-        <data-list :orderList="historyData" :headers="headers" :isJmDir="false"></data-list>
+      <data-list :orderList="historyData" :headers="headers" :isJmDir="false"></data-list>
       <!-- </div> -->
     </div>
   </div>
@@ -58,7 +64,8 @@ import getQrStr from '../../../../common/utils/getQRstring';
 export default {
     name: 'unFinishOrder',
     props: {
-        count: Array
+        count: Array,
+        HistoryCount:Array
     },
     components: {
         'data-list': dataList
@@ -291,6 +298,23 @@ export default {
 <style lang="scss" scoped>
 .m-inner-box {
   margin-bottom: 25px;
+}
+.qlhi {
+  position: absolute;
+  left: 10px;
+  top: 9px;
+  transform: translateY(-50%) translateX(-80%);
+  background-color: #ffa500;
+  border-radius: 10px;
+  color: #fff;
+  display: inline-block;
+  font-size: 12px;
+  height: 18px;
+  line-height: 18px;
+  padding: 0 6px;
+  text-align: center;
+  white-space: nowrap;
+  border: 1px solid #fff;
 }
 </style>
 

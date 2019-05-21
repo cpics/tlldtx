@@ -24,14 +24,14 @@ function qr1(item) {
     strArr.push(item.hh);
     strArr.push(item.carType);
     //如果大于1则直接使用1 如果小于1 例如0.6就要变成.6
-    if (item.tpgd < 1) {
-        strArr.push('.' + item.tpgd.split('.')[1]);
-    } else if (item.tpgd >= 1) {
-        strArr.push(item.tpgd);
+    if (item.tphd < 1) {
+        strArr.push('.' + item.tphd.split('.')[1]);
+    } else if (item.tphd >= 1) {
+        strArr.push(item.tphd);
     }
     // strArr.push('.6');//贴皮厚度
 
-    // console.log(strArr.join('|'));
+    console.log(strArr.join('|'));
     return strArr.join('|');
 
 }
@@ -40,8 +40,8 @@ function qr2(item) {
     let strArr = ['CB+C'];
     let LL = item.ll / 10;
     // debugger;
-    if (LL / 100 < 10) {
-        LL = '0' + '' + LL;
+    if (LL / 10 < 10) {
+        LL = '0' + '' + (LL / 10);
     }
     strArr.push(LL);
     let zkck = ''
@@ -53,6 +53,7 @@ function qr2(item) {
     strArr.push(zkck);
     strArr.push(item.orderNo);
 
+    console.log(strArr.join(''));
     return strArr.join('');
 
 }
@@ -60,8 +61,8 @@ function qr2(item) {
 function qr3(item) {
     let strArr = ['CB+C'];
     let LL = item.ll / 10;
-    if (LL / 100 < 10) {
-        LL = '0' + '' + LL;
+    if (LL / 10 < 10) {
+        LL = '0' + '' + (LL / 10);
     }
     strArr.push(LL);
     let zkck = ''
@@ -72,7 +73,7 @@ function qr3(item) {
     }
     strArr.push(zkck);
     strArr.push(item.orderNo);
-
+    console.log(strArr.join(''));
     return strArr.join('');
 
 }

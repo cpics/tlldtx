@@ -24,12 +24,15 @@
                 :value="qlCount"
                 v-if="tabsList[item].meta.title =='缺料装箱订单'"
                 class="item m-inside"
-              >{{tabsList[item].meta.title}}</el-badge>
+              >
+                {{tabsList[item].meta.title}}
+                <span class="qlhi" v-if="qlHistoryCount">{{qlHistoryCount}}</span>
+              </el-badge>
               <!-- <el-badge :value="99" class="item m-inside">{{tabsList[item].meta.title}}</el-badge> -->
             </span>
           </el-tab-pane>
         </el-tabs>
-        <router-view @getCountQueliao="getCountQueliao" :count="count"/>
+        <router-view @getCountQueliao="getCountQueliao" :count="count" :HistoryCount="HistoryCount"/>
       </el-main>
     </el-container>
     <audio
@@ -76,7 +79,8 @@ import {
     queryWipsInfo,
     updateScInfo,
     jinrikanban,
-    countQueliao
+    countQueliao,
+    countqueliaohistory
 } from '../../api/index';
 export default {
     name: 'qiantai',
@@ -93,7 +97,10 @@ export default {
             defaultSort: [],
             ws: null,
             count: [],
-            qlCount: ''
+            qlCount: '',
+            HistoryCount:[],
+            qlHistoryCount:''
+        
         };
     },
     components: {
@@ -110,7 +117,8 @@ export default {
             let res = await jinrikanban();
             if (res.code === 0) {
                 res.objects.forEach(item => {
-                    item.finishPercent = parseInt(item.finishPercent * 100) + '%';
+                    item.finishPercent =
+                        parseInt(item.finishPercent * 100) + '%';
                     if (item.type == type) {
                         this.todayLeftData = item;
                     }
@@ -185,6 +193,96 @@ export default {
             this.ws.onclose = event => {
                 console.log('连接已断开！');
             };
+        },
+        async countqueliaohistory() {
+            let res = await countqueliaohistory();
+            if (res.code === 0) {
+                let count = res.objects;
+                if (this.userInfo.roleMaxType == 'ZX') {
+                    this.HistoryCount = [];
+                    this.qlHistoryCount = '';
+                    if (this.userInfo.role == 1 || this.userInfo.role == 2) {
+                        if (count.qb == 0) {
+                            this.HistoryCount.push('');
+                        } else {
+                            this.HistoryCount.push(count.qb);
+                        }
+                        if (count.th == 0) {
+                            this.HistoryCount.push('');
+                        } else {
+                            this.HistoryCount.push(count.th);
+                        }
+                        if (count.jm == 0) {
+                            this.HistoryCount.push('');
+                        } else {
+                            this.HistoryCount.push(count.jm);
+                        }
+                        if (count.aj == 0) {
+                            this.HistoryCount.push('');
+                        } else {
+                            this.HistoryCount.push(count.aj);
+                        }
+                    } else if (this.userInfo.role == 3) {
+                        if (count.jm == 0) {
+                            this.HistoryCount.push('');
+                        } else {
+                            this.HistoryCount.push(count.jm);
+                        }
+                        if (count.aj == 0) {
+                            this.HistoryCount.push('');
+                        } else {
+                            this.HistoryCount.push(count.aj);
+                        }
+                        // this.count = [1,1];
+                        // this.qlCount = 4;
+                    }
+                    let qlCount = 0;
+                    this.HistoryCount.forEach(item => {
+                        if (item != '') {
+                            qlCount += item;
+                        }
+                    });
+                    if (qlCount > 0) {
+                        this.qlHistoryCount = qlCount;
+                    }
+                } else if (this.userInfo.roleMaxType == 'QB') {
+                    this.HistoryCount = [];
+                    this.qlHistoryCount = '';
+                    if (count.nan == 0) {
+                        this.HistoryCount.push('');
+                    } else {
+                        this.HistoryCount.push(count.nan);
+                    }
+                    if (count.bei == 0) {
+                        this.HistoryCount.push('');
+                    } else {
+                        this.HistoryCount.push(count.bei);
+                    }
+
+                    if (this.userInfo.role == 6 || this.userInfo.role == 7) {
+                        if (count.emini == 0) {
+                            this.HistoryCount.push('');
+                        } else {
+                            this.HistoryCount.push(count.emini);
+                        }
+                    }
+
+                    let qlCount = 0;
+                    this.HistoryCount.forEach(item => {
+                        if (item != '') {
+                            qlCount += item;
+                        }
+                    });
+                    if (qlCount > 0) {
+                        this.qlHistoryCount = qlCount;
+                    }
+                }
+            } else {
+                this.$notify.error({
+                    type: '错误',
+                    message: res.codeInfo
+                });
+            }
         },
         closeWebSocket() {
             this.ws.close();
@@ -343,6 +441,7 @@ export default {
         // this.getCountQueliao();
         this.t = setInterval(() => {
             this.getCountQueliao();
+            this.countqueliaohistory();
         }, 5000);
         this.openWebSocket(this.userInfo.username, this.userInfo.role);
     },
@@ -388,5 +487,22 @@ export default {
     background: #b1b7c3;
     margin-top: -1px;
   }
+}
+.qlhi {
+  position: absolute;
+  left: 0px;
+  top: 9px;
+  transform: translateY(-50%) translateX(-80%);
+  background-color: #ffa500;
+  border-radius: 10px;
+  color: #fff;
+  display: inline-block;
+  font-size: 12px;
+  height: 18px;
+  line-height: 18px;
+  padding: 0 6px;
+  text-align: center;
+  white-space: nowrap;
+  border: 1px solid #fff;
 }
 </style>

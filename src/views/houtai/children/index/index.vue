@@ -7,8 +7,8 @@
       <el-table-column prop="finishPercent" label="完成进度"></el-table-column>
       <el-table-column prop="workStatus" label="状态">
         <template slot-scope="scope">
-          <font color="green" v-if="scope.row.workStatus.indexOf('落后')>-1">{{scope.row.workStatus}}</font>
-          <font color="red" v-if="scope.row.workStatus.indexOf('超前')>-1">{{scope.row.workStatus}}</font>
+          <font color="red" v-if="scope.row.workStatus.indexOf('落后')>-1">{{scope.row.workStatus}}</font>
+          <font color="green" v-if="scope.row.workStatus.indexOf('超前')>-1">{{scope.row.workStatus}}</font>
           <font color="black" v-if="scope.row.workStatus.indexOf('正常')>-1">{{scope.row.workStatus}}</font>
         </template>
       </el-table-column>

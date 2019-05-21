@@ -209,3 +209,9 @@ export const quxiaohistory = params =>
     fetch.get(domain + '/queryquxiaohistory.2x', {
         params: params,
     });
+
+//查询缺料历史
+export const countqueliaohistory = params =>
+    fetch.get(domain + '/countqueliaohistory.2x ', {
+        params: params,
+    });
