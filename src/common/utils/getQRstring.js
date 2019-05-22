@@ -10,17 +10,17 @@ function getQrStr(item) {
 function qr1(item) {
     let strArr = [];
     strArr.push(item.orderNo);
-    if (item.line == '') {
-        strArr.push(0);
-    } else if (item.line == '北') {
-        strArr.push('N');
+    if (item.line == '北') {
+        strArr.push('B');
     } else if (item.line == '南') {
-        strArr.push('S');
+        strArr.push('N');
+    } else {
+        strArr.push('0');
     }
     strArr.push(item.jc);
     strArr.push(item.zkck);
     strArr.push(item.panel); //Panel
-    strArr.push(item.ll.replace(/[^0-9]/ig,''));
+    strArr.push(item.ll.replace(/[^0-9]/gi, ''));
     strArr.push(item.hh);
     strArr.push(item.carType);
     //如果大于1则直接使用1 如果小于1 例如0.6就要变成.6
@@ -33,18 +33,17 @@ function qr1(item) {
 
     console.log(strArr.join('|'));
     return strArr.join('|');
-
 }
 
 function qr2(item) {
     let strArr = ['CB+C'];
-    let LL = item.ll / 10;
+    let LL = item.ll / 100;
     // debugger;
-    if (LL / 10 < 10) {
-        LL = '0' + '' + (LL / 10);
+    if (LL < 10) {
+        LL = '0' + '' + LL;
     }
     strArr.push(LL);
-    let zkck = ''
+    let zkck = '';
     if (item.zkck == '1C') {
         zkck = 'CL';
     } else if (item.zkck == '2L' || item.zkck == '2R') {
@@ -55,17 +54,16 @@ function qr2(item) {
 
     console.log(strArr.join(''));
     return strArr.join('');
-
 }
 
 function qr3(item) {
     let strArr = ['CB+C'];
-    let LL = item.ll / 10;
-    if (LL / 10 < 10) {
-        LL = '0' + '' + (LL / 10);
+    let LL = item.ll / 100;
+    if (LL < 10) {
+        LL = '0' + '' + LL;
     }
     strArr.push(LL);
-    let zkck = ''
+    let zkck = '';
     if (item.zkck == '1C') {
         zkck = 'CR';
     } else if (item.zkck == '2L' || item.zkck == '2R') {
@@ -75,6 +73,5 @@ function qr3(item) {
     strArr.push(item.orderNo);
     console.log(strArr.join(''));
     return strArr.join('');
-
 }
 export default getQrStr;
