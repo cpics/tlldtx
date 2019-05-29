@@ -177,8 +177,7 @@
 <style lang="scss">
 
     .key-order {
-        min-height: 400px;
-        max-height: 640px;
+        height: 600px;
         overflow-y: auto;
         table {
             tbody {
