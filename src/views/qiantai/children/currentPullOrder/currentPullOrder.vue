@@ -1,110 +1,126 @@
 <template>
-  <div class="g-order-main">
-    <!--当前拉动订单-->
-    <div class="tab-pane-btn">
-      <el-button
-        type="primary"
-        v-if="userRoleMaxType == 'ZX'"
-        size="small"
-        @click="showGridPoP"
-      >一键下单</el-button>
-    </div>
-    <el-dialog style="z-index: 9999;" title="一键下单" :visible.sync="dialogTableVisible" width="80%">
-      <!--加急 单元行-标红 tr  + c-red-->
-      <el-table :data="gridData" @selection-change="handleSelectionChange" max-height="500">
-        <el-table-column type="selection" fixed width="55"></el-table-column>
-        <el-table-column
-          :width="getWidth(item)"
-          v-for="(item,index) in headers"
-          :key="index"
-          :prop="item.props"
-          :label="item.name"
-        ></el-table-column>
-      </el-table>
-      <div class="m-dialog-btn">
-        <el-button type="primary" @click="yijianxiadan">下单</el-button>
-      </div>
-    </el-dialog>
-    <el-tabs v-model="activeName" @tab-click="chooseCx" v-if="userRoleMaxType=='ZX'">
-      <el-tab-pane v-for="(item,i) in pullPanes" :key="i" :label="item.label" :name="item.name"></el-tab-pane>
-    </el-tabs>
-    <div v-for="(item,i) in tableData" :key="i">
-      <data-list
-        :isJmDir="item.batchType == 6"
-        :orderName="`${userRoleMaxType=='ZX'?activePane.label:(item.batchLine==1?'装箱南线':(item.batchLine==2?'装箱北线':'E-mini'))} - ${item.batchNo} ${item.piciDate}`"
-        :orderList="item.orderList"
-        :headers="headers"
-      >
-        <template slot-scope="slotProps" slot="allAction">
-          <template v-if="userRoleMaxType == 'ZX'">
-            <el-button type="danger" size="mini" @click="yijiancehui(item)">一键撤回</el-button>
-          </template>
+    <div class="g-order-main">
+        <!--当前拉动订单-->
+        <div class="tab-pane-btn">
+            <el-button type="primary"
+                       v-if="userRoleMaxType == 'ZX'"
+                       size="small"
+                       @click="showGridPoP">一键下单</el-button>
+        </div>
+        <el-dialog style="z-index: 9999;"
+                   title="一键下单"
+                   class="zzzz-rap"
+                   :visible.sync="dialogTableVisible"
+                   width="80%">
+            <el-collapse class="key-order"
+                         accordion>
+                <el-collapse-item v-for="(item,i) in gridData"
+                                  :key="i">
+                    <template slot="title">
+                        <div class="item-hd-tit">
+                            <div class="item-tit-left">
+                                <span class="item-tit-txt">{{item.name}}</span>
+                                <span class="item-tag"
+                                      v-if="item.list">({{item.list.length}})</span>
+                            </div>
+                            <div class="item-tit-right">
+                                <!-- <el-checkbox v-model="checked">批量选择</el-checkbox> -->
+                            </div>
+                        </div>
+                    </template>
+                    <el-table :data="item.list"
+                              @selection-change="handleSelectionChange($event,i)"
+                              max-height="500">
+                        <el-table-column type="selection"
+                                         fixed
+                                         width="55"></el-table-column>
+                        <el-table-column :width="getWidth(h)"
+                                         v-for="(h,index) in headers"
+                                         :key="index"
+                                         :prop="h.props"
+                                         :label="h.name"></el-table-column>
+                    </el-table>
+                </el-collapse-item>
+            </el-collapse>
+            <div class="m-dialog-btn">
+                <el-button type="primary"
+                           @click="yijianxiadan">下单</el-button>
+            </div>
+        </el-dialog>
+        <el-tabs v-model="activeName"
+                 @tab-click="chooseCx"
+                 v-if="userRoleMaxType=='ZX'">
+            <el-tab-pane v-for="(item,i) in pullPanes"
+                         :key="i"
+                         :label="item.label"
+                         :name="item.name"></el-tab-pane>
+        </el-tabs>
+        <div v-for="(item,i) in tableData"
+             :key="i">
+            <data-list :isJmDir="item.batchType == 6"
+                       :orderName="`${userRoleMaxType=='ZX'?activePane.label:(item.batchLine==1?'装箱南线':(item.batchLine==2?'装箱北线':'E-mini'))} - ${item.batchNo} ${item.piciDate}`"
+                       :orderList="item.orderList"
+                       :headers="headers">
+                <template slot-scope="slotProps"
+                          slot="allAction">
+                    <template v-if="userRoleMaxType == 'ZX'">
+                        <el-button type="danger"
+                                   size="mini"
+                                   @click="yijiancehui(item)">一键撤回</el-button>
+                    </template>
 
-          <template v-if="userRoleMaxType == 'QB'">
-            <el-button
-              type="danger"
-              v-if="item.orderArrayStatus == '已下单'"
-              @click="yijianqueliao(item)"
-              size="mini"
-            >一键缺料</el-button>
-            <el-button
-              type="warning"
-              v-if="item.orderArrayStatus == '已下单'"
-              @click="yijianshengchan(item)"
-              size="mini"
-            >一键生产</el-button>
-            <el-button
-              type="primary"
-              v-if="item.orderArrayStatus == '生产中'"
-              @click="yijianshengchanwancheng(item)"
-              size="mini"
-            >一键完成</el-button>
-          </template>
-        </template>
-        <template slot-scope="slotProps" slot="itemAction">
-          <template v-if="userRoleMaxType == 'ZX'">
-            <!-- <el-button
+                    <template v-if="userRoleMaxType == 'QB'">
+                        <el-button type="danger"
+                                   v-if="item.orderArrayStatus == '已下单'"
+                                   @click="yijianqueliao(item)"
+                                   size="mini">一键缺料</el-button>
+                        <el-button type="warning"
+                                   v-if="item.orderArrayStatus == '已下单'"
+                                   @click="yijianshengchan(item)"
+                                   size="mini">一键生产</el-button>
+                        <el-button type="primary"
+                                   v-if="item.orderArrayStatus == '生产中'"
+                                   @click="yijianshengchanwancheng(item)"
+                                   size="mini">一键完成</el-button>
+                    </template>
+                </template>
+                <template slot-scope="slotProps"
+                          slot="itemAction">
+                    <template v-if="userRoleMaxType == 'ZX'">
+                        <!-- <el-button
               v-if="slotProps.rowData.currentStatus == '未安排'"
               type="primary"
               class="minimum"
               size="mini"
               @click="xiadan(i,slotProps.rowData)"
             >下单</el-button>-->
-            <el-button
-              v-if="slotProps.rowData.currentStatus == '已下单'"
-              type="danger"
-              class="minimum"
-              size="mini"
-              @click="cehui(item,slotProps.rowData)"
-            >撤回</el-button>
-          </template>
-          <template v-if="userRoleMaxType == 'QB'">
-            <el-button
-              type="danger"
-              class="minimum"
-              size="mini"
-              v-if="slotProps.rowData.currentStatus == '已下单'"
-              @click="queliao(item,slotProps.rowData)"
-            >缺料</el-button>
-            <el-button
-              v-if="slotProps.rowData.currentStatus == '已下单'"
-              type="warning"
-              class="minimum"
-              size="mini"
-              @click="shengchan(item,slotProps.rowData)"
-            >生产</el-button>
-            <el-button
-              v-if="slotProps.rowData.currentStatus == '生产中'"
-              type="primary"
-              class="minimum"
-              size="mini"
-              @click="shengchanwancheng(item,slotProps.rowData)"
-            >完成</el-button>
-          </template>
-        </template>
-      </data-list>
+                        <el-button v-if="slotProps.rowData.currentStatus == '已下单'"
+                                   type="danger"
+                                   class="minimum"
+                                   size="mini"
+                                   @click="cehui(item,slotProps.rowData)">撤回</el-button>
+                    </template>
+                    <template v-if="userRoleMaxType == 'QB'">
+                        <el-button type="danger"
+                                   class="minimum"
+                                   size="mini"
+                                   v-if="slotProps.rowData.currentStatus == '已下单'"
+                                   @click="queliao(item,slotProps.rowData)">缺料</el-button>
+                        <el-button v-if="slotProps.rowData.currentStatus == '已下单'"
+                                   type="warning"
+                                   class="minimum"
+                                   size="mini"
+                                   @click="shengchan(item,slotProps.rowData)">生产</el-button>
+                        <el-button v-if="slotProps.rowData.currentStatus == '生产中'"
+                                   type="primary"
+                                   class="minimum"
+                                   size="mini"
+                                   @click="shengchanwancheng(item,slotProps.rowData)">完成</el-button>
+                    </template>
+                </template>
+            </data-list>
+        </div>
     </div>
-  </div>
 </template>
 <script>
 import dataList from '../../components/dataList/dataList';
@@ -142,6 +158,7 @@ export default {
         return {
             t: null,
             activeName: 'qianbi',
+            checkedArr: [],
             activePane: {},
             headers: [],
             userInfo: {},
@@ -190,42 +207,7 @@ export default {
             ],
             tableData: [],
             gridData: [
-                {
-                    order: '12345678',
-                    parts1: 'A-01',
-                    parts2: 'B-01',
-                    parts3: 'C-01',
-                    parts4: 'D-01',
-                    time: '2018-12-21',
-                    remarks: '加急'
-                },
-                {
-                    order: '12345678',
-                    parts1: 'A-01',
-                    parts2: 'B-01',
-                    parts3: 'C-01',
-                    parts4: 'D-01',
-                    time: '2018-12-21',
-                    remarks: '加急'
-                },
-                {
-                    order: '12345678',
-                    parts1: 'A-01',
-                    parts2: 'B-01',
-                    parts3: 'C-01',
-                    parts4: 'D-01',
-                    time: '2018-12-21',
-                    remarks: '加急'
-                },
-                {
-                    order: '12345678',
-                    parts1: 'A-01',
-                    parts2: 'B-01',
-                    parts3: 'C-01',
-                    parts4: 'D-01',
-                    time: '2018-12-21',
-                    remarks: '加急'
-                }
+
             ],
             dialogTableVisible: false,
             multipleSelection: []
@@ -460,8 +442,10 @@ export default {
             }
         },
         showGridPoP() {
-            this.dialogTableVisible = true;
+            this.gridData = [];
             this.getGridData();
+            this.dialogTableVisible = true;
+
         },
         // deleteRow(index, rows) {
         //     rows.splice(index, 1);
@@ -475,9 +459,12 @@ export default {
                 this.$refs.multipleTable.clearSelection();
             }
         },
-        handleSelectionChange(val) {
-            this.multipleSelection = val;
-            console.log(this.multipleSelection);
+
+        handleSelectionChange(val, i) {
+            this.checkedArr[i] = val;
+            console.log(val, i);
+            // this.multipleSelection = val;
+            // console.log(this.multipleSelection);
         },
         //获取拉动接口数据
         async getData() {
@@ -547,7 +534,42 @@ export default {
                         item.feibiao = feibiao[1];
                     }
                 });
-                this.gridData = res.objects;
+
+                let arr = [];
+                let checkedArr = [];
+                res.objects.forEach(item => {
+                    let nameArr = item.orderBatch.split('-')[1].split('+');
+                    let current = nameArr[0] + '+' + nameArr[1] + '+' + parseInt(nameArr[2]);
+                    console.log(current);
+
+
+                    let dir = false;
+                    arr.forEach(v => {
+
+                        if (v.name == current) {
+                            console.log(v.name, current);
+                            dir = true;
+                            v.list.push(item);
+                        }
+                    })
+                    if (!dir) {
+                        arr.push({
+                            name: current,
+                            list: []
+                        });
+                        arr.forEach(v => {
+                            if (v.name == current) {
+                                v.list.push(item);
+                            }
+                        })
+
+                        checkedArr.push([]);
+                    }
+                    // arr.push(current);
+                });
+
+                this.checkedArr = checkedArr;
+                this.gridData = arr;
             } else {
                 this.$notify.error({
                     type: '错误',
@@ -558,16 +580,23 @@ export default {
         //一键下单
         async yijianxiadan() {
             let orderArr = [];
-            if (this.multipleSelection.length == 0) {
+
+            // this.multipleSelection.forEach(item => {
+            //     orderArr.push(item.orderNo);
+            // });
+            this.checkedArr.forEach(arr => {
+                arr.forEach(item => {
+                    orderArr.push(item.orderNo);
+                })
+            })
+            console.log(orderArr.length);
+            if (orderArr.length == 0) {
                 this.$notify.error({
                     type: '错误',
                     message: '请选择要下单的数据'
                 });
                 return false;
             }
-            this.multipleSelection.forEach(item => {
-                orderArr.push(item.orderNo);
-            });
             let res = await yijianxiadan({
                 type: this.activePane.type,
                 ordersNo: orderArr.join(',')
@@ -627,17 +656,60 @@ export default {
 </script>
 <style lang="scss" scoped>
 .g-order-main {
-  position: relative;
+    position: relative;
 }
 .tab-pane-btn {
-  position: absolute;
-  top: 0;
-  right: 0;
-  z-index: 4;
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: 4;
 }
 .m-dialog-btn {
-  text-align: center;
-  padding-top: 20px;
+    text-align: center;
+    padding-top: 20px;
+}
+.zzzz-rap {
+    overflow: visible;
+}
+.key-order {
+    height: 600px;
+    overflow-y: auto;
+    table {
+        tbody {
+            font-weight: normal;
+            tr:last-child {
+                td {
+                    border-bottom: 0;
+                }
+            }
+        }
+    }
+    .item-tag {
+        color: #f56c6c;
+    }
+}
+
+.item-hd-tit {
+    width: 100%;
+    height: 49px;
+}
+
+.item-tit-left {
+    float: left;
+}
+
+.item-tit-right {
+    float: right;
+    padding-right: 10px;
+}
+
+.item-tit-txt {
+    font-size: 14px;
+    padding: 0 10px;
+}
+
+.el-dialog__body .el-collapse-item__header.is-active {
+    background: #fafafa;
 }
 </style>
 

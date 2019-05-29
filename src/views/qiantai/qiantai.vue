@@ -175,7 +175,7 @@ export default {
             };
             this.ws.onmessage = event => {
                 var obj = JSON.parse(event.data);
-                console.log(JSON.parse(event.data));
+                // console.log(JSON.parse(event.data));
                 // return ;
 
                 // if(!obj.role.split(',').include(role))return;
@@ -315,7 +315,7 @@ export default {
             });
         },
         async getCountQueliao() {
-            console.log(this.userInfo);
+            // console.log(this.userInfo);
             let res = await countQueliao();
             if (res.code == 0) {
                 let count = res.objects;
