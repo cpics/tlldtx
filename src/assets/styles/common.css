@@ -228,3 +228,12 @@ body,
     z-index: 5;
     top:9px;
 }
+
+.el-table table.el-table__body tbody{
+    color: #333;
+    font-size: 30px;
+}
+
+.el-table .el-table__body .cell{
+    line-height: 1.3;
+}
