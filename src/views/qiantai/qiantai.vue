@@ -1,69 +1,65 @@
 <template>
-  <el-container class="mod-wrapper">
-    <el-aside class="g-slide-bar" width="200px">
-      <leftSliderbar
-        :maxClassString="userInfo.roleString"
-        :todayLeftData="todayLeftData"
-        :wipsInfo="wipsInfo"
-      />
-    </el-aside>
-    <el-container>
-      <el-header class="f-header-bar">
-        <i class="f-menu-line"></i>
-        <layoutTopHeaderRight/>
-      </el-header>
-      <el-main class="f-el-main">
-        <el-tabs v-model="activeName" type="card" @tab-click="tabClick">
-          <el-tab-pane v-for="(item,index) in defaultSort" :key="index" :name="tabsList[item].name">
-            <span slot="label">
-              <el-badge
-                v-if="tabsList[item].meta.title !='缺料装箱订单'"
-                class="item m-inside"
-              >{{tabsList[item].meta.title}}</el-badge>
-              <el-badge
-                :value="qlCount"
-                v-if="tabsList[item].meta.title =='缺料装箱订单'"
-                class="item m-inside"
-              >
-                {{tabsList[item].meta.title}}
-                <span class="qlhi" v-if="qlHistoryCount">{{qlHistoryCount}}</span>
-              </el-badge>
-              <!-- <el-badge :value="99" class="item m-inside">{{tabsList[item].meta.title}}</el-badge> -->
-            </span>
-          </el-tab-pane>
-        </el-tabs>
-        <router-view @getCountQueliao="getCountQueliao" :count="count" :HistoryCount="HistoryCount"/>
-      </el-main>
+    <el-container class="mod-wrapper">
+        <el-aside class="g-slide-bar"
+                  v-if="leftSliderDir"
+                  width="200px">
+            <leftSliderbar :maxClassString="userInfo.roleString"
+                           :todayLeftData="todayLeftData"
+                           :wipsInfo="wipsInfo" />
+        </el-aside>
+        <el-container>
+            <el-header class="f-header-bar">
+                <i class="f-menu-line"
+                   @click="showleftSlideBar"></i>
+                <layoutTopHeaderRight/>
+            </el-header>
+            <el-main class="f-el-main">
+                <el-tabs v-model="activeName"
+                         type="card"
+                         @tab-click="tabClick">
+                    <el-tab-pane v-for="(item,index) in defaultSort"
+                                 :key="index"
+                                 :name="tabsList[item].name">
+                        <span slot="label">
+                            <el-badge v-if="tabsList[item].meta.title !='缺料装箱订单'"
+                                      class="item m-inside">{{tabsList[item].meta.title}}</el-badge>
+                            <el-badge :value="qlCount"
+                                      v-if="tabsList[item].meta.title =='缺料装箱订单'"
+                                      class="item m-inside">
+                                {{tabsList[item].meta.title}}
+                                <span class="qlhi"
+                                      v-if="qlHistoryCount">{{qlHistoryCount}}</span>
+                            </el-badge>
+                            <!-- <el-badge :value="99" class="item m-inside">{{tabsList[item].meta.title}}</el-badge> -->
+                        </span>
+                    </el-tab-pane>
+                </el-tabs>
+                <router-view @getCountQueliao="getCountQueliao"
+                             :count="count"
+                             :HistoryCount="HistoryCount" />
+            </el-main>
+        </el-container>
+        <audio style="display:none"
+               controls="controls"
+               id="biaojiyichang"
+               preload
+               v-bind:src="`${require('../../assets/audio/biaojiyichang.mp3')}`" />
+        <audio style="display:none"
+               controls="controls"
+               id="dingdanwancheng"
+               preload
+               v-bind:src="`${require('../../assets/audio/dingdanwancheng.mp3')}`" />
+        <audio style="display:none"
+               controls="controls"
+               id="quxiaoyichang"
+               preload
+               v-bind:src="`${require('../../assets/audio/quxiaoyichang.mp3')}`" />
+        <audio style="display:none"
+               controls="controls"
+               id="xindedingdan"
+               preload
+               v-bind:src="`${require('../../assets/audio/xindedingdan.mp3')}`" />
     </el-container>
-    <audio
-      style="display:none"
-      controls="controls"
-      id="biaojiyichang"
-      preload
-      v-bind:src="`${require('../../assets/audio/biaojiyichang.mp3')}`"
-    />
-    <audio
-      style="display:none"
-      controls="controls"
-      id="dingdanwancheng"
-      preload
-      v-bind:src="`${require('../../assets/audio/dingdanwancheng.mp3')}`"
-    />
-    <audio
-      style="display:none"
-      controls="controls"
-      id="quxiaoyichang"
-      preload
-      v-bind:src="`${require('../../assets/audio/quxiaoyichang.mp3')}`"
-    />
-    <audio
-      style="display:none"
-      controls="controls"
-      id="xindedingdan"
-      preload
-      v-bind:src="`${require('../../assets/audio/xindedingdan.mp3')}`"
-    />
-  </el-container>
 </template>
 <script>
 import layoutTopHeaderRight from '../../components/layoutTopHeaderRight/layoutTopHeaderRight';
@@ -98,9 +94,10 @@ export default {
             ws: null,
             count: [],
             qlCount: '',
-            HistoryCount:[],
-            qlHistoryCount:''
-        
+            HistoryCount: [],
+            qlHistoryCount: '',
+            leftSliderDir: true,
+
         };
     },
     components: {
@@ -108,6 +105,9 @@ export default {
         leftSliderbar
     },
     methods: {
+        showleftSlideBar() {
+            this.leftSliderDir = !this.leftSliderDir;
+        },
         tabClick(tab, event) {
             this.$router.push(this.tabsList[this.defaultSort[tab.index]].path);
             this.getCountQueliao();
@@ -452,57 +452,57 @@ export default {
 </script>
 <style lang="scss" scoped>
 .g-slide-bar {
-  color: #fff;
-  background: #005982;
+    color: #fff;
+    background: #005982;
 }
 .f-el-main {
-  background: #fff;
+    background: #fff;
 }
 .f-header-bar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  color: #000;
-  background: #f8f9fd;
-  .f-header-right {
     display: flex;
     align-items: center;
-  }
+    justify-content: space-between;
+    color: #000;
+    background: #f8f9fd;
+    .f-header-right {
+        display: flex;
+        align-items: center;
+    }
 }
 .f-menu-line {
-  position: relative;
-  width: 20px;
-  height: 12px;
-  display: inline-block;
-  border-top: 2px solid #b1b7c3;
-  border-bottom: 2px solid #b1b7c3;
-  background-clip: content-box;
-  &:before {
-    position: absolute;
-    left: 0;
-    top: 50%;
-    content: "";
-    width: 100%;
-    height: 2px;
-    background: #b1b7c3;
-    margin-top: -1px;
-  }
+    position: relative;
+    width: 20px;
+    height: 12px;
+    display: inline-block;
+    border-top: 2px solid #b1b7c3;
+    border-bottom: 2px solid #b1b7c3;
+    background-clip: content-box;
+    &:before {
+        position: absolute;
+        left: 0;
+        top: 50%;
+        content: '';
+        width: 100%;
+        height: 2px;
+        background: #b1b7c3;
+        margin-top: -1px;
+    }
 }
 .qlhi {
-  position: absolute;
-  left: 0px;
-  top: 9px;
-  transform: translateY(-50%) translateX(-80%);
-  background-color: #ffa500;
-  border-radius: 10px;
-  color: #fff;
-  display: inline-block;
-  font-size: 12px;
-  height: 18px;
-  line-height: 18px;
-  padding: 0 6px;
-  text-align: center;
-  white-space: nowrap;
-  border: 1px solid #fff;
+    position: absolute;
+    left: 0px;
+    top: 9px;
+    transform: translateY(-50%) translateX(-80%);
+    background-color: #ffa500;
+    border-radius: 10px;
+    color: #fff;
+    display: inline-block;
+    font-size: 12px;
+    height: 18px;
+    line-height: 18px;
+    padding: 0 6px;
+    text-align: center;
+    white-space: nowrap;
+    border: 1px solid #fff;
 }
 </style>
