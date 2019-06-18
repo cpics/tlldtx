@@ -5,7 +5,7 @@ function getWidth(item) {
     if (props == 'orderNo' || props == 'tp' || props == 'feibiao') {
         width = 230;
     } else if (props == 'orderBatch') {
-        width = 100;
+        width = 243;
     } else if (props == 'tixing') {
         width = 350;
     } else if (props == 'Orderdate') {
@@ -45,8 +45,14 @@ function getWidth(item) {
         width = 100;
     } else if (props == 'panel') {
         width = 50;
-    }else if(props == 'line'){
-        width = 70;
+    } else if (props == 'line') {
+        // width = 70;
+    } else if (props == 'zkck') {
+        width = 85;
+    } else if (props == 'tphd') {
+        width = 85;
+    } else if (props == 'tpkd') {
+        width = 100;
     }
     return width;
 }
