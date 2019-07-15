@@ -33,7 +33,7 @@
           <template slot-scope="props">
             <div class="jmtm">
               <div>
-                <canvas :id="'qr1'+props.row.orderNo"></canvas>
+                <qrcode-vue :value="props.row.qr1" :size="80" level="H"></qrcode-vue>
               </div>
             </div>
           </template>
@@ -49,7 +49,8 @@
           <template slot-scope="props">
             <div class="jmtm">
               <div>
-                <canvas :id="'qr2'+props.row.orderNo"></canvas>
+                <qrcode-vue :value="props.row.qr2" :size="80" level="H"></qrcode-vue>
+                <!-- <canvas :id="'qr2'+props.row.orderNo"></canvas> -->
               </div>
             </div>
           </template>
@@ -65,7 +66,8 @@
           <template slot-scope="props">
             <div class="jmtm">
               <div>
-                <canvas :id="'qr3'+props.row.orderNo"></canvas>
+                <qrcode-vue :value="props.row.qr3" :size="80" level="H"></qrcode-vue>
+                <!-- <canvas :id="'qr3'+props.row.orderNo"></canvas> -->
               </div>
             </div>
           </template>
@@ -111,6 +113,7 @@ import {
 } from '../../../../common/category/jiaomen.js';
 import getWidth from '../../../../common/utils/getWidth.js';
 import QRCode from 'qrcode';
+import QrcodeVue from 'qrcode.vue';
 export default {
     name: 'dataList',
     props: {
@@ -134,36 +137,39 @@ export default {
             return width;
         }
     },
+    components:{
+        QrcodeVue
+    },
     mounted() {
         console.log(this.orderList);
         this.$nextTick(() => {
             if (this.isJmDir) {
                 this.orderList.forEach(item => {
                     // debugger;
-                    QRCode.toCanvas(
-                        document.getElementById('qr1' + item.orderNo),
-                        item.qr1,
-                        {
-                            width: 80,
-                            height: 80
-                        }
-                    );
-                    QRCode.toCanvas(
-                        document.getElementById('qr2' + item.orderNo),
-                        item.qr2,
-                        {
-                            width: 80,
-                            height: 80
-                        }
-                    );
-                    QRCode.toCanvas(
-                        document.getElementById('qr3' + item.orderNo),
-                        item.qr3,
-                        {
-                            width: 80,
-                            height: 80
-                        }
-                    );
+                    // QRCode.toCanvas(
+                    //     document.getElementById('qr1' + item.orderNo),
+                    //     item.qr1,
+                    //     {
+                    //         width: 80,
+                    //         height: 80
+                    //     }
+                    // );
+                    // QRCode.toCanvas(
+                    //     document.getElementById('qr2' + item.orderNo),
+                    //     item.qr2,
+                    //     {
+                    //         width: 80,
+                    //         height: 80
+                    //     }
+                    // );
+                    // QRCode.toCanvas(
+                    //     document.getElementById('qr3' + item.orderNo),
+                    //     item.qr3,
+                    //     {
+                    //         width: 80,
+                    //         height: 80
+                    //     }
+                    // );
                 });
             }
         });

@@ -352,16 +352,17 @@ export default {
                 batchNo: orderObject.batchNo
             });
             if (res.code == 0) {
-                let orderObjectIndex = this.tableData.indexOf(orderObject);
-                let orderItemIndex = orderObject.orderList.indexOf(orderItem);
-                orderObject.orderList.splice(orderItemIndex, 1);
-                if (orderObject.orderList.length == 0) {
-                    this.tableData.splice(orderObjectIndex, 1);
-                }
+                // let orderObjectIndex = this.tableData.indexOf(orderObject);
+                // let orderItemIndex = orderObject.orderList.indexOf(orderItem);
+                // orderObject.orderList.splice(orderItemIndex, 1);
+                // if (orderObject.orderList.length == 0) {
+                //     this.tableData.splice(orderObjectIndex, 1);
+                // }
                 this.$notify.success({
                     title: '成功',
                     message: res.codeInfo
                 });
+                this.getData();
             } else {
                 this.$notify.error({
                     type: '错误',
