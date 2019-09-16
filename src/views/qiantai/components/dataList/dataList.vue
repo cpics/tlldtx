@@ -11,78 +11,87 @@
       </div>
     </div>
     <!--加急 单元行-标红 tr  + c-red-->
-    <el-table :data="orderList" style="width: 100%;">
-      <el-table-column
-        v-if="!isJmDir"
-        v-for="(item,index) in headers"
-        :width="getWidth(item)"
-        :key="index"
-        :prop="item.props"
-        :label="item.name"
-      ></el-table-column>
+    <el-table :data="orderList"
+              :row-style="oderListStyle"
+              style="width: 100%;"
+              :row-class-name="tableRowClassName">
+      <el-table-column v-if="!isJmDir"
+                       v-for="(item,index) in headers"
+                       :width="getWidth(item)"
+                       :key="index"
+                       :prop="item.props"
+                       :label="item.name"></el-table-column>
       <template v-if="isJmDir">
-        <el-table-column
-          v-for="(item,ii) in jiaomen1"
-          :width="getWidth(item)"
-          :key="ii"
-          :prop="item.props"
-          :label="item.name"
-        ></el-table-column>
+        <el-table-column v-for="(item,ii) in jiaomen1"
+                         :width="getWidth(item)"
+                         :key="ii"
+                         :prop="item.props"
+                         :label="item.name"></el-table-column>
 
-        <el-table-column v-if="isJmDir" width="100" label="二维码1">
+        <el-table-column v-if="isJmDir"
+                         width="100"
+                         label="二维码1">
           <template slot-scope="props">
             <div class="jmtm">
               <div>
-                <qrcode-vue :value="props.row.qr1" :size="80" level="H"></qrcode-vue>
+                <qrcode-vue :value="props.row.qr1"
+                            :size="80"
+                            level="H"></qrcode-vue>
               </div>
             </div>
           </template>
         </el-table-column>
-        <el-table-column
-          v-for="(item,iii) in jiaomen2"
-          :width="getWidth(item)"
-          :key="10+iii"
-          :prop="item.props"
-          :label="item.name"
-        ></el-table-column>
-        <el-table-column v-if="isJmDir" width="100" label="二维码2">
+        <el-table-column v-for="(item,iii) in jiaomen2"
+                         :width="getWidth(item)"
+                         :key="10+iii"
+                         :prop="item.props"
+                         :label="item.name"></el-table-column>
+        <el-table-column v-if="isJmDir"
+                         width="100"
+                         label="二维码2">
           <template slot-scope="props">
             <div class="jmtm">
               <div>
-                <qrcode-vue :value="props.row.qr2" :size="80" level="H"></qrcode-vue>
+                <qrcode-vue :value="props.row.qr2"
+                            :size="80"
+                            level="H"></qrcode-vue>
                 <!-- <canvas :id="'qr2'+props.row.orderNo"></canvas> -->
               </div>
             </div>
           </template>
         </el-table-column>
-        <el-table-column
-          v-for="(item,iiii) in jiaomen3"
-          :width="getWidth(item)"
-          :key="100+iiii"
-          :prop="item.props"
-          :label="item.name"
-        ></el-table-column>
-        <el-table-column v-if="isJmDir" width="100" label="二维码3">
+        <el-table-column v-for="(item,iiii) in jiaomen3"
+                         :width="getWidth(item)"
+                         :key="100+iiii"
+                         :prop="item.props"
+                         :label="item.name"></el-table-column>
+        <el-table-column v-if="isJmDir"
+                         width="100"
+                         label="二维码3">
           <template slot-scope="props">
             <div class="jmtm">
               <div>
-                <qrcode-vue :value="props.row.qr3" :size="80" level="H"></qrcode-vue>
+                <qrcode-vue :value="props.row.qr3"
+                            :size="80"
+                            level="H"></qrcode-vue>
                 <!-- <canvas :id="'qr3'+props.row.orderNo"></canvas> -->
               </div>
             </div>
           </template>
         </el-table-column>
-        <el-table-column
-          v-for="(item,iiii) in jiaomen4"
-          :width="getWidth(item)"
-          :key="1000+iiii"
-          :prop="item.props"
-          :label="item.name"
-        ></el-table-column>
+        <el-table-column v-for="(item,iiii) in jiaomen4"
+                         :width="getWidth(item)"
+                         :key="1000+iiii"
+                         :prop="item.props"
+                         :label="item.name"></el-table-column>
       </template>
-      <el-table-column prop="handle" fixed="right" label="操作" width="150">
+      <el-table-column prop="handle"
+                       fixed="right"
+                       label="操作"
+                       width="150">
         <template slot-scope="scope">
-          <slot :rowData="scope.row" name="itemAction"></slot>
+          <slot :rowData="scope.row"
+                name="itemAction"></slot>
         </template>
       </el-table-column>
       <!-- <el-table-column type="expand" v-if="isJmDir">
@@ -135,9 +144,27 @@ export default {
         getWidth(item) {
             let width = getWidth(item);
             return width;
+        },
+        tableRowClassName(row, rowIndex) {
+            // console.log(row.row.currentStatus);
+            // return '';
+            if (row.row.currentStatus == '生产中') {
+
+                return 'success-row';
+            } else {
+                return '';
+            }
+        },
+        oderListStyle(row) {
+            // console.log(row);
+            if (location.href.indexOf('currentPullOrder') > -1) {
+                return 'height:200px';
+            } else {
+                return '';
+            }
         }
     },
-    components:{
+    components: {
         QrcodeVue
     },
     mounted() {
@@ -173,27 +200,34 @@ export default {
                 });
             }
         });
-        // QRCode.toCanvas(document.getElementById('qr1'), this.shareUrl);
-        // console.log(this.headers);
-        // console.log()
+    // QRCode.toCanvas(document.getElementById('qr1'), this.shareUrl);
+    // console.log(this.headers);
+    // console.log()
     }
 };
 </script>
 
 <style>
 .jmtm {
-  /* font-family: 'code128'; */
-  /* font-size:25px; */
+    /* font-family: 'code128'; */
+    /* font-size:25px; */
 }
 table tbody {
-  font-weight: bolder;
+    font-weight: bolder;
 }
 .jmtm div {
-  width: 80px;
-  height: 80px;
-  /* float: left; */
-  /* width: 30%; */
-  /* text-align: center; */
-  /* padding-right:100px; */
+    width: 80px;
+    height: 80px;
+    /* float: left; */
+    /* width: 30%; */
+    /* text-align: center; */
+    /* padding-right:100px; */
+}
+.el-table .success-row {
+    background: #555555;
+    color: #fff;
+}
+.el-table .success-row:hover {
+    color: #000;
 }
 </style>

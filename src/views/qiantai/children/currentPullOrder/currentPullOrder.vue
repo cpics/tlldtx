@@ -508,6 +508,7 @@ export default {
                     this.filterStatus(orderArray);
                 });
                 this.tableData = res.objects;
+                console.log(this.tableData);
                 // res.objects.forEach(item => {
                 //     this.tableData.push(item);
                 // });
