@@ -11,7 +11,7 @@ function getWidth(item) {
     } else if (props == 'Orderdate') {
         width = 200;
     } else if (props == 'carType') {
-        width = 60;
+        width = 90;
     } else if (props == 'hmchouDu' || props == 'produceDate') {
         width = 100;
     } else if (props == 'ak') {
@@ -40,7 +40,7 @@ function getWidth(item) {
     } else if (props == 'bb' || props == 'dd') {
         width = 100;
     } else if (props == 'jc') {
-        width = 90;
+        width = 110;
     } else if (props == 'jbgd' || props == 'tpgd') {
         width = 100;
     } else if (props == 'panel') {
