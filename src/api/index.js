@@ -1,7 +1,7 @@
 import fetch from '../common/fetch/index';
-// export const domain = '//blog.365dianti.com:8023';
+export const domain = '//blog.365dianti.com:8023';
 // export const domain = '//kone.2xnet.net:8023';
-export const domain = '//' + location.host;
+// export const domain = '//' + location.host;
 
 //用户登录
 export const login = params =>
@@ -213,5 +213,16 @@ export const quxiaohistory = params =>
 //查询缺料历史
 export const countqueliaohistory = params =>
     fetch.get(domain + '/countqueliaohistory.2x ', {
+        params: params,
+    });
+
+//admin-查询所有订单
+export const queryAllOrders = params =>
+    fetch.get(domain + '/queryAllOrders.2x ', {
+        params: params,
+    });
+//admin-删除订单
+export const deleteOrders = params =>
+    fetch.get(domain + '/deleteOrders.2x', {
         params: params,
     });

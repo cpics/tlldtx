@@ -47,15 +47,15 @@ const jiaomen = [{
 {
     name: '宽度',
     props: 'tpkd'
-},
-{
-    name: '基板高度',
-    props: 'jbgd'
-},
-{
-    name: '贴皮高度',
-    props: 'tpgd'
 }
+// {
+//     name: '基板高度',
+//     props: 'jbgd'
+// },
+// {
+//     name: '贴皮高度',
+//     props: 'tpgd'
+// }
 // {
 //     name: 'Cladding',
 //     props: 'doorcladding'
@@ -123,14 +123,14 @@ export const jiaomen4 = [{
     name: '宽度',
     props: 'tpkd'
 },
-{
-    name: '基板高度',
-    props: 'jbgd'
-},
-{
-    name: '贴皮高度',
-    props: 'tpgd'
-},
+// {
+//     name: '基板高度',
+//     props: 'jbgd'
+// },
+// {
+//     name: '贴皮高度',
+//     props: 'tpgd'
+// },
 // {
 //     name: '非标信息',
 //     props: 'feibiao'

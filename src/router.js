@@ -7,8 +7,10 @@ import Qiantai from './views/qiantai/qiantai';
 import index from './views/houtai/children/index/index';
 import Login from './views/login/login';
 import orderImport from './views/houtai/children/orderImport/orderImport';
+import orderGuanli from './views/houtai/children/orderGuanli/orderGuanli';
 import systemEdit from './views/houtai/children/systemEdit/systemEdit';
 import manage from './views/houtai/children/manage/manage';
+
 import test from './views/test/test';
 
 import CurrentWipAreaOrder from './views/qiantai/children/currentWipAreaOrder/currentWipAreaOrder';
@@ -16,6 +18,7 @@ import CurrentPullOrder from './views/qiantai/children/currentPullOrder/currentP
 import TodayProOrder from './views/qiantai/children/todayProOrder/todayProOrder';
 import UnfinishOrder from './views/qiantai/children/unFinishOrder/unFinishOrder';
 import boardOrder from './views/qiantai/children/boardOrder/boardOrder';
+
 
 Vue.use(Router);
 
@@ -34,6 +37,14 @@ export const houtaiRouters = [
         component: orderImport,
         meta: {
             title: '订单导入',
+        },
+    },
+    {
+        path: 'order/guanli',
+        name: 'orderGuanli',
+        component: orderGuanli,
+        meta: {
+            title: '订单管理',
         },
     },
     {
