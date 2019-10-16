@@ -4,8 +4,10 @@
             <el-button type="primary">删除订单</el-button>
         </div>
         <el-table :data="list"
+        
                   border
-                  style="width: 100%">
+                  class="guanli-table"
+                  style="width: 100%:">
             <el-table-column width="100"
                              type="index"
                              label="序号"></el-table-column>
@@ -83,4 +85,7 @@ export default {
 </script>
 
 <style>
+.guanli-table tbody{
+    font-size: 20px !important;
+}
 </style>

@@ -1,6 +1,5 @@
 import fetch from '../common/fetch/index';
 export const domain = '//blog.365dianti.com:8023';
-// export const domain = '//kone.2xnet.net:8023';
 // export const domain = '//' + location.host;
 
 //用户登录
