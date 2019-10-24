@@ -224,8 +224,8 @@ table tbody {
     /* padding-right:100px; */
 }
 .el-table .success-row {
-    background: #555555;
-    color: #fff;
+    background: #fdffc3;
+    color: #000;
 }
 .el-table .success-row:hover {
     color: #000;
