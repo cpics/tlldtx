@@ -96,7 +96,7 @@ export default {
             qlCount: '',
             HistoryCount: [],
             qlHistoryCount: '',
-            leftSliderDir: true,
+            leftSliderDir: false,
 
         };
     },
