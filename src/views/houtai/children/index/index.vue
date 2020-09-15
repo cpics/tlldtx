@@ -3,9 +3,9 @@
     <div>
         <div class="weeks">
             <ul>
-                <li @click="chooseWeekData(i)" :class="{'active':weekActive == item.i}" v-if="i<dataList.length"
-                    v-for="(item,i) in weeks"
-                    :key="i">{{item.name}}</li>
+                <li @click="chooseWeekData(i)" :class="{'active':weekActive == i}" 
+                    v-for="(item,i) in dataList"
+                    :key="i">{{item.week}}</li>
             </ul>
         </div>
         <div class="dayNight"
